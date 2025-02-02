@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
+import Image from "next/image";
 
 export default function About() {
   const [greeted, setGreeted] = useState(false);
@@ -25,11 +26,14 @@ export default function About() {
             animate={{ scale: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <img
-              src="/characters/Explainer.png" // Replace with your character image path
-              alt="Character"
-              className="w-32 h-32"
-            />
+           
+<Image
+  src="/characters/Explainer.png" // Replace with your character image path
+  alt="Character"
+  width={128} // Specify the width (32 * 4, based on the class size)
+  height={128} // Specify the height (32 * 4, based on the class size)
+  className="w-32 h-32" // You can still apply your custom styles
+/>
             <motion.p
               className="text-lg font-bold text-white mt-4"
               initial={{ opacity: 0, y: 10 }}
