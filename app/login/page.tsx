@@ -3,11 +3,12 @@ import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { AnimatedBackground } from "@/components/AnimatedBackground"
 import { Login } from "@/components/Login"
+import { User } from "@/types"
 
 export default function LoginPage() {
   const router = useRouter()
 
-  const handleLogin = (userData: string) => {
+  const handleLogin = (userData: User) => {
     // Here you would typically handle the login process, perhaps storing the user data in a global state or context
     console.log("User logged in:", userData)
     router.push("/game-map")

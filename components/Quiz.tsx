@@ -1,6 +1,4 @@
-"use client";
-
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, JSX } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -36,25 +34,11 @@ const mockQuestions: Question[] = [
   // Add more mock questions here
 ]
 
-export function Quiz({ onComplete }: QuizProps) {
+export function Quiz({ quizSet, onComplete }: QuizProps): JSX.Element {
   const [currentSection, setCurrentSection] = useState<number>(0)
   const [currentQuestion, setCurrentQuestion] = useState<number>(0)
   const [score, setScore] = useState<number>(0)
   const [timeLeft, setTimeLeft] = useState<number>(60)
-
-  const handleNextQuestion = useCallback(() => {
-    if (currentQuestion < 9) {
-      setCurrentQuestion((prev) => prev + 1);
-      setTimeLeft(60);
-    } else if (currentSection < 6) {
-      setCurrentSection((prev) => prev + 1);
-      setCurrentQuestion(0);
-      setTimeLeft(60);
-    } else {
-      onComplete(score);
-    }
-  }, [currentQuestion, currentSection, onComplete, score]); // ✅ Memoized
-  
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -68,27 +52,27 @@ export function Quiz({ onComplete }: QuizProps) {
     }, 1000)
 
     return () => clearInterval(timer)
-  }, [handleNextQuestion])
+  }, [])
 
-  const handleAnswer = (selectedAnswer:string) => {
+  const handleAnswer = (selectedAnswer: string) => {
     if (selectedAnswer === mockQuestions[currentQuestion].correctAnswer) {
       setScore((prevScore) => prevScore + 1)
     }
     handleNextQuestion()
   }
 
-  // const handleNextQuestion = () => {
-  //   if (currentQuestion < 9) {
-  //     setCurrentQuestion((prev) => prev + 1)
-  //     setTimeLeft(60)
-  //   } else if (currentSection < 6) {
-  //     setCurrentSection((prev) => prev + 1)
-  //     setCurrentQuestion(0)
-  //     setTimeLeft(60)
-  //   } else {
-  //     onComplete(score)
-  //   }
-  // }
+  const handleNextQuestion = () => {
+    if (currentQuestion < 9) {
+      setCurrentQuestion((prev) => prev + 1)
+      setTimeLeft(60)
+    } else if (currentSection < 6) {
+      setCurrentSection((prev) => prev + 1)
+      setCurrentQuestion(0)
+      setTimeLeft(60)
+    } else {
+      onComplete(score)
+    }
+  }
 
   const currentQuestionData = mockQuestions[currentQuestion]
 
@@ -154,12 +138,7 @@ export function Quiz({ onComplete }: QuizProps) {
                   visible: { opacity: 1, y: 0 },
                 }}
               >
-                <Button
-                  onClick={() => handleAnswer(option)}
-                  className="w-full h-full py-4 text-lg"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
+                <Button onClick={() => handleAnswer(option)} className="w-full h-full py-4 text-lg">
                   {option}
                 </Button>
               </motion.div>

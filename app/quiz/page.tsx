@@ -4,15 +4,23 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { motion } from "framer-motion"
 import { AnimatedBackground } from "@/components/AnimatedBackground"
 import { Quiz } from "@/components/Quiz"
+import type { QuizSet } from "@/types"
+import { JSX } from "react"
 
-export default function QuizPage() {
+export default function QuizPage(): JSX.Element {
   const router = useRouter()
   const searchParams = useSearchParams()
   const stage = searchParams.get("stage")
-  const quizSet = searchParams.get("set")
+  const quizSet = searchParams.get("set") as QuizSet | null
 
-  const handleQuizCompletion = (score: string|null) => {
-    router.push(`/certificate?stage=${encodeURIComponent(stage)}&set=${encodeURIComponent(quizSet)}&score=${score}`)
+  const handleQuizCompletion = (score: number): void => {
+    router.push(
+      `/certificate?stage=${encodeURIComponent(stage ?? "")}&set=${encodeURIComponent(quizSet ?? "")}&score=${score}`,
+    )
+  }
+
+  if (!stage || !quizSet) {
+    return <div>Error: Missing stage or quiz set information</div>
   }
 
   return (

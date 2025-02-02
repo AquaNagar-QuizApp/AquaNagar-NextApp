@@ -4,14 +4,24 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { motion } from "framer-motion"
 import { AnimatedBackground } from "@/components/AnimatedBackground"
 import { QuizSelection } from "@/components/QuizSelection"
+import type { QuizSet } from "@/types"
 
 export default function QuizSelectionPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const stage = searchParams.get("stage")
+  const stage: string | null = searchParams.get("stage")
 
-  const handleQuizSelection = (quizSet:string) => {
-    router.push(`/quiz?stage=${encodeURIComponent(stage)}&set=${encodeURIComponent(quizSet)}`)
+  const handleQuizSelection = (quizSet: QuizSet): void => {
+    if (stage) {
+      router.push(`/quiz?stage=${encodeURIComponent(stage)}&set=${encodeURIComponent(quizSet)}`)
+    } else {
+      console.error("Stage is missing")
+      // Handle the error appropriately, e.g., redirect to an error page or show an error message
+    }
+  }
+
+  if (!stage) {
+    return <div>Error: Missing stage information</div>
   }
 
   return (
