@@ -36,7 +36,7 @@ const mockQuestions: Question[] = [
   // Add more mock questions here
 ]
 
-export function Quiz({ quizSet, onComplete }: QuizProps) {
+export function Quiz({ onComplete }: QuizProps) {
   const [currentSection, setCurrentSection] = useState<number>(0)
   const [currentQuestion, setCurrentQuestion] = useState<number>(0)
   const [score, setScore] = useState<number>(0)

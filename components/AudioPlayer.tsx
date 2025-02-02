@@ -21,7 +21,7 @@ const AudioPlayer = () => {
           setIsPlaying(true);
           audio1.muted = false; // Unmute after the first play attempt
         })
-        .catch((err) => {
+        .catch((_err) => {
           //console.error("Error while trying to play audio:", err);
         });
 
