@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -42,6 +42,20 @@ export function Quiz({ onComplete }: QuizProps) {
   const [score, setScore] = useState<number>(0)
   const [timeLeft, setTimeLeft] = useState<number>(60)
 
+  const handleNextQuestion = useCallback(() => {
+    if (currentQuestion < 9) {
+      setCurrentQuestion((prev) => prev + 1);
+      setTimeLeft(60);
+    } else if (currentSection < 6) {
+      setCurrentSection((prev) => prev + 1);
+      setCurrentQuestion(0);
+      setTimeLeft(60);
+    } else {
+      onComplete(score);
+    }
+  }, [currentQuestion, currentSection, onComplete, score]); // ✅ Memoized
+  
+
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft((prevTime) => {
@@ -54,27 +68,27 @@ export function Quiz({ onComplete }: QuizProps) {
     }, 1000)
 
     return () => clearInterval(timer)
-  }, [])
+  }, [handleNextQuestion])
 
-  const handleAnswer = (selectedAnswer) => {
+  const handleAnswer = (selectedAnswer:string) => {
     if (selectedAnswer === mockQuestions[currentQuestion].correctAnswer) {
       setScore((prevScore) => prevScore + 1)
     }
     handleNextQuestion()
   }
 
-  const handleNextQuestion = () => {
-    if (currentQuestion < 9) {
-      setCurrentQuestion((prev) => prev + 1)
-      setTimeLeft(60)
-    } else if (currentSection < 6) {
-      setCurrentSection((prev) => prev + 1)
-      setCurrentQuestion(0)
-      setTimeLeft(60)
-    } else {
-      onComplete(score)
-    }
-  }
+  // const handleNextQuestion = () => {
+  //   if (currentQuestion < 9) {
+  //     setCurrentQuestion((prev) => prev + 1)
+  //     setTimeLeft(60)
+  //   } else if (currentSection < 6) {
+  //     setCurrentSection((prev) => prev + 1)
+  //     setCurrentQuestion(0)
+  //     setTimeLeft(60)
+  //   } else {
+  //     onComplete(score)
+  //   }
+  // }
 
   const currentQuestionData = mockQuestions[currentQuestion]
 

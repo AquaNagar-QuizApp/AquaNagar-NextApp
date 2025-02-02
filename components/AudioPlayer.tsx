@@ -22,8 +22,8 @@ const AudioPlayer = () => {
           setIsPlaying(true);
           audio1.muted = false; // Unmute after the first play attempt
         })
-        .catch((err) => {
-          // eslint-disable-line @typescript-eslint/no-unused-vars
+        .catch((err) => {// eslint-disable-line @typescript-eslint/no-unused-vars
+          
           // console.error("Error while trying to play audio:", err);
         });
 
