@@ -7,7 +7,7 @@ import { Login } from "@/components/Login"
 export default function LoginPage() {
   const router = useRouter()
 
-  const handleLogin = (userData) => {
+  const handleLogin = (userData: any) => {
     // Here you would typically handle the login process, perhaps storing the user data in a global state or context
     console.log("User logged in:", userData)
     router.push("/game-map")

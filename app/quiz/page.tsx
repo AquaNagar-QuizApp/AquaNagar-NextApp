@@ -11,7 +11,7 @@ export default function QuizPage() {
   const stage = searchParams.get("stage")
   const quizSet = searchParams.get("set")
 
-  const handleQuizCompletion = (score) => {
+  const handleQuizCompletion = (score: string|null) => {
     router.push(`/certificate?stage=${encodeURIComponent(stage)}&set=${encodeURIComponent(quizSet)}&score=${score}`)
   }
 
