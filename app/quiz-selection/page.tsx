@@ -10,7 +10,7 @@ export default function QuizSelectionPage() {
   const searchParams = useSearchParams()
   const stage = searchParams.get("stage")
 
-  const handleQuizSelection = (quizSet) => {
+  const handleQuizSelection = (quizSet:string) => {
     router.push(`/quiz?stage=${encodeURIComponent(stage)}&set=${encodeURIComponent(quizSet)}`)
   }
 
