@@ -11,8 +11,7 @@ export default function Home() {
   const [showContent, setShowContent] = useState(false);
   const [showWaves, setShowWaves] = useState(false);
   const [waveCount, setWaveCount] = useState(0);
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
-
+  
   useEffect(() => {
     setHasMounted(true);
   }, []);
