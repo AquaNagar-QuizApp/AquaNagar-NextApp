@@ -57,7 +57,7 @@ const AudioPlayer = () => {
         Your browser does not support the audio element.
       </audio>
       <audio ref={audioRef2} loop>
-        <source src="./songs/bgm1.mp3" type="audio/mp3" />
+        <source src="./songs/bgm2.mp3" type="audio/mp3" />
         Your browser does not support the audio element.
       </audio>
     </div>
