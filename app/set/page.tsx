@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import type { QuizSelectionProps, QuizSetName } from "@/types"
+import type { QuizSetName } from "@/types"
 import { JSX } from "react"
 import { useRouter } from "next/navigation"
 import { AnimatedBackground } from "@/components/AnimatedBackground"
@@ -13,6 +13,7 @@ export default function SetSelection(): JSX.Element {
 
   const onSelect = (set: QuizSetName) => {
     // setSelectedSet(set)
+    console.log(set);
     setTimeout(() => {
       router.push("/game-map")
     }, 100)

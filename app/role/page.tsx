@@ -1,15 +1,15 @@
 "use client"
 
 import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
-import { ChevronRight } from "lucide-react"
 import { AnimatedBackground } from "@/components/AnimatedBackground"
 
 export default function RoleSelection() {
   const router = useRouter()
   const [selectedRole, setSelectedRole] = useState<string | null>(null)
+  console.log(selectedRole);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -59,9 +59,7 @@ export default function RoleSelection() {
           animate="visible"
           variants={containerVariants}
         >
-          <motion.h2 className="text-4xl font-bold text-center text-gray-800 mb-8" variants={itemVariants}>
-            What's Your Role?
-          </motion.h2>
+          <motion.h2 className="text-4xl font-bold text-center text-gray-800 mb-8" variants={itemVariants}>What's Your Role?</motion.h2>
           <motion.p className="text-center text-gray-600 mb-8" variants={itemVariants}>
             Choose the option that best describes you.
           </motion.p>

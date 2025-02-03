@@ -15,9 +15,9 @@ const stages = [
 ]
 
 export default function GameMap() {
-  const router = useRouter()
 
   const handleStageClick = (stage: string) => {
+    console.log(stage);
     // router.push(`/quiz-selection?stage=${encodeURIComponent(stage)}`)
   }
 
