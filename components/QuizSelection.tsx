@@ -1,10 +1,12 @@
-"use client";
+"use client"
 
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
+import type { QuizSelectionProps, QuizSetName } from "@/types"
+import { JSX } from "react"
 
-export function QuizSelection({ onSelect }) {
-  const quizSets = ["Set 1", "Set 2", "Set 3", "Set 4"]
+export function QuizSelection({ onSelect }: QuizSelectionProps): JSX.Element {
+  const quizSets: QuizSetName[] = ["Set 1", "Set 2", "Set 3", "Set 4"]
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -32,17 +34,17 @@ export function QuizSelection({ onSelect }) {
       <motion.div className="grid grid-cols-2 gap-4" variants={containerVariants}>
         {quizSets.map((set) => (
           <motion.div key={set} variants={itemVariants}>
-            <Button
-              onClick={() => onSelect(set)}
-              className="w-full h-full py-8 text-lg font-semibold"
+            <motion.div
               whileHover={{
                 scale: 1.05,
                 transition: { duration: 0.2 },
               }}
               whileTap={{ scale: 0.95 }}
             >
-              {set}
-            </Button>
+              <Button onClick={() => onSelect(set)} className="w-full h-full py-8 text-lg font-semibold">
+                {set}
+              </Button>
+            </motion.div>
           </motion.div>
         ))}
       </motion.div>
