@@ -1,4 +1,5 @@
 export type QuizSetName = "Set 1" | "Set 2" | "Set 3" | "Set 4"
+export type Title = "Mr" | "Mrs" | "Ms" | "Mx" | "Dr" | "Prof"
 
 export interface Question {
   type: "text" | "image"
@@ -15,6 +16,7 @@ export interface QuizSet {
 
 export interface User {
   name: string
+  title: Title | "",
   department: string
   designation: string
   email: string

@@ -20,7 +20,7 @@ export default function Challenge() {
             Are you prepared to take on the role of WSS Engineer and tackle the water management challenges of Aqua
             Nagar?
           </p>
-          <Link href="/login">
+          <Link href="/set">
             <motion.button
               className="px-6 py-3 bg-blue-500 text-white rounded-lg font-semibold"
               whileHover={{ scale: 1.05 }}

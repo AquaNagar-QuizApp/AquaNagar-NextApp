@@ -18,7 +18,7 @@ export default function GameMap() {
   const router = useRouter()
 
   const handleStageClick = (stage: string) => {
-    router.push(`/quiz-selection?stage=${encodeURIComponent(stage)}`)
+    // router.push(`/quiz-selection?stage=${encodeURIComponent(stage)}`)
   }
 
   return (
