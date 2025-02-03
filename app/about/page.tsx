@@ -9,7 +9,8 @@ import Image from "next/image";
 
 export default function About() {
   const [greeted, setGreeted] = useState(false);
-
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+  
   const text =
     "Test your knowledge about water management through our interactive quiz. Choose from 4 sets of questions, each with 7 sections and 10 questions per section. You'll have 1 minute to answer each question. Upon completion, you'll receive a certificate based on your score.";
 
@@ -28,7 +29,7 @@ export default function About() {
           >
            
 <Image
-  src="/characters/Explainer.png" // Replace with your character image path
+ src={`${basePath}/characters/Explainer.png`} // Replace with your character image path
   alt="Character"
   width={128} // Specify the width (32 * 4, based on the class size)
   height={128} // Specify the height (32 * 4, based on the class size)
@@ -62,7 +63,8 @@ export default function About() {
           >
             {/* Character positioned at the top-left */}
             <motion.img
-              src="/characters/Explainer.png" // Replace with your character image path
+              src={`${basePath}/characters/Explainer.png`}
+              // Replace with your character image path
               alt="Character"
               className="absolute top-0 left-0 w-32 h-32 z-20" // Top-left position
               initial={{ x: -50, y: -50 }}

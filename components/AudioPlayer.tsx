@@ -6,6 +6,8 @@ const AudioPlayer = () => {
   const audioRef1 = useRef<HTMLAudioElement | null>(null);
   const audioRef2 = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+ 
 
   // Memoizing the function with useCallback to avoid unnecessary re-renders
   const handleMouseMove = useCallback(() => {
@@ -51,11 +53,11 @@ const AudioPlayer = () => {
   return (
     <div style={{ display: "none" }}>
       <audio ref={audioRef1} loop>
-        <source src="/songs/bgm1.mp3" type="audio/mp3" />
+        <source src={`${basePath}/songs/bgm1.mp3`} type="audio/mp3" />
         Your browser does not support the audio element.
       </audio>
       <audio ref={audioRef2} loop>
-        <source src="/songs/bgm2.mp3" type="audio/mp3" />
+        <source src={`${basePath}/songs/bgm1.mp3`} type="audio/mp3" />
         Your browser does not support the audio element.
       </audio>
     </div>

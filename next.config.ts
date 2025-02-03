@@ -1,9 +1,13 @@
-import exp from "constants";
-import type { NextConfig } from "next";
+/** @type {import('next').NextConfig} */
+const isProd = process.env.NODE_ENV === "production";
 
-const nextConfig: NextConfig = {
-  /* config options here */
-  output:"export"
+const nextConfig = {
+  output: "export",
+  images: {
+    unoptimized: true,
+  },
+  basePath: isProd ? "/AquaNagar-NextApp" : "", // No org name needed
+  assetPrefix: isProd ? "/AquaNagar-NextApp" : "",
 };
 
-export default nextConfig;
+module.exports = nextConfig;
