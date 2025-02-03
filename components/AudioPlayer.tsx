@@ -6,7 +6,7 @@ const AudioPlayer = () => {
   const audioRef1 = useRef<HTMLAudioElement | null>(null);
   const audioRef2 = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
  
 
   // Memoizing the function with useCallback to avoid unnecessary re-renders
