@@ -6,7 +6,12 @@ export interface User {
     phone: string
   }
   
-  export type QuizSet = "Set 1" | "Set 2" | "Set 3" | "Set 4"
+  //export type QuizSet = "Set 1" | "Set 2" | "Set 3" | "Set 4"
+
+  
+export interface QuizSet {
+    sections: Question[][]
+  }
   
   export interface Question {
     type: "text" | "image"

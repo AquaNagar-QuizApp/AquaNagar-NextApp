@@ -4,23 +4,18 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { motion } from "framer-motion"
 import { AnimatedBackground } from "@/components/AnimatedBackground"
 import { Quiz } from "@/components/Quiz"
-import type { QuizSet } from "@/types"
-import { JSX } from "react"
+import { QuizSet } from "@/types"
 
-export default function QuizPage(): JSX.Element {
+export default function QuizPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const stage = searchParams.get("stage")
-  const quizSet = searchParams.get("set") as QuizSet | null
+  const stage: string | null = searchParams.get("stage")
+  const quizSet =searchParams.get("set") as unknown as QuizSet;
 
   const handleQuizCompletion = (score: number): void => {
     router.push(
-      `/certificate?stage=${encodeURIComponent(stage ?? "")}&set=${encodeURIComponent(quizSet ?? "")}&score=${score}`,
+      `/certificate?stage=${encodeURIComponent(stage ?? "")}&set=${encodeURIComponent(JSON.stringify(quizSet)?? "")}&score=${score}`,
     )
-  }
-
-  if (!stage || !quizSet) {
-    return <div>Error: Missing stage or quiz set information</div>
   }
 
   return (
@@ -34,7 +29,7 @@ export default function QuizPage(): JSX.Element {
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-2xl font-semibold text-white mb-6 text-center">
-            {stage} - {quizSet}
+            {stage} - {JSON.stringify(quizSet)}
           </h2>
           <Quiz quizSet={quizSet} onComplete={handleQuizCompletion} />
         </motion.div>

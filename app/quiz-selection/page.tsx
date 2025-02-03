@@ -13,7 +13,7 @@ export default function QuizSelectionPage() {
 
   const handleQuizSelection = (quizSet: QuizSet): void => {
     if (stage) {
-      router.push(`/quiz?stage=${encodeURIComponent(stage)}&set=${encodeURIComponent(quizSet)}`)
+      router.push(`/quiz?stage=${encodeURIComponent(stage)}&set=${encodeURIComponent(JSON.stringify(quizSet))}`)
     } else {
       console.error("Stage is missing")
       // Handle the error appropriately, e.g., redirect to an error page or show an error message

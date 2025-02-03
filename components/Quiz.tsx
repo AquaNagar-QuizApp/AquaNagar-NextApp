@@ -4,9 +4,8 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 
-interface QuizProps {
-  quizSet: string
-  onComplete: (score: number) => void
+interface QuizSet {
+  sections: Question[][]
 }
 
 interface Question {
@@ -17,28 +16,47 @@ interface Question {
   imageUrl?: string
 }
 
-const mockQuestions: Question[] = [
-  {
-    type: "text",
-    question: "What is the main source of freshwater on Earth?",
-    options: ["Oceans", "Rivers", "Groundwater", "Glaciers"],
-    correctAnswer: "Groundwater",
-  },
-  {
-    type: "image",
-    question: "Which of these is a water conservation method?",
-    imageUrl: "/placeholder.svg?height=200&width=300",
-    options: ["Drip irrigation", "Flood irrigation", "Sprinkler system", "Manual watering"],
-    correctAnswer: "Drip irrigation",
-  },
-  // Add more mock questions here
-]
+interface QuizProps {
+  quizSet: QuizSet
+  onComplete: (score: number) => void
+}
+
+// const mockQuestions: Question[] = [
+//   {
+//     type: "text",
+//     question: "What is the main source of freshwater on Earth?",
+//     options: ["Oceans", "Rivers", "Groundwater", "Glaciers"],
+//     correctAnswer: "Groundwater",
+//   },
+//   {
+//     type: "image",
+//     question: "Which of these is a water conservation method?",
+//     imageUrl: "/placeholder.svg?height=200&width=300",
+//     options: ["Drip irrigation", "Flood irrigation", "Sprinkler system", "Manual watering"],
+//     correctAnswer: "Drip irrigation",
+//   },
+//   // Add more mock questions here
+// ]
 
 export function Quiz({ quizSet, onComplete }: QuizProps): JSX.Element {
   const [currentSection, setCurrentSection] = useState<number>(0)
   const [currentQuestion, setCurrentQuestion] = useState<number>(0)
   const [score, setScore] = useState<number>(0)
   const [timeLeft, setTimeLeft] = useState<number>(60)
+
+  const handleNextQuestion = () => {
+    const currentSectionQuestions = quizSet.sections[currentSection]
+    if (currentQuestion < currentSectionQuestions.length - 1) {
+      setCurrentQuestion((prev) => prev + 1)
+      setTimeLeft(60)
+    } else if (currentSection < quizSet.sections.length - 1) {
+      setCurrentSection((prev) => prev + 1)
+      setCurrentQuestion(0)
+      setTimeLeft(60)
+    } else {
+      onComplete(score)
+    }
+  }
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -52,29 +70,17 @@ export function Quiz({ quizSet, onComplete }: QuizProps): JSX.Element {
     }, 1000)
 
     return () => clearInterval(timer)
-  }, [])
+  }, [handleNextQuestion])
 
   const handleAnswer = (selectedAnswer: string) => {
-    if (selectedAnswer === mockQuestions[currentQuestion].correctAnswer) {
+    const currentSectionQuestions = quizSet.sections[currentSection]
+    if (selectedAnswer === currentSectionQuestions[currentQuestion].correctAnswer) {
       setScore((prevScore) => prevScore + 1)
     }
     handleNextQuestion()
   }
 
-  const handleNextQuestion = () => {
-    if (currentQuestion < 9) {
-      setCurrentQuestion((prev) => prev + 1)
-      setTimeLeft(60)
-    } else if (currentSection < 6) {
-      setCurrentSection((prev) => prev + 1)
-      setCurrentQuestion(0)
-      setTimeLeft(60)
-    } else {
-      onComplete(score)
-    }
-  }
-
-  const currentQuestionData = mockQuestions[currentQuestion]
+  const currentQuestionData = quizSet.sections[currentSection][currentQuestion]
 
   const questionVariants = {
     hidden: { opacity: 0, x: -50 },
