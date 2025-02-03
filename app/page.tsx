@@ -12,7 +12,7 @@ export default function Home() {
   const [showWaves, setShowWaves] = useState(false);
   const [waveCount, setWaveCount] = useState(0);
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
- 
+
   useEffect(() => {
     setHasMounted(true);
   }, []);
@@ -48,7 +48,7 @@ export default function Home() {
         {!isClicked && (
           <div className="flex space-x-4 mb-8">
             <motion.img
-              src={`${basePath}/logos/logo1.png`}
+              src="/.logos/logo1.png"
               alt="Logo 1"
               initial={{ y: 100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -56,7 +56,7 @@ export default function Home() {
               className="w-16 h-16"
             />
             <motion.img
-              src={`${basePath}/logos/logo2.png`}
+              src="./logos/logo2.png"
               alt="Logo 2"
               initial={{ y: 100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -64,7 +64,7 @@ export default function Home() {
               className="w-16 h-16"
             />
             <motion.img
-              src={`${basePath}/logos/logo3.png`}
+              src="./logos/logo3.png"
               alt="Logo 3"
               initial={{ y: 100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
