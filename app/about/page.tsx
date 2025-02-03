@@ -5,7 +5,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
-import Image from "next/image";
 
 export default function About() {
   const [greeted, setGreeted] = useState(false);
