@@ -6,8 +6,8 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  basePath: isProd ? "/AquaNagar-NextApp" : "", // No org name needed
-  assetPrefix: isProd ? "/AquaNagar-NextApp" : "",
+  basePath: isProd ? "./AquaNagar-NextApp" : "", // No org name needed
+  assetPrefix: isProd ? "./AquaNagar-NextApp" : "",
 };
 
 module.exports = nextConfig;
