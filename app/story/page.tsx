@@ -103,7 +103,7 @@ export default function Story() {
             >
               {/* Character Positioned at Top Left */}
               <motion.img
-                src="/characters/Explainer.png" // Replace with your character image path
+                src="./characters/Explainer.png" // Replace with your character image path
                 alt="Character"
                 className="absolute top-0 left-10 w-24 h-24 z-20 -mt-12 -ml-12 "
                 initial={{ x: -50, y: -50 }}

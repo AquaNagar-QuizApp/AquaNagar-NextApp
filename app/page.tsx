@@ -47,7 +47,7 @@ export default function Home() {
         {!isClicked && (
           <div className="flex space-x-4 mb-8">
             <motion.img
-              src=".logos/logo1.png"
+              src="./logos/logo1.png"
               alt="Logo 1"
               initial={{ y: 100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
