@@ -59,7 +59,7 @@ export default function RoleSelection() {
           animate="visible"
           variants={containerVariants}
         >
-          <motion.h2 className="text-4xl font-bold text-center text-gray-800 mb-8" variants={itemVariants}>What's Your Role?</motion.h2>
+          <motion.h2 className="text-4xl font-bold text-center text-gray-800 mb-8" variants={itemVariants}>What&apos;s Your Role?</motion.h2>
           <motion.p className="text-center text-gray-600 mb-8" variants={itemVariants}>
             Choose the option that best describes you.
           </motion.p>
