@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
-import { useRouter } from "next/navigation"
 
 interface QuizSet {
   sections: Question[][]

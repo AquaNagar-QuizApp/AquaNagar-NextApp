@@ -140,7 +140,7 @@ export default function About() {
             animate={isMounted ? { scale: 1 } : { scale: 0 }} // Animate only on client
             transition={{ duration: 0.5 }}
           >
-            <img
+            <motion.img
               src="./characters/Explainer.png" // Replace with your character image path
               alt="Character"
               className="w-32 h-32"
