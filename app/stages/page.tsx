@@ -16,7 +16,7 @@ const caseStudies = [
   "Once the system is operational, you’ll monitor its performance. Use data from smart meters and sensors to assess water production, energy consumption, and system efficiency."
 ];
 
-export default function Stages() {
+function StagesResult() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [currentPart, setCurrentPart] = useState(0);
@@ -71,7 +71,6 @@ export default function Stages() {
   // };
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
       <main className="min-h-screen relative overflow-hidden">
         <AnimatedBackground />
         <div className="relative z-10 h-screen flex flex-col items-center justify-center p-4">
@@ -121,6 +120,13 @@ export default function Stages() {
           </div>
         </div>
       </main>
+  );
+}
+
+export default function Stages(){
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <StagesResult />
     </Suspense>
   );
 }
