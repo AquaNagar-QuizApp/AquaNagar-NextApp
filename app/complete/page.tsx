@@ -3,7 +3,6 @@
 import { useState, useEffect, Suspense } from "react"
 import Confetti from "react-confetti"
 import { useRouter, useSearchParams } from "next/navigation"
-import { QuizSetName } from "@/types"
 
 export default function Complete() {
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
