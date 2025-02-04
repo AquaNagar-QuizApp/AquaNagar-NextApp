@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import Confetti from "react-confetti"
 import { useRouter, useSearchParams } from "next/navigation"
 import { QuizSetName } from "@/types"
@@ -8,15 +8,12 @@ import { QuizSetName } from "@/types"
 export default function Complete() {
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const stage = searchParams.get("stage");
-  const score = searchParams.get("score");
 
-  const onSelect = (set: QuizSetName) => {
-    setTimeout(() => {
-      router.push(`/game-map?set=${encodeURIComponent(set)}`)
-    }, 100)
-  };
+  // const onSelect = (set: QuizSetName) => {
+  //   setTimeout(() => {
+  //     router.push(`/game-map?set=${encodeURIComponent(set)}`)
+  //   }, 100)
+  // };
 
   useEffect(() => {
     const handleResize = () => {
@@ -43,16 +40,20 @@ export default function Complete() {
             <p className="text-6xl font-bold text-yellow-300 animate-pulse">{score}</p>
           </div> */}
 
-          <div className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-lg p-8 mb-8 text-center">
+          <Suspense fallback={<div className="text-white text-xl">Loading...</div>}>
+            <StageScoreSection />
+          </Suspense>
+
+          {/* <div className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-lg p-8 mb-8 text-center">
             <p className="text-3xl text-white mb-4">You have successfully completed </p>
             <p className="text-4xl text-white mb-4"><strong>{stage} Stage</strong> </p>
             <p className="text-3xl text-white mb-4"> with a score of</p>
             <p className="text-6xl font-bold text-blue-800 animate-pulse">{score}</p>
-          </div>
+          </div> */}
 
           <button
             className="px-6 py-2 bg-blue-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-blue-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
-            onClick={() => onSelect("Set 1")}
+            onClick={() => router.push(`/game-map?set=${encodeURIComponent("Set 1")}`)}
           >
             Return to Stages Page
           </button>
@@ -60,4 +61,21 @@ export default function Complete() {
       </div>
     </main>
   )
+}
+
+function StageScoreSection() {
+  const searchParams = useSearchParams();
+  const stage = searchParams.get("stage");
+  const score = searchParams.get("score");
+
+  return (
+    <div className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-lg p-8 mb-8 text-center">
+      <p className="text-3xl text-white mb-4">You have successfully completed</p>
+      <p className="text-4xl text-white mb-4">
+        <strong>{stage} Stage</strong>
+      </p>
+      <p className="text-3xl text-white mb-4">with a score of</p>
+      <p className="text-6xl font-bold text-blue-800 animate-pulse">{score}</p>
+    </div>
+  );
 }
