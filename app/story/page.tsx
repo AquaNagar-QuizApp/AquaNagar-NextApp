@@ -173,13 +173,13 @@ export default function Story() {
     if (currentPart < storyParts.length - 1) {
       setCurrentPart(currentPart + 1);
     } else {
-      router.push("/stages");
+      router.push("/challenge");
     }
   };
 
   const handleSkip = () => {
     setTimeout(() => {
-      router.push("/stages")
+      router.push("/challenge")
     }, 100)
   };
 
@@ -251,7 +251,7 @@ export default function Story() {
               whileTap={{ scale: 0.95 }}
               onClick={handleSkip}
             >
-              Skip Story
+              Skip
             </motion.button>
           </div>
         </div>

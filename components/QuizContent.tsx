@@ -13,9 +13,11 @@ export function QuizContent(): JSX.Element {
   const quizSetName = searchParams.get("set") as QuizSetName | null
 
   const handleQuizCompletion = (score: number): void => {
-    router.push(
-      `/certificate?stage=${encodeURIComponent(stage ?? "")}&set=${encodeURIComponent(quizSetName ?? "")}&score=${score}`,
-    )
+    // router.push(
+    //   `/certificate?stage=${encodeURIComponent(stage ?? "")}&set=${encodeURIComponent(quizSetName ?? "")}&score=${score}`,
+    // )
+
+    router.push(`/complete?stage=${encodeURIComponent(stage ?? "")}&score=${score}`);
   }
 
   if (!stage || !quizSetName || !(quizSetName in quizSets)) {

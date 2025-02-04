@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
+import { useRouter } from "next/navigation"
 
 interface QuizSet {
   sections: Question[][]
@@ -39,44 +40,134 @@ interface QuizProps {
 // ]
 
 export function Quiz({ quizSet, onComplete }: QuizProps): JSX.Element {
-  const [currentSection, setCurrentSection] = useState<number>(0)
+  // const [currentSection, setCurrentSection] = useState<number>(0)
+  const currentSection = 0
   const [currentQuestion, setCurrentQuestion] = useState<number>(0)
   const [score, setScore] = useState<number>(0)
-  const [timeLeft, setTimeLeft] = useState<number>(60)
+  const [timeLeft, setTimeLeft] = useState<number>(30)
+  const [answered, setAnswered] = useState<boolean>(false)
 
   const handleNextQuestion = () => {
     const currentSectionQuestions = quizSet.sections[currentSection]
+
     if (currentQuestion < currentSectionQuestions.length - 1) {
       setCurrentQuestion((prev) => prev + 1)
-      setTimeLeft(60)
-    } else if (currentSection < quizSet.sections.length - 1) {
-      setCurrentSection((prev) => prev + 1)
-      setCurrentQuestion(0)
-      setTimeLeft(60)
-    } else {
-      onComplete(score)
+      setTimeLeft(30)
+      setAnswered(false)
+    }
+    // else if (currentSection < quizSet.sections.length - 1) {
+    //   setCurrentSection((prev) => prev + 1)
+    //   setCurrentQuestion(0)
+    //   setTimeLeft(30)
+    //   setAnswered(false)
+    // }
+    else {
+      onComplete(score);
     }
   }
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prevTime) => {
-        if (prevTime === 0) {
-          handleNextQuestion()
-          return 60
-        }
-        return prevTime - 1
-      })
-    }, 1000)
+  // const handleNextQuestion = () => {
+  //   const currentSectionQuestions = quizSet.sections[currentSection]
+  //   if (currentQuestion < currentSectionQuestions.length - 1) {
+  //     setCurrentQuestion((prev) => prev + 1)
+  //     setTimeLeft(30)
+  //   } else if (currentSection < quizSet.sections.length - 1) {
+  //     setCurrentSection((prev) => prev + 1)
+  //     setCurrentQuestion(0)
+  //     setTimeLeft(30)
+  //   } else {
+  //     onComplete(score)
+  //   }
+  // }
 
-    return () => clearInterval(timer)
-  }, [handleNextQuestion])
+  // useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     setTimeLeft((prevTime) => {
+  //       if (prevTime === 0) {
+  //         handleNextQuestion()
+  //         return 30
+  //       }
+  //       return prevTime - 1
+  //     })
+  //   }, 1000)
+
+  //   return () => clearInterval(timer)
+  // }, [handleNextQuestion])
+
+  // useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     setTimeLeft((prevTime) => {
+  //       if (prevTime === 0) {
+  //         if (!answered) {
+  //           // Proceed to the next question if not answered yet
+  //           handleNextQuestion()
+  //         }
+  //         return 30
+  //       }
+  //       return prevTime - 1
+  //     })
+  //   }, 1000)
+
+  //   return () => clearInterval(timer)
+  // }, [answered, handleNextQuestion])\
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout | null = null
+
+    if (!answered && timeLeft > 0) {
+      timer = setInterval(() => {
+        setTimeLeft((prevTime) => prevTime - 1)
+      }, 1000)
+    } else if (timeLeft === 0 && !answered) {
+      console.log("Time Up! Moving to Next Question")
+      handleNextQuestion()
+    }
+
+    return () => {
+      if (timer) clearInterval(timer)
+    }
+  }, [timeLeft, answered, handleNextQuestion])
+
+  // useEffect(() => {
+  //   console.log("Timer Effect Running"); // Debug log
+
+  //   const timer = setInterval(() => {
+  //     console.log("Timer Triggered"); // Should print only once per second
+
+  //     setTimeLeft((prevTime) => {
+  //       if (prevTime === 0) {
+  //         console.log("Time Up! Moving to Next Question");
+
+  //         if (!answered) {
+  //           handleNextQuestion();
+  //         }
+  //         return 30;
+  //       }
+  //       return prevTime - 1;
+  //     });
+  //   }, 1000);
+
+  //   return () => {
+  //     console.log("Cleaning up Timer");
+  //     clearInterval(timer);
+  //   };
+  // }, [answered]); // Only depends on `answered`
+
+
+  // const handleAnswer = (selectedAnswer: string) => {
+  //   const currentSectionQuestions = quizSet.sections[currentSection]
+  //   if (selectedAnswer === currentSectionQuestions[currentQuestion].correctAnswer) {
+  //     setScore((prevScore) => prevScore + 1)
+  //   }
+  //   handleNextQuestion()
+  // }
 
   const handleAnswer = (selectedAnswer: string) => {
     const currentSectionQuestions = quizSet.sections[currentSection]
     if (selectedAnswer === currentSectionQuestions[currentQuestion].correctAnswer) {
       setScore((prevScore) => prevScore + 1)
     }
+    setAnswered(true)
     handleNextQuestion()
   }
 
@@ -86,6 +177,24 @@ export function Quiz({ quizSet, onComplete }: QuizProps): JSX.Element {
     hidden: { opacity: 0, x: -50 },
     visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
     exit: { opacity: 0, x: 50, transition: { duration: 0.5 } },
+  }
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      }
+    }
+  }
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+    }
   }
 
   return (
@@ -102,7 +211,7 @@ export function Quiz({ quizSet, onComplete }: QuizProps): JSX.Element {
         <span className="text-lg font-medium">Time left: {timeLeft}s</span>
       </motion.div>
       <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 0.5 }}>
-        <Progress value={(timeLeft / 60) * 100} className="w-full" />
+        <Progress value={(timeLeft / 30) * 100} className="w-full" />
       </motion.div>
       <AnimatePresence mode="wait">
         <motion.div
@@ -123,8 +232,30 @@ export function Quiz({ quizSet, onComplete }: QuizProps): JSX.Element {
               transition={{ duration: 0.5 }}
             />
           )}
-          <p className="text-lg">{currentQuestionData.question}</p>
-          <motion.div
+          <p className="text-lg text-center">{currentQuestionData.question}</p>
+
+          <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-8" variants={containerVariants}>
+            {currentQuestionData.options.map((option) => (
+              <motion.div key={option} variants={itemVariants}>
+                <motion.div
+                  className="px-4 py-2 bg-blue-700 text-white rounded-lg font-medium backdrop-blur-lg flex items-center justify-center"
+                  whileHover={{
+                    scale: 1.05,
+                    transition: { duration: 0.2 },
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Button
+                    onClick={() => handleAnswer(option)}
+                    className="w-full h-full py-3 px-3 text-base font-medium text-center break-words whitespace-normal flex items-center justify-center md:w-60 md:h-16"
+                    >
+                    {option}
+                  </Button>
+                </motion.div>
+              </motion.div>
+            ))}
+          </motion.div>
+          {/* <motion.div
             className="grid grid-cols-2 gap-4"
             variants={{
               hidden: { opacity: 0 },
@@ -144,15 +275,15 @@ export function Quiz({ quizSet, onComplete }: QuizProps): JSX.Element {
                   visible: { opacity: 1, y: 0 },
                 }}
               >
-                <Button onClick={() => handleAnswer(option)} className="w-full h-full py-4 text-lg">
+                <Button onClick={() => handleAnswer(option)}
+                  className="w-full h-full py-4 px-1 text-lg font-semibold text-center break-words whitespace-normal flex items-center justify-center md:w-64 md:h-20">
                   {option}
                 </Button>
               </motion.div>
             ))}
-          </motion.div>
+          </motion.div> */}
         </motion.div>
       </AnimatePresence>
     </Card>
   )
 }
-

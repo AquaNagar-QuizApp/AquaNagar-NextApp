@@ -3,7 +3,7 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Aqua Nagar',
-  description: 'Created by Mahesh',
+  // description: 'Created by Mahesh',
 }
 
 export default function RootLayout({

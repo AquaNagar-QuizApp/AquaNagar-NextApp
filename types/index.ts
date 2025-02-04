@@ -1,5 +1,5 @@
 export type QuizSetName = "Set 1" | "Set 2" | "Set 3" | "Set 4"
-export type Title = "Mr" | "Mrs" | "Ms" | "Mx" | "Dr" | "Prof"
+export type Title = "Mr" | "Mrs" | "Ms" | "Dr"
 
 export interface Question {
   type: "text" | "image"
@@ -16,11 +16,20 @@ export interface QuizSet {
 
 export interface User {
   name: string
-  title: Title | "",
   department: string
   designation: string
   email: string
-  phone: string
+  mobile: string
+  title: Title | ""
+}
+
+export interface LoginError {
+  name: boolean
+  department: boolean
+  designation: boolean
+  email: boolean
+  mobile: boolean
+  title: boolean
 }
 
 export interface QuizProps {

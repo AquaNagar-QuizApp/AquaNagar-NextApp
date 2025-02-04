@@ -13,9 +13,8 @@ export default function SetSelection(): JSX.Element {
 
   const onSelect = (set: QuizSetName) => {
     // setSelectedSet(set)
-    console.log(set);
     setTimeout(() => {
-      router.push("/game-map")
+      router.push(`/game-map?set=${encodeURIComponent(set)}`)
     }, 100)
   };
 
@@ -25,8 +24,8 @@ export default function SetSelection(): JSX.Element {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-      },
-    },
+      }
+    }
   }
 
   const itemVariants = {
@@ -34,7 +33,7 @@ export default function SetSelection(): JSX.Element {
     visible: {
       y: 0,
       opacity: 1,
-    },
+    }
   }
 
   return (

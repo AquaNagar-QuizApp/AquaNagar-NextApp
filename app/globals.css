@@ -38,3 +38,86 @@ body {
 .title{
   font-family: 'Ancient', sans-serif;
 }
+
+
+
+/* Confetti explosion */
+.confetti {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  animation: explode 1s ease-out forwards;
+}
+
+/* Individual confetti pieces */
+.confetti-piece {
+  position: absolute;
+  width: 8px;
+  height: 16px;
+  background-color: #feca57;
+  top: 0;
+  opacity: 0;
+}
+
+/* Confetti positioning */
+.confetti-piece:nth-child(1) { left: 10%; transform: rotate(15deg); }
+.confetti-piece:nth-child(2) { left: 20%; transform: rotate(30deg); }
+.confetti-piece:nth-child(3) { left: 30%; transform: rotate(45deg); }
+.confetti-piece:nth-child(4) { left: 40%; transform: rotate(60deg); }
+.confetti-piece:nth-child(5) { left: 50%; transform: rotate(75deg); }
+.confetti-piece:nth-child(6) { left: 60%; transform: rotate(90deg); }
+.confetti-piece:nth-child(7) { left: 70%; transform: rotate(105deg); }
+.confetti-piece:nth-child(8) { left: 80%; transform: rotate(120deg); }
+.confetti-piece:nth-child(9) { left: 90%; transform: rotate(135deg); }
+.confetti-piece:nth-child(10) { left: 100%; transform: rotate(150deg); }
+
+/* Popper animation */
+@keyframes popUp {
+  0% { transform: scale(0); }
+  80% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* Confetti explosion animation */
+@keyframes explode {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-500px); }
+}
+
+/* Confetti floating effect */
+.confetti-piece {
+  animation: float 3s infinite ease-in-out;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0; }
+  25% { opacity: 1; }
+  50% { transform: translateY(-100px) rotate(180deg); opacity: 1; }
+  75% { opacity: 1; }
+  100% { transform: translateY(-200px) rotate(360deg); opacity: 0; }
+}
+
+/* 🌍 Responsive Media Queries */
+@media (max-width: 768px) {  /* Tablets & Mobile */
+  .confetti-piece {
+    width: 6px;
+    height: 12px;
+  }
+
+  @keyframes explode {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-300px); }
+  }
+}
+
+@media (max-width: 480px) {  /* Small Mobile */
+  .confetti-piece {
+    width: 4px;
+    height: 10px;
+  }
+
+  @keyframes explode {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-200px); }
+  }
+}

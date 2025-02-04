@@ -171,15 +171,6 @@ export default function About() {
             animate={isMounted ? { opacity: 1, y: 0 } : { opacity: 0, y: -50 }} // Animate only on client
             transition={{ duration: 0.5 }}
           >
-            {/* Character positioned at the top-left */}
-            <motion.img
-              src="./characters/Explainer.png" // Replace with your character image path
-              alt="Character"
-              className="absolute top-0 left-0 w-32 h-32 z-20" // Top-left position
-              initial={false} // Disable initial animation on server
-              animate={isMounted ? { x: 0, y: 0 } : { x: -50, y: -50 }} // Animate only on client
-              transition={{ type: "spring", stiffness: 50 }}
-            />
             <h2 className="text-3xl font-semibold text-white mb-4">
               About the Game
             </h2>
@@ -189,7 +180,17 @@ export default function About() {
               animate={isMounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }} // Animate only on client
               transition={{ duration: 0.5 }}
             >
-              <motion.p className="text-lg text-blue-100 mb-8 text-justify">
+              {/* Character positioned at the top-left */}
+            <motion.img
+              src="./characters/Explainer.png" // Replace with your character image path
+              alt="Character"
+              className="absolute w-32 h-32 z-20"
+              style={{ top: "-4.5rem", left: "-1.8rem" }}
+              initial={false} // Disable initial animation on server
+              animate={isMounted ? { x: 0, y: 0 } : { x: -50, y: -50 }} // Animate only on client
+              transition={{ type: "spring", stiffness: 50 }}
+            />
+              <motion.p className="text-lg text-blue-100 mb-8 mt-8 text-justify">
                 {isMounted && // Render dynamic content only after mounting
                   textArray.map((char, index) => (
                     <motion.span

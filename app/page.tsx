@@ -177,7 +177,7 @@ export default function Home() {
           transition={{ duration: 0.5 }}
         >
           <motion.h1
-            className="title text-6xl text-blue-800 mb-8"
+            className="title text-4xl md:text-5xl text-blue-800 mb-8 text-center w-full"
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.5 }}
