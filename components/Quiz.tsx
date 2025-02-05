@@ -1,4 +1,4 @@
-import { useState, useEffect, JSX } from "react"
+import { useState, useEffect, JSX, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -45,14 +45,20 @@ export function Quiz({ quizSet, onComplete }: QuizProps): JSX.Element {
   const [score, setScore] = useState<number>(0)
   const [timeLeft, setTimeLeft] = useState<number>(30)
   const [answered, setAnswered] = useState<boolean>(false)
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [correctAnswer, setCorrectAnswer] = useState<string | null>(null);
+  const [highlighted, setHighlighted] = useState<boolean>(false);
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = useCallback(() => {
     const currentSectionQuestions = quizSet.sections[currentSection]
 
     if (currentQuestion < currentSectionQuestions.length - 1) {
       setCurrentQuestion((prev) => prev + 1)
       setTimeLeft(30)
       setAnswered(false)
+      setSelectedOption(null);
+      setCorrectAnswer(null);
+      setHighlighted(false);
     }
     // else if (currentSection < quizSet.sections.length - 1) {
     //   setCurrentSection((prev) => prev + 1)
@@ -63,7 +69,55 @@ export function Quiz({ quizSet, onComplete }: QuizProps): JSX.Element {
     else {
       onComplete(score);
     }
-  }
+  }, [quizSet.sections, currentSection, currentQuestion, onComplete, score])
+
+  
+  useEffect(() => {
+    let timer: NodeJS.Timeout | null = null
+
+    if (!answered && timeLeft > 0) {
+      console.log("One second")
+      timer = setInterval(() => {
+        setTimeLeft((prevTime) => prevTime - 1)
+      }, 1000)
+    } else if (timeLeft === 0 && !answered) {
+      console.log("Next question")
+      const correct = quizSet.sections[currentSection][currentQuestion].correctAnswer;
+      setCorrectAnswer(correct);
+      setHighlighted(true); // Trigger UI update for button color
+
+      setTimeout(() => {
+        handleNextQuestion(); // Move to next question after showing the correct answer for 2 seconds
+      }, 2000);
+    }
+
+    return () => {
+      if (timer) clearInterval(timer)
+    }
+  }, [timeLeft, answered, handleNextQuestion, currentQuestion, quizSet.sections, currentSection])
+
+
+  const handleAnswer = (selectedAnswer: string) => {
+    const currentSectionQuestions = quizSet.sections[currentSection];
+    const correct = currentSectionQuestions[currentQuestion].correctAnswer;
+
+    setSelectedOption(selectedAnswer);
+    setCorrectAnswer(correct);
+    setAnswered(true);
+    setHighlighted(true); // Ensures immediate highlight when user answers
+
+    if (selectedAnswer === correct) {
+      setScore((prevScore) => prevScore + 5);
+    }
+
+    setTimeout(() => {
+      setSelectedOption(null);
+      setCorrectAnswer(null);
+      setHighlighted(false);
+      handleNextQuestion();
+    }, 2000); // Move to the next question after 2 seconds
+  };
+
 
   // const handleNextQuestion = () => {
   //   const currentSectionQuestions = quizSet.sections[currentSection]
@@ -108,24 +162,8 @@ export function Quiz({ quizSet, onComplete }: QuizProps): JSX.Element {
   //   }, 1000)
 
   //   return () => clearInterval(timer)
-  // }, [answered, handleNextQuestion])\
+  // }, [answered, handleNextQuestion])
 
-  useEffect(() => {
-    let timer: NodeJS.Timeout | null = null
-
-    if (!answered && timeLeft > 0) {
-      timer = setInterval(() => {
-        setTimeLeft((prevTime) => prevTime - 1)
-      }, 1000)
-    } else if (timeLeft === 0 && !answered) {
-      console.log("Time Up! Moving to Next Question")
-      handleNextQuestion()
-    }
-
-    return () => {
-      if (timer) clearInterval(timer)
-    }
-  }, [timeLeft, answered, handleNextQuestion])
 
   // useEffect(() => {
   //   console.log("Timer Effect Running"); // Debug log
@@ -161,14 +199,14 @@ export function Quiz({ quizSet, onComplete }: QuizProps): JSX.Element {
   //   handleNextQuestion()
   // }
 
-  const handleAnswer = (selectedAnswer: string) => {
-    const currentSectionQuestions = quizSet.sections[currentSection]
-    if (selectedAnswer === currentSectionQuestions[currentQuestion].correctAnswer) {
-      setScore((prevScore) => prevScore + 1)
-    }
-    setAnswered(true)
-    handleNextQuestion()
-  }
+  // const handleAnswer = (selectedAnswer: string) => {
+  //   const currentSectionQuestions = quizSet.sections[currentSection]
+  //   if (selectedAnswer === currentSectionQuestions[currentQuestion].correctAnswer) {
+  //     setScore((prevScore) => prevScore + 1)
+  //   }
+  //   setAnswered(true)
+  //   handleNextQuestion()
+  // }
 
   const currentQuestionData = quizSet.sections[currentSection][currentQuestion]
 
@@ -209,9 +247,61 @@ export function Quiz({ quizSet, onComplete }: QuizProps): JSX.Element {
         </h3>
         <span className="text-lg font-medium">Time left: {timeLeft}s</span>
       </motion.div>
-      <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 0.5 }}>
-        <Progress value={(timeLeft / 30) * 100} className="w-full" />
+
+      <motion.div
+        key={timeLeft} // Re-triggers animation when timeLeft updates
+        initial={{ scaleX: 1, opacity: 1 }}
+        animate={{
+          scaleX: timeLeft > 0 ? timeLeft / 30 : 0, // Shrink width smoothly
+          opacity: timeLeft > 0 ? 1 : 0, // Fade out when reaching 0s
+          scaleY: timeLeft > 0 ? 1 : 0.2, // Reduce height at the end
+        }}
+        transition={{ duration: 1, ease: "linear" }} // Smooth animation
+        className="w-full"
+      >
+        <Progress
+          value={(timeLeft / 30) * 100}
+          className={`w-full h-4 transition-all duration-500 ${timeLeft <= 10 ? "bg-red-500" : timeLeft <= 20 ? "bg-blue-500" : "bg-green-500"
+            }`}
+        />
       </motion.div>
+
+      {/* <motion.div
+        initial={{ scaleX: 1, opacity: 1 }}
+        animate={{
+          scaleX: timeLeft / 30, // Shrinks smoothly without expanding again
+          opacity: timeLeft > 0 ? 1 : 0, // Disappears at 0s
+          scaleY: timeLeft > 0 ? 1 : 0.2, // Shrinks in height at the end
+        }}
+        transition={{ duration: 1, ease: "linear" }}
+        className="w-full"
+      >
+        <Progress
+          value={(timeLeft / 30) * 100}
+          className={`w-full h-4 transition-all duration-500 ${timeLeft <= 10 ? "bg-red-500" : timeLeft <= 20 ? "bg-blue-500" : "bg-green-500"
+            }`}
+        />
+      </motion.div> */}
+
+      {/* <motion.div
+        initial={{ scaleX: 1, opacity: 1 }}
+        animate={{
+          scaleX: timeLeft / 30, // Shrinks smoothly
+          opacity: timeLeft > 0 ? 1 : 0, // Disappears at 0s
+          scaleY: timeLeft > 0 ? 1 : 0.2, // Shrinks in height at the end
+        }}
+        transition={{ duration: 1, ease: "linear" }}
+        className="w-full overflow-hidden rounded-full" // Ensures smooth shrinking
+        // style={{ transformOrigin: "left" }} // Prevents losing rounded edges
+      >
+        <Progress
+          value={(timeLeft / 30) * 100}
+          className={`w-full h-4 min-w-[8px] transition-all duration-500 rounded-full ${timeLeft <= 10 ? "bg-red-500" : timeLeft <= 20 ? "bg-blue-500" : "bg-green-500"
+            }`}
+        />
+      </motion.div> */}
+
+
       <AnimatePresence mode="wait">
         <motion.div
           key={currentQuestion}
@@ -234,7 +324,45 @@ export function Quiz({ quizSet, onComplete }: QuizProps): JSX.Element {
           <p className="text-lg text-center">{currentQuestionData.question}</p>
 
           <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-8" variants={containerVariants}>
-            {currentQuestionData.options.map((option) => (
+            {currentQuestionData.options.map((option) => {
+              // let bgColor = "bg-blue-700"; // Default button color
+              // if (selectedOption) {
+              //   if (option === correctAnswer) bgColor = "bg-green-500"; // Correct answer
+              //   else if (option === selectedOption) bgColor = "bg-red-500"; // Wrong answer
+              // }
+
+              return (
+                <motion.div key={option} variants={itemVariants}>
+                  <motion.div
+                    // className={`px-4 py-2 text-white rounded-lg font-medium backdrop-blur-lg flex items-center justify-center ${bgColor}`}
+                    className={`px-4 py-2 rounded-lg font-medium backdrop-blur-lg flex items-center justify-center
+                      ${selectedOption || highlighted
+                        ? option === correctAnswer
+                          ? "bg-green-600 text-white font-bold shadow-lg scale-105" // Correct option
+                          : option === selectedOption
+                            ? "bg-red-600 text-white font-bold shadow-lg scale-105" // Incorrect option
+                            : "opacity-50" // Other options fade out
+                        : "bg-blue-600 text-white"
+                      }
+                    `}
+                    whileHover={{
+                      scale: selectedOption ? 1 : 1.05,
+                      transition: { duration: 0.2 },
+                    }}
+                    whileTap={{ scale: selectedOption ? 1 : 0.95 }}
+                  >
+                    <Button
+                      onClick={() => handleAnswer(option)}
+                      className="w-full h-full py-3 px-3 text-base font-medium text-center break-words whitespace-normal flex items-center justify-center md:w-60 md:h-16"
+                      disabled={!!selectedOption} // Disable after selecting an answer
+                    >
+                      {option}
+                    </Button>
+                  </motion.div>
+                </motion.div>
+              );
+            })}
+            {/* {currentQuestionData.options.map((option) => (
               <motion.div key={option} variants={itemVariants}>
                 <motion.div
                   className="px-4 py-2 bg-blue-700 text-white rounded-lg font-medium backdrop-blur-lg flex items-center justify-center"
@@ -252,7 +380,7 @@ export function Quiz({ quizSet, onComplete }: QuizProps): JSX.Element {
                   </Button>
                 </motion.div>
               </motion.div>
-            ))}
+            ))} */}
           </motion.div>
           {/* <motion.div
             className="grid grid-cols-2 gap-4"

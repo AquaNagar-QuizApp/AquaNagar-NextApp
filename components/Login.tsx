@@ -17,12 +17,12 @@ export function Login({ onLogin }: LoginProps): JSX.Element {
   })
 
   const [errors, setErrors] = useState({
-    title: false,
-    name: false,
-    department: false,
-    designation: false,
-    email: false,
-    mobile: false,
+    title: "",
+    name: "",
+    department: "",
+    designation: "",
+    email: "",
+    mobile: "",
   })
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -33,13 +33,65 @@ export function Login({ onLogin }: LoginProps): JSX.Element {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
+    // const newErrors: LoginError = {
+    //   title: !formData.title, // Required check
+
+    //   name: !formData.name ||
+    //     !/^[A-Za-z\s]+$/.test(formData.name) ||  // Only alphabets and spaces allowed
+    //     !(formData.name.length < 50), // Max length check
+
+    //   department: !formData.department ||
+    //     !/^[A-Za-z\s]+$/.test(formData.department), // No numbers or special characters allowed
+
+    //   designation: !formData.designation ||
+    //     /^\d+$/.test(formData.designation) || // Cannot be entirely numeric
+    //     /[^A-Za-z\s\d]/.test(formData.designation), // No special characters allowed
+
+    //   email: !formData.email ||
+    //     !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email), // Strict email validation
+
+    //   mobile: !formData.mobile ||
+    //     !/^[6-9]\d{9}$/.test(formData.mobile), // Must start with 6-9 and have 10 digits
+    // };
+
     const newErrors: LoginError = {
-      title: !formData.title,
-      name: !formData.name || !(formData.name.length < 50),
-      department: !formData.department,
-      designation: !formData.designation,
-      email: !formData.email || !/\S+@\S+\.\S+/.test(formData.email),
-      mobile: !formData.mobile || !/^\d{10}$/.test(formData.mobile),
+      title: !formData.title ? "Title is required" : "",
+
+      name: !formData.name
+        ? "Name is required"
+        : !/^[A-Za-z\s]+$/.test(formData.name)
+          ? "Only alphabets and spaces are allowed"
+          : formData.name.length >= 50
+            ? "Name must be less than 50 characters"
+            : "",
+
+      department: !formData.department
+        ? "Department is required"
+        : !/^[A-Za-z\s]+$/.test(formData.department)
+          ? "Only alphabets and spaces are allowed"
+          : "",
+
+      designation: !formData.designation
+        ? "Designation is required"
+        : /^\d+$/.test(formData.designation)
+          ? "Designation cannot be only numbers"
+          : /[^A-Za-z\s\d]/.test(formData.designation)
+            ? "Special characters are not allowed"
+            : "",
+
+      email: !formData.email
+        ? "Email is required"
+        : !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email)
+          ? "Enter a valid email address"
+          : "",
+
+      mobile: !formData.mobile
+        ? "Mobile number is required"
+        : !/^\d{10}$/.test(formData.mobile)
+          ? "Mobile number must be 10 digits"
+          : !/^[6-9]\d{9}$/.test(formData.mobile)
+            ? "Mobile number must start with 6, 7, 8, or 9"
+            : "",
     };
 
     // const newErrors: LoginError = {
@@ -200,7 +252,7 @@ export function Login({ onLogin }: LoginProps): JSX.Element {
             onChange={handleChange}
             required={false} // Remove native required
           />
-          {errors.name && <p className="text-red-600 text-sm min-h-[20px]">Name is required</p>}
+          {errors.name && <p className="text-red-600 text-sm min-h-[20px]">{errors.name}</p>}
         </div>
       </motion.div>
 
@@ -214,7 +266,7 @@ export function Login({ onLogin }: LoginProps): JSX.Element {
           onChange={handleChange}
           required={false} // Remove native required
         />
-        {errors.department && <p className="text-red-600 text-sm">Department is required</p>}
+        {errors.department && <p className="text-red-600 text-sm min-h-[20px]">{errors.department}</p>}
       </motion.div>
       <motion.div variants={inputVariants}>
         <Label htmlFor="designation">Designation</Label>
@@ -225,19 +277,19 @@ export function Login({ onLogin }: LoginProps): JSX.Element {
           onChange={handleChange}
           required={false} // Remove native required
         />
-        {errors.designation && <p className="text-red-600 text-sm">Designation is required</p>}
+        {errors.designation && <p className="text-red-600 text-sm min-h-[20px]">{errors.designation}</p>}
       </motion.div>
       <motion.div variants={inputVariants}>
         <Label htmlFor="email">Email</Label>
         <Input
           id="email"
           name="email"
-          type="email"
+          // type="email"
           value={formData.email}
           onChange={handleChange}
           required={false} // Remove native required
         />
-        {errors.email && <p className="text-red-600 text-sm">Valid email is required</p>}
+        {errors.email && <p className="text-red-600 text-sm min-h-[20px]">{errors.email}</p>}
       </motion.div>
       <motion.div variants={inputVariants}>
         <Label htmlFor="mobile">Mobile</Label>
@@ -249,7 +301,7 @@ export function Login({ onLogin }: LoginProps): JSX.Element {
           onChange={handleChange}
           required={false} // Remove native required
         />
-        {errors.mobile && <p className="text-red-600 text-sm">Valid mobile number is required</p>}
+        {errors.mobile && <p className="text-red-600 text-sm min-h-[20px]">{errors.mobile}</p>}
       </motion.div>
 
       <motion.div

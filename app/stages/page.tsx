@@ -37,7 +37,23 @@ function StagesResult() {
   }, [searchParams.toString()]);
 
   // Auto route to next stage after animation completes
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     const set = searchParams.get("set");
+  //     if (stageParam && set) {
+  //       router.push(`/quiz?stage=${encodeURIComponent(stageParam)}&set=${encodeURIComponent(set)}`);
+  //     } else {
+  //       console.error("Stage is missing");
+  //     }
+  //   }, 5000); // Change page after 5 seconds
+
+  //   return () => clearTimeout(timer); // Cleanup on unmount
+  // }, [currentPart]);
+
   useEffect(() => {
+    const textLength = caseStudies[currentPart].length;
+    const animationTime = textLength * 0.05 + 0.1; // Calculate the required animation time
+
     const timer = setTimeout(() => {
       const set = searchParams.get("set");
       if (stageParam && set) {
@@ -45,10 +61,11 @@ function StagesResult() {
       } else {
         console.error("Stage is missing");
       }
-    }, 5000); // Change page after 5 seconds
+    }, animationTime * 1000 + 2000); // Convert to milliseconds
 
     return () => clearTimeout(timer); // Cleanup on unmount
   }, [currentPart]);
+
 
   // const handlePrevious = () => {
   //   if (currentPart > 0) {
@@ -71,35 +88,36 @@ function StagesResult() {
   // };
 
   return (
-      <main className="min-h-screen relative overflow-hidden">
-        <AnimatedBackground />
-        <div className="relative z-10 h-screen flex flex-col items-center justify-center p-4">
-          <div className="max-w-2xl w-full">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentPart}
-                className="relative bg-white bg-opacity-20 backdrop-blur-lg rounded-xl p-6 mb-4"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5 }}
-              >
-                {/* Character Positioned at Top Left */}
-                <motion.img
-                  src="./characters/Explainer.png"
-                  alt="Character"
-                  className="absolute top-0 left-10 w-24 h-24 z-20 -mt-12 -ml-12"
-                  initial={{ x: -50, y: -50 }}
-                  animate={{ x: 0, y: 0 }}
-                  transition={{ type: "spring", stiffness: 50 }}
-                />
+    <main className="min-h-screen relative overflow-hidden">
+      <AnimatedBackground />
+      <div className="relative z-10 h-screen flex flex-col items-center justify-center p-4">
+        <div className="max-w-2xl w-full">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentPart}
+              className="relative bg-white bg-opacity-20 backdrop-blur-lg rounded-xl p-6 mb-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+            >
+              {/* Character Positioned at Top Left */}
+              <motion.img
+                src="./characters/Explainer.png"
+                alt="Character"
+                className="absolute top-0 left-10 w-24 h-24 z-20 -mt-12 -ml-12"
+                initial={{ x: -50, y: -50 }}
+                animate={{ x: 0, y: 0 }}
+                transition={{ type: "spring", stiffness: 50 }}
+              />
 
-                {/* Heading for the current story part */}
-                <motion.h2 className="text-2xl font-bold text-white mt-5 text-center w-full">
-                  {stageTitle}
-                </motion.h2>
+              {/* Heading for the current story part */}
+              <motion.h2 className="text-2xl font-bold text-white mt-5 text-center w-full">
+                {stageTitle}
+              </motion.h2>
 
-                {/* Story Part Content */}
+              {/* Story Part Content */}
+              <motion.div className="flex justify-center text-center w-full">
                 <motion.p className="text-lg text-white mt-5">
                   {caseStudies[currentPart].split("").map((char, index) => (
                     <motion.span
@@ -116,14 +134,15 @@ function StagesResult() {
                   ))}
                 </motion.p>
               </motion.div>
-            </AnimatePresence>
-          </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
-      </main>
+      </div>
+    </main>
   );
 }
 
-export default function Stages(){
+export default function Stages() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <StagesResult />

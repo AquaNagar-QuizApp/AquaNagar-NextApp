@@ -24,12 +24,12 @@ export interface User {
 }
 
 export interface LoginError {
-  name: boolean
-  department: boolean
-  designation: boolean
-  email: boolean
-  mobile: boolean
-  title: boolean
+  name: string
+  department: string
+  designation: string
+  email: string
+  mobile: string
+  title: string
 }
 
 export interface QuizProps {
