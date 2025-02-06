@@ -166,6 +166,7 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
     setTimeout(() => {
       // Ensure last question triggers completion
       if (currentQuestion === currentSectionQuestions.length - 1) {
+        console.log(stage);
         const completedSections = JSON.parse(sessionStorage.getItem("completedSections") || "{}");
         completedSections[currentSection] = score + (answered && selectedOption === correctAnswer ? 5 : 0);
         sessionStorage.setItem("completedSections", JSON.stringify(completedSections));
