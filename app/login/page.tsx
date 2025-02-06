@@ -5,22 +5,29 @@ import { AnimatedBackground } from "@/components/AnimatedBackground"
 import { Login } from "@/components/Login"
 import { User } from "@/types"
 import { useState } from "react"
+import { useAudio } from "@/context/AudioContext"
+// import AudioPlayer from "@/components/AudioPlayer"
 
 export default function LoginPage() {
   const [showInitialContent, setShowInitialContent] = useState(true)
   const [showWaves, setShowWaves] = useState(false)
   const [waveCount, setWaveCount] = useState(0)
   const router = useRouter()
+  const { isMuted, playBackgroundMusic, pauseBackgroundMusic } = useAudio();
 
   const handleLogin = (userData: User) => {
     setShowInitialContent(false)
     setShowWaves(true)
     let count = 0
- 
+
+    if (!isMuted){
+      playBackgroundMusic();
+    }
+
     const interval = setInterval(() => {
       setWaveCount((prev) => prev + 1)
       count++
- 
+
       if (count === 5) {
         clearInterval(interval)
         setTimeout(() => {
@@ -29,6 +36,8 @@ export default function LoginPage() {
       }
     }, 600) // Increased wave count every 600ms (faster than before)
 
+    // Simulate login
+    sessionStorage.setItem("isLoggedIn", "true")
     console.log("User logged in:", userData)
   }
 
@@ -58,6 +67,7 @@ export default function LoginPage() {
               exit={{ opacity: 0, scale: 0.5 }}
               transition={{ duration: 0.5 }}
             >
+              {/* <AudioPlayer/> */}
               <div>{"🌀".repeat(waveCount)}</div>
               {waveCount <= 5 && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>

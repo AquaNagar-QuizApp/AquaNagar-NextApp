@@ -29,7 +29,7 @@ export function QuizContent(): JSX.Element {
       <h2 className="text-2xl font-semibold text-white mb-6 text-center">
         {stage} - {quizSetName}
       </h2>
-      <Quiz quizSet={quizSets[quizSetName]} onComplete={handleQuizCompletion} />
+      <Quiz quizSet={quizSets[quizSetName]} stage={stage} onComplete={handleQuizCompletion} />
     </>
   )
 }

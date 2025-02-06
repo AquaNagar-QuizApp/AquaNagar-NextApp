@@ -1,8 +1,9 @@
-import { useState, useEffect, JSX, useCallback } from "react"
+import { useState, useEffect, JSX, useCallback, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
+import { useAudio } from "@/context/AudioContext"
 
 interface QuizSet {
   sections: Question[][]
@@ -18,27 +19,11 @@ interface Question {
 
 interface QuizProps {
   quizSet: QuizSet
+  stage: string
   onComplete: (score: number) => void
 }
 
-// const mockQuestions: Question[] = [
-//   {
-//     type: "text",
-//     question: "What is the main source of freshwater on Earth?",
-//     options: ["Oceans", "Rivers", "Groundwater", "Glaciers"],
-//     correctAnswer: "Groundwater",
-//   },
-//   {
-//     type: "image",
-//     question: "Which of these is a water conservation method?",
-//     imageUrl: "/placeholder.svg?height=200&width=300",
-//     options: ["Drip irrigation", "Flood irrigation", "Sprinkler system", "Manual watering"],
-//     correctAnswer: "Drip irrigation",
-//   },
-//   // Add more mock questions here
-// ]
-
-export function Quiz({ quizSet, onComplete }: QuizProps): JSX.Element {
+export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
   // const [currentSection, setCurrentSection] = useState<number>(0)
   const currentSection = 0
   const [currentQuestion, setCurrentQuestion] = useState<number>(0)
@@ -49,53 +34,107 @@ export function Quiz({ quizSet, onComplete }: QuizProps): JSX.Element {
   const [correctAnswer, setCorrectAnswer] = useState<string | null>(null);
   const [highlighted, setHighlighted] = useState<boolean>(false);
 
+  const { isMuted, playBackgroundMusic, pauseBackgroundMusic } = useAudio();
+
+  const correctSoundRef = useRef<HTMLAudioElement | null>(null);
+  const wrongSoundRef = useRef<HTMLAudioElement | null>(null);
+  const buzzerSoundRef = useRef<HTMLAudioElement | null>(null);
+
+  // Play background music after the sound ends
+  useEffect(() => {
+    const resumeBGM = () => {
+      if (!isMuted) {
+        playBackgroundMusic();
+      }
+    };
+
+    // Add event listeners to sound elements
+    const correctSound = correctSoundRef.current;
+    const wrongSound = wrongSoundRef.current;
+    const buzzerSound = buzzerSoundRef.current;
+
+    if (correctSound) {
+      correctSound.addEventListener("ended", resumeBGM);
+    }
+    if (wrongSound) {
+      wrongSound.addEventListener("ended", resumeBGM);
+    }
+    if (buzzerSound) {
+      buzzerSound.addEventListener("ended", resumeBGM);
+    }
+
+    // Cleanup event listeners
+    return () => {
+      if (correctSound) {
+        correctSound.removeEventListener("ended", resumeBGM);
+      }
+      if (wrongSound) {
+        wrongSound.removeEventListener("ended", resumeBGM);
+      }
+      if (buzzerSound) {
+        buzzerSound.removeEventListener("ended", resumeBGM);
+      }
+    };
+  }, [playBackgroundMusic]);
+
   const handleNextQuestion = useCallback(() => {
-    const currentSectionQuestions = quizSet.sections[currentSection]
+    const currentSectionQuestions = quizSet.sections[currentSection];
 
     if (currentQuestion < currentSectionQuestions.length - 1) {
-      setCurrentQuestion((prev) => prev + 1)
-      setTimeLeft(30)
-      setAnswered(false)
+      if (answered && selectedOption === correctAnswer) {
+        setScore((prev) => prev + 5);
+      }
+      setCurrentQuestion((prev) => prev + 1);
+      setTimeLeft(30);
+      setAnswered(false);
       setSelectedOption(null);
       setCorrectAnswer(null);
       setHighlighted(false);
+    } else {
+      // Wait for animation before completing the quiz
+      setTimeout(() => {
+        // Section completed, save section name & total score
+        // const completedSections = JSON.parse(sessionStorage.getItem("completedSections") || "{}");
+        // completedSections[currentSection] = score + (answered && selectedOption === correctAnswer ? 5 : 0);
+        // sessionStorage.setItem("completedSections", JSON.stringify(completedSections));
+        setScore((prevScore) => {
+          const finalScore = answered && selectedOption === correctAnswer ? prevScore + 5 : prevScore;
+          onComplete(finalScore);
+          return finalScore;
+        });
+      }, 500); // Wait for exit animation (500ms)
     }
-    // else if (currentSection < quizSet.sections.length - 1) {
-    //   setCurrentSection((prev) => prev + 1)
-    //   setCurrentQuestion(0)
-    //   setTimeLeft(30)
-    //   setAnswered(false)
-    // }
-    else {
-      onComplete(score);
-    }
-  }, [quizSet.sections, currentSection, currentQuestion, onComplete, score])
+  }, [quizSet.sections, currentSection, currentQuestion, answered, selectedOption, correctAnswer, onComplete]);
 
-  
+
   useEffect(() => {
-    let timer: NodeJS.Timeout | null = null
+    let timer: NodeJS.Timeout | null = null;
 
     if (!answered && timeLeft > 0) {
-      console.log("One second")
       timer = setInterval(() => {
-        setTimeLeft((prevTime) => prevTime - 1)
-      }, 1000)
+        setTimeLeft((prevTime) => {
+          if (prevTime === 1 && !isMuted) {
+            pauseBackgroundMusic(); // Pauses the background music
+
+            buzzerSoundRef.current?.play(); // Play buzzer sound 1 second before timeout
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
     } else if (timeLeft === 0 && !answered) {
-      console.log("Next question")
       const correct = quizSet.sections[currentSection][currentQuestion].correctAnswer;
       setCorrectAnswer(correct);
-      setHighlighted(true); // Trigger UI update for button color
+      setHighlighted(true);
 
       setTimeout(() => {
-        handleNextQuestion(); // Move to next question after showing the correct answer for 2 seconds
+        handleNextQuestion();
       }, 2000);
     }
 
     return () => {
-      if (timer) clearInterval(timer)
-    }
-  }, [timeLeft, answered, handleNextQuestion, currentQuestion, quizSet.sections, currentSection])
-
+      if (timer) clearInterval(timer);
+    };
+  }, [timeLeft, answered, handleNextQuestion, currentQuestion, quizSet.sections, currentSection]);
 
   const handleAnswer = (selectedAnswer: string) => {
     const currentSectionQuestions = quizSet.sections[currentSection];
@@ -106,107 +145,44 @@ export function Quiz({ quizSet, onComplete }: QuizProps): JSX.Element {
     setAnswered(true);
     setHighlighted(true); // Ensures immediate highlight when user answers
 
+    if (isMuted) {
+      // Pause background music before playing the sound effect
+      pauseBackgroundMusic();
+    }
+
     if (selectedAnswer === correct) {
       setScore((prevScore) => prevScore + 5);
+      if (!isMuted) {
+        pauseBackgroundMusic();
+        correctSoundRef.current?.play(); // Play correct sound
+      }
+    } else {
+      if (!isMuted) {
+        pauseBackgroundMusic();
+        wrongSoundRef.current?.play(); // Play wrong sound
+      }
     }
 
     setTimeout(() => {
-      setSelectedOption(null);
-      setCorrectAnswer(null);
-      setHighlighted(false);
-      handleNextQuestion();
-    }, 2000); // Move to the next question after 2 seconds
+      // Ensure last question triggers completion
+      if (currentQuestion === currentSectionQuestions.length - 1) {
+        const completedSections = JSON.parse(sessionStorage.getItem("completedSections") || "{}");
+        completedSections[currentSection] = score + (answered && selectedOption === correctAnswer ? 5 : 0);
+        sessionStorage.setItem("completedSections", JSON.stringify(completedSections));
+        onComplete(score + (selectedAnswer === correct ? 5 : 0)); // Finalize the score
+      } else {
+        handleNextQuestion();
+      }
+    }, 2000); // Wait for animation before moving to next
+
+    // setTimeout(() => {
+    //   setSelectedOption(null);
+    //   setCorrectAnswer(null);
+    //   setHighlighted(false);
+    //   handleNextQuestion();
+    // }, 2000);
   };
 
-
-  // const handleNextQuestion = () => {
-  //   const currentSectionQuestions = quizSet.sections[currentSection]
-  //   if (currentQuestion < currentSectionQuestions.length - 1) {
-  //     setCurrentQuestion((prev) => prev + 1)
-  //     setTimeLeft(30)
-  //   } else if (currentSection < quizSet.sections.length - 1) {
-  //     setCurrentSection((prev) => prev + 1)
-  //     setCurrentQuestion(0)
-  //     setTimeLeft(30)
-  //   } else {
-  //     onComplete(score)
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     setTimeLeft((prevTime) => {
-  //       if (prevTime === 0) {
-  //         handleNextQuestion()
-  //         return 30
-  //       }
-  //       return prevTime - 1
-  //     })
-  //   }, 1000)
-
-  //   return () => clearInterval(timer)
-  // }, [handleNextQuestion])
-
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     setTimeLeft((prevTime) => {
-  //       if (prevTime === 0) {
-  //         if (!answered) {
-  //           // Proceed to the next question if not answered yet
-  //           handleNextQuestion()
-  //         }
-  //         return 30
-  //       }
-  //       return prevTime - 1
-  //     })
-  //   }, 1000)
-
-  //   return () => clearInterval(timer)
-  // }, [answered, handleNextQuestion])
-
-
-  // useEffect(() => {
-  //   console.log("Timer Effect Running"); // Debug log
-
-  //   const timer = setInterval(() => {
-  //     console.log("Timer Triggered"); // Should print only once per second
-
-  //     setTimeLeft((prevTime) => {
-  //       if (prevTime === 0) {
-  //         console.log("Time Up! Moving to Next Question");
-
-  //         if (!answered) {
-  //           handleNextQuestion();
-  //         }
-  //         return 30;
-  //       }
-  //       return prevTime - 1;
-  //     });
-  //   }, 1000);
-
-  //   return () => {
-  //     console.log("Cleaning up Timer");
-  //     clearInterval(timer);
-  //   };
-  // }, [answered]); // Only depends on `answered`
-
-
-  // const handleAnswer = (selectedAnswer: string) => {
-  //   const currentSectionQuestions = quizSet.sections[currentSection]
-  //   if (selectedAnswer === currentSectionQuestions[currentQuestion].correctAnswer) {
-  //     setScore((prevScore) => prevScore + 1)
-  //   }
-  //   handleNextQuestion()
-  // }
-
-  // const handleAnswer = (selectedAnswer: string) => {
-  //   const currentSectionQuestions = quizSet.sections[currentSection]
-  //   if (selectedAnswer === currentSectionQuestions[currentQuestion].correctAnswer) {
-  //     setScore((prevScore) => prevScore + 1)
-  //   }
-  //   setAnswered(true)
-  //   handleNextQuestion()
-  // }
 
   const currentQuestionData = quizSet.sections[currentSection][currentQuestion]
 
@@ -236,6 +212,11 @@ export function Quiz({ quizSet, onComplete }: QuizProps): JSX.Element {
 
   return (
     <Card className="p-6 space-y-4">
+      <>
+        <audio ref={correctSoundRef} src="./soundeffects/correctanswer.mp3" />
+        <audio ref={wrongSoundRef} src="./soundeffects/wronganswer.mp3" />
+        <audio ref={buzzerSoundRef} src="./soundeffects/buzzersound.mp3" />
+      </>
       <motion.div
         className="flex justify-between items-center"
         initial={{ opacity: 0, y: -20 }}
@@ -243,64 +224,30 @@ export function Quiz({ quizSet, onComplete }: QuizProps): JSX.Element {
         transition={{ duration: 0.5 }}
       >
         <h3 className="text-xl font-semibold">
-          Section {currentSection + 1} - Question {currentQuestion + 1}
+          Stage {currentSection + 1} - Question {currentQuestion + 1}
         </h3>
         <span className="text-lg font-medium">Time left: {timeLeft}s</span>
       </motion.div>
 
-      <motion.div
-        key={timeLeft} // Re-triggers animation when timeLeft updates
-        initial={{ scaleX: 1, opacity: 1 }}
-        animate={{
-          scaleX: timeLeft > 0 ? timeLeft / 30 : 0, // Shrink width smoothly
-          opacity: timeLeft > 0 ? 1 : 0, // Fade out when reaching 0s
-          scaleY: timeLeft > 0 ? 1 : 0.2, // Reduce height at the end
-        }}
-        transition={{ duration: 1, ease: "linear" }} // Smooth animation
-        className="w-full"
-      >
-        <Progress
-          value={(timeLeft / 30) * 100}
-          className={`w-full h-4 transition-all duration-500 ${timeLeft <= 10 ? "bg-red-500" : timeLeft <= 20 ? "bg-blue-500" : "bg-green-500"
-            }`}
-        />
-      </motion.div>
-
-      {/* <motion.div
-        initial={{ scaleX: 1, opacity: 1 }}
-        animate={{
-          scaleX: timeLeft / 30, // Shrinks smoothly without expanding again
-          opacity: timeLeft > 0 ? 1 : 0, // Disappears at 0s
-          scaleY: timeLeft > 0 ? 1 : 0.2, // Shrinks in height at the end
-        }}
-        transition={{ duration: 1, ease: "linear" }}
-        className="w-full"
-      >
-        <Progress
-          value={(timeLeft / 30) * 100}
-          className={`w-full h-4 transition-all duration-500 ${timeLeft <= 10 ? "bg-red-500" : timeLeft <= 20 ? "bg-blue-500" : "bg-green-500"
-            }`}
-        />
-      </motion.div> */}
-
-      {/* <motion.div
-        initial={{ scaleX: 1, opacity: 1 }}
-        animate={{
-          scaleX: timeLeft / 30, // Shrinks smoothly
-          opacity: timeLeft > 0 ? 1 : 0, // Disappears at 0s
-          scaleY: timeLeft > 0 ? 1 : 0.2, // Shrinks in height at the end
-        }}
-        transition={{ duration: 1, ease: "linear" }}
-        className="w-full overflow-hidden rounded-full" // Ensures smooth shrinking
-        // style={{ transformOrigin: "left" }} // Prevents losing rounded edges
-      >
-        <Progress
-          value={(timeLeft / 30) * 100}
-          className={`w-full h-4 min-w-[8px] transition-all duration-500 rounded-full ${timeLeft <= 10 ? "bg-red-500" : timeLeft <= 20 ? "bg-blue-500" : "bg-green-500"
-            }`}
-        />
-      </motion.div> */}
-
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={timeLeft} // Re-triggers animation when timeLeft updates
+          initial={{ scaleX: 1, opacity: 1 }}
+          animate={{
+            scaleX: timeLeft > 0 ? timeLeft / 30 : 0, // Shrink width smoothly
+            opacity: timeLeft > 0 ? 1 : 0, // Fade out when reaching 0s
+            scaleY: timeLeft > 0 ? 1 : 0.2, // Reduce height at the end
+          }}
+          transition={{ duration: 1, ease: "linear" }} // Smooth animation
+          className="w-full"
+        >
+          <Progress
+            value={(timeLeft / 30) * 100}
+            className={`w-full h-4 transition-all duration-500 ${timeLeft <= 10 ? "bg-red-500" : timeLeft <= 20 ? "bg-blue-500" : "bg-green-500"
+              }`}
+          />
+        </motion.div>
+      </AnimatePresence>
 
       <AnimatePresence mode="wait">
         <motion.div
@@ -325,12 +272,6 @@ export function Quiz({ quizSet, onComplete }: QuizProps): JSX.Element {
 
           <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-8" variants={containerVariants}>
             {currentQuestionData.options.map((option) => {
-              // let bgColor = "bg-blue-700"; // Default button color
-              // if (selectedOption) {
-              //   if (option === correctAnswer) bgColor = "bg-green-500"; // Correct answer
-              //   else if (option === selectedOption) bgColor = "bg-red-500"; // Wrong answer
-              // }
-
               return (
                 <motion.div key={option} variants={itemVariants}>
                   <motion.div
@@ -362,53 +303,7 @@ export function Quiz({ quizSet, onComplete }: QuizProps): JSX.Element {
                 </motion.div>
               );
             })}
-            {/* {currentQuestionData.options.map((option) => (
-              <motion.div key={option} variants={itemVariants}>
-                <motion.div
-                  className="px-4 py-2 bg-blue-700 text-white rounded-lg font-medium backdrop-blur-lg flex items-center justify-center"
-                  whileHover={{
-                    scale: 1.05,
-                    transition: { duration: 0.2 },
-                  }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Button
-                    onClick={() => handleAnswer(option)}
-                    className="w-full h-full py-3 px-3 text-base font-medium text-center break-words whitespace-normal flex items-center justify-center md:w-60 md:h-16"
-                    >
-                    {option}
-                  </Button>
-                </motion.div>
-              </motion.div>
-            ))} */}
           </motion.div>
-          {/* <motion.div
-            className="grid grid-cols-2 gap-4"
-            variants={{
-              hidden: { opacity: 0 },
-              visible: {
-                opacity: 1,
-                transition: { staggerChildren: 0.1 },
-              },
-            }}
-            initial="hidden"
-            animate="visible"
-          >
-            {currentQuestionData.options.map((option) => (
-              <motion.div
-                key={option}
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0 },
-                }}
-              >
-                <Button onClick={() => handleAnswer(option)}
-                  className="w-full h-full py-4 px-1 text-lg font-semibold text-center break-words whitespace-normal flex items-center justify-center md:w-64 md:h-20">
-                  {option}
-                </Button>
-              </motion.div>
-            ))}
-          </motion.div> */}
         </motion.div>
       </AnimatePresence>
     </Card>

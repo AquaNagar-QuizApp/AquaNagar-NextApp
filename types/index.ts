@@ -9,6 +9,16 @@ export interface Question {
   imageUrl?: string
 }
 
+export type Stage = {
+  stageName: string;
+  questions: Question[];
+};
+
+export type Set = {
+  setName: string;
+  stages: Stage[];
+};
+
 export interface QuizSet {
   name: QuizSetName
   sections: Question[][]
