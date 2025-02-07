@@ -930,18 +930,18 @@ const getQuestionsForStage8 = (): Question[] => [
   //   imageUrl: "/placeholder.svg?height=200&width=300",
   // },
 
-  const getQuestionsForSampleStage = (): Question[] => [
-  {
-    type: "text",
-    question: "What is the primary benefit of implementing smart water meters in urban water systems?",
-    options: [
-      "Increased water usage",
-      "Improved billing accuracy and leak detection",
-      "Reduced consumer awareness",
-      "Higher water prices",
-    ],
-    correctAnswer: "Improved billing accuracy and leak detection",
-  }];
+  // const getQuestionsForSampleStage = (): Question[] => [
+  // {
+  //   type: "text",
+  //   question: "What is the primary benefit of implementing smart water meters in urban water systems?",
+  //   options: [
+  //     "Increased water usage",
+  //     "Improved billing accuracy and leak detection",
+  //     "Reduced consumer awareness",
+  //     "Higher water prices",
+  //   ],
+  //   correctAnswer: "Improved billing accuracy and leak detection",
+  // }];
 
 // Generate stages for each set
 const stages: Stage[] = [

@@ -383,20 +383,6 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
       </div>
 
       {allSectionsCompleted ? (
-        // <>
-        //   <button
-        //     className="px-6 py-2 bg-green-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-green-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 mb-4"
-        //     onClick={handleSelectAnotherSet}
-        //   >
-        //     Return to Select Another Set
-        //   </button>
-        //   <button
-        //     className="px-6 py-2 bg-yellow-600 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-yellow-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50"
-        //     onClick={handleDownloadCertificate}
-        //   >
-        //     Download Certificate
-        //   </button>
-        // </>
         <div className="flex flex-col md:flex-row justify-between items-center w-full gap-4">
           <button
             className="px-6 py-2 w-full md:w-auto bg-green-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-green-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50"
