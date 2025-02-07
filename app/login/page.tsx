@@ -13,7 +13,7 @@ export default function LoginPage() {
   const [showWaves, setShowWaves] = useState(false)
   const [waveCount, setWaveCount] = useState(0)
   const router = useRouter()
-  const { isMuted, playBackgroundMusic, pauseBackgroundMusic } = useAudio();
+  const { isMuted, playBackgroundMusic } = useAudio();
 
   const handleLogin = (userData: User) => {
     setShowInitialContent(false)

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, Suspense, useRef, RefObject } from "react"
+import { useState, useEffect, Suspense } from "react"
 import Confetti from "react-confetti"
 import { useRouter, useSearchParams } from "next/navigation"
 import { JSX } from "react/jsx-runtime"
@@ -14,7 +14,7 @@ interface StageScoreSectionProps {
   // winningSoundRef: RefObject<HTMLAudioElement | null>; // Ref for the winning sound
   isMuted: boolean;
   backgroundAudioSrc: string;
-  pauseBackgroundMusic: () => void; // Function to pause background music
+  // pauseBackgroundMusic: () => void; // Function to pause background music
   playBackgroundMusic: () => void; // Function to play background music
   setBackgroundAudioSrc: (src: string) => void; // Function to update the audio source
 }
@@ -24,7 +24,7 @@ export default function Complete(): JSX.Element {
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
   const router = useRouter()
 
-  const { isMuted, backgroundAudioSrc, playBackgroundMusic, pauseBackgroundMusic, setBackgroundAudioSrc } = useAudio();
+  const { isMuted, backgroundAudioSrc, playBackgroundMusic, setBackgroundAudioSrc } = useAudio();
 
 
 
@@ -49,7 +49,7 @@ export default function Complete(): JSX.Element {
             // winningSoundRef={winningSoundRef} // Pass the ref for the winning sound
             isMuted={isMuted}
             backgroundAudioSrc={backgroundAudioSrc}
-            pauseBackgroundMusic={pauseBackgroundMusic} // Pass pauseBackgroundMusic
+            // pauseBackgroundMusic={pauseBackgroundMusic} // Pass pauseBackgroundMusic
             playBackgroundMusic={playBackgroundMusic} // Pass playBackgroundMusic 
             setBackgroundAudioSrc={setBackgroundAudioSrc}
           />
@@ -60,7 +60,7 @@ export default function Complete(): JSX.Element {
 }
 
 
-function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pauseBackgroundMusic, playBackgroundMusic, setBackgroundAudioSrc }: StageScoreSectionProps) {
+function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, playBackgroundMusic, setBackgroundAudioSrc }: StageScoreSectionProps) {
   const searchParams = useSearchParams();
   const score = Number(searchParams.get("score") || 0);
   const stage = searchParams.get("stage") || "Unknown";
