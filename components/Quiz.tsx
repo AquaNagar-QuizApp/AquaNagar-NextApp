@@ -4,21 +4,22 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { useAudio } from "@/context/AudioContext"
+import { QuizSet, Stage } from "@/types"
 
-interface QuizSet {
-  sections: Question[][]
-}
+// interface QuizSet {
+//   sections: Question[][]
+// }
 
-interface Question {
-  type: "text" | "image"
-  question: string
-  options: string[]
-  correctAnswer: string
-  imageUrl?: string
-}
+// interface Question {
+//   type: "text" | "image"
+//   question: string
+//   options: string[]
+//   correctAnswer: string
+//   imageUrl?: string
+// }
 
 interface QuizProps {
-  quizSet: QuizSet
+  quizSet: Stage
   stage: string
   onComplete: (score: number) => void
 }
@@ -78,7 +79,7 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
   }, [playBackgroundMusic]);
 
   const handleNextQuestion = useCallback(() => {
-    const currentSectionQuestions = quizSet.sections[currentSection];
+    const currentSectionQuestions = quizSet.questions;
 
     if (currentQuestion < currentSectionQuestions.length - 1) {
       if (answered && selectedOption === correctAnswer) {
@@ -99,12 +100,17 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
         // sessionStorage.setItem("completedSections", JSON.stringify(completedSections));
         setScore((prevScore) => {
           const finalScore = answered && selectedOption === correctAnswer ? prevScore + 5 : prevScore;
+          if (finalScore > 0) {
+            const completedSections = JSON.parse(sessionStorage.getItem("completedSections") || "{}");
+            completedSections[stage] = score + (answered && selectedOption === correctAnswer ? 5 : 0);
+            sessionStorage.setItem("completedSections", JSON.stringify(completedSections));
+          }
           onComplete(finalScore);
           return finalScore;
         });
       }, 500); // Wait for exit animation (500ms)
     }
-  }, [quizSet.sections, currentSection, currentQuestion, answered, selectedOption, correctAnswer, onComplete]);
+  }, [quizSet, currentSection, currentQuestion, answered, selectedOption, correctAnswer, onComplete]);
 
 
   useEffect(() => {
@@ -122,7 +128,7 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
         });
       }, 1000);
     } else if (timeLeft === 0 && !answered) {
-      const correct = quizSet.sections[currentSection][currentQuestion].correctAnswer;
+      const correct = quizSet.questions[currentQuestion].correctAnswer;
       setCorrectAnswer(correct);
       setHighlighted(true);
 
@@ -134,10 +140,10 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
     return () => {
       if (timer) clearInterval(timer);
     };
-  }, [timeLeft, answered, handleNextQuestion, currentQuestion, quizSet.sections, currentSection]);
+  }, [timeLeft, answered, handleNextQuestion, currentQuestion, quizSet, currentSection]);
 
   const handleAnswer = (selectedAnswer: string) => {
-    const currentSectionQuestions = quizSet.sections[currentSection];
+    const currentSectionQuestions = quizSet.questions;
     const correct = currentSectionQuestions[currentQuestion].correctAnswer;
 
     setSelectedOption(selectedAnswer);
@@ -166,11 +172,13 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
     setTimeout(() => {
       // Ensure last question triggers completion
       if (currentQuestion === currentSectionQuestions.length - 1) {
-        console.log(stage);
-        const completedSections = JSON.parse(sessionStorage.getItem("completedSections") || "{}");
-        completedSections[currentSection] = score + (answered && selectedOption === correctAnswer ? 5 : 0);
-        sessionStorage.setItem("completedSections", JSON.stringify(completedSections));
-        onComplete(score + (selectedAnswer === correct ? 5 : 0)); // Finalize the score
+        const finalScore = score + (selectedAnswer === correct ? 5 : 0);
+        if (finalScore > 0) {
+          const completedSections = JSON.parse(sessionStorage.getItem("completedSections") || "{}");
+          completedSections[stage] = finalScore + (answered && selectedOption === correctAnswer ? 5 : 0);
+          sessionStorage.setItem("completedSections", JSON.stringify(completedSections));
+        }
+        onComplete(finalScore); // Finalize the score
       } else {
         handleNextQuestion();
       }
@@ -185,7 +193,7 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
   };
 
 
-  const currentQuestionData = quizSet.sections[currentSection][currentQuestion]
+  const currentQuestionData = quizSet.questions[currentQuestion];
 
   const questionVariants = {
     hidden: { opacity: 0, x: -50 },
@@ -225,7 +233,8 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
         transition={{ duration: 0.5 }}
       >
         <h3 className="text-xl font-semibold">
-          Stage {currentSection + 1} - Question {currentQuestion + 1}
+          {/* Stage {currentSection + 1} -  */}
+          Question {currentQuestion + 1}
         </h3>
         <span className="text-lg font-medium">Time left: {timeLeft}s</span>
       </motion.div>
@@ -271,10 +280,10 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
           )}
           <p className="text-lg text-center">{currentQuestionData.question}</p>
 
-          <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-8" variants={containerVariants}>
+          <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full" variants={containerVariants}>
             {currentQuestionData.options.map((option) => {
               return (
-                <motion.div key={option} variants={itemVariants}>
+                <motion.div key={option} variants={itemVariants} className="w-full">
                   <motion.div
                     // className={`px-4 py-2 text-white rounded-lg font-medium backdrop-blur-lg flex items-center justify-center ${bgColor}`}
                     className={`px-4 py-2 rounded-lg font-medium backdrop-blur-lg flex items-center justify-center
@@ -295,7 +304,7 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
                   >
                     <Button
                       onClick={() => handleAnswer(option)}
-                      className="w-full h-full py-3 px-3 text-base font-medium text-center break-words whitespace-normal flex items-center justify-center md:w-60 md:h-16"
+                      className="w-full min-h-[64px] py-2 px-3 text-sm sm:text-base font-medium text-center break-words whitespace-normal" //flex items-center justify-center md:w-60 md:h-16
                       disabled={!!selectedOption} // Disable after selecting an answer
                     >
                       {option}

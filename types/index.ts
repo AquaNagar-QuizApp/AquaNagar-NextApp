@@ -14,15 +14,15 @@ export type Stage = {
   questions: Question[];
 };
 
-export type Set = {
+export type QuizSet = {
   setName: string;
   stages: Stage[];
 };
 
-export interface QuizSet {
-  name: QuizSetName
-  sections: Question[][]
-}
+// export interface QuizSet {
+//   setName: QuizSetName
+//   sections: Question[][]
+// }
 
 export interface User {
   name: string

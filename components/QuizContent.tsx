@@ -2,35 +2,44 @@
 
 import { useRouter, useSearchParams } from "next/navigation"
 import { Quiz } from "@/components/Quiz"
-import type { QuizSetName } from "@/types"
-import { quizSets } from "@/components/data/quizData"
+import type { QuizSet, QuizSetName, Stage } from "@/types"
+import { quizData } from "@/components/data/quizData"
 import { JSX } from "react"
 
 export function QuizContent(): JSX.Element {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const stage = searchParams.get("stage")
+  const stageName = searchParams.get("stage")
   const quizSetName = searchParams.get("set") as QuizSetName | null
+
+  // Find the quiz set
+  const selectedQuizSet: QuizSet | undefined = quizData.find(set => set.setName === quizSetName);
+  // const selectedQuizSet = quizData.find(set => set.setName === quizSetName);
+
+  // Find the specific stage within the selected quiz set
+  const selectedStage: Stage | undefined = selectedQuizSet?.stages.find(s => s.stageName === stageName);
 
   const handleQuizCompletion = (score: number): void => {
     // router.push(
     //   `/certificate?stage=${encodeURIComponent(stage ?? "")}&set=${encodeURIComponent(quizSetName ?? "")}&score=${score}`,
     // )
 
-    router.push(`/complete?stage=${encodeURIComponent(stage ?? "")}&score=${score}`);
+    router.push(`/complete?set=${encodeURIComponent(quizSetName ?? "")}&stage=${encodeURIComponent(stageName ?? "")}&score=${score}`);
   }
 
-  if (!stage || !quizSetName || !(quizSetName in quizSets)) {
-    return <div className="text-white">Error: Missing or invalid stage or quiz set information</div>
+  // if (!stage || !quizSetName || !(quizSetName in quizData)) {
+  //   return <div className="text-white">Error: Missing or invalid stage or quiz set information</div>
+  // }
+  if (!stageName || !selectedQuizSet || !selectedStage) {
+    return <div className="text-white">Error: Missing or invalid stage or quiz set information</div>;
   }
 
   return (
     <>
       <h2 className="text-2xl font-semibold text-white mb-6 text-center">
-        {stage} - {quizSetName}
+        {stageName} - {quizSetName}
       </h2>
-      <Quiz quizSet={quizSets[quizSetName]} stage={stage} onComplete={handleQuizCompletion} />
+      <Quiz quizSet={selectedStage} stage={stageName} onComplete={handleQuizCompletion} />
     </>
   )
 }
-

@@ -4,7 +4,7 @@ import { AnimatedBackground } from "@/components/AnimatedBackground"
 import { Button } from "@/components/ui/button"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Droplet, PenTool, Building2, FlaskRoundIcon as Flask, Cloud, Receipt, Banknote, BarChart3 } from "lucide-react"
-import React, { Suspense, useMemo } from "react"
+import React, { Suspense, useEffect, useMemo, useState } from "react"
 
 const stages = [
   "Plan A Water Supply System",
@@ -170,9 +170,23 @@ export default function GameMap() {
 function GameMapContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [completedSections, setCompletedSections] = useState<Record<string, number>>({});
 
   // Memoizing searchParams to avoid unnecessary re-renders
   const set = useMemo(() => searchParams.get("set"), [searchParams]);
+
+  console.log(completedSections);
+
+  // Retrieve sessionStorage data on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedData = sessionStorage.getItem("completedSections");
+      if (storedData) {
+        setCompletedSections(JSON.parse(storedData));
+        console.log(storedData);
+      }
+    }
+  }, []);
 
   const handleStageClick = (stage: string, stageIndex: number) => {
     if (set) {
@@ -207,15 +221,21 @@ function GameMapContent() {
       </motion.h2>
       <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-6" variants={containerVariants}>
         {stages.map((stage, index) => {
+          const isCompleted = completedSections.hasOwnProperty(stage); // Check if stage is completed
           return (
             <motion.div key={index + 1} variants={itemVariants}>
               <motion.div
-                className="px-6 py-4 bg-blue-700 text-white rounded-lg font-semibold backdrop-blur-lg"
-                whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
-                whileTap={{ scale: 0.95 }}
-              >
+                // className={`px-6 py-4 ${isCompleted ? 'bg-gray-500' : 'bg-blue-700'} text-white rounded-lg font-semibold backdrop-blur-lg`}
+                className={`px-6 py-4 rounded-lg font-semibold backdrop-blur-lg ${isCompleted
+                  ? "bg-gray-400 text-gray-700 cursor-not-allowed" // Disabled state
+                  : "bg-blue-700 text-white"
+                }`}
+                whileHover={isCompleted ? {} : { scale: 1.05, transition: { duration: 0.2 } }} // Disable hover effect when completed
+                whileTap={isCompleted ? {} : { scale: 0.95 }} // Disable tap effect when completed
+                >
                 <Button
                   onClick={() => handleStageClick(stage, index)}
+                  disabled={isCompleted} // Disable button
                   className="w-full h-full py-4 px-1 text-lg font-semibold text-center break-words whitespace-normal flex items-center justify-between md:w-64 md:h-20"
                 >
                   {React.createElement(icons[index], {

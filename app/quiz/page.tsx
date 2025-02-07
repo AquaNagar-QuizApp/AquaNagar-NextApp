@@ -90,8 +90,15 @@ export default function QuizPage(): JSX.Element {
   return (
     <main className="min-h-screen relative overflow-auto">
       <AnimatedBackground />
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-6">
+      {/* <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-6">
         <div className="max-w-2xl w-full bg-white bg-opacity-20 backdrop-blur-lg rounded-xl p-8">
+          <Suspense fallback={<div className="text-center text-white">Loading quiz...</div>}>
+            <QuizContent />
+          </Suspense>
+        </div>
+      </div> */}
+      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-6 ">
+        <div className="max-w-3xl w-full bg-white bg-opacity-20 backdrop-blur-lg rounded-xl p-4 ">
           <Suspense fallback={<div className="text-center text-white">Loading quiz...</div>}>
             <QuizContent />
           </Suspense>

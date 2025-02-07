@@ -62,13 +62,45 @@ export default function Complete(): JSX.Element {
 function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, playBackgroundMusic, setBackgroundAudioSrc }: StageScoreSectionProps) {
   const searchParams = useSearchParams();
   const score = Number(searchParams.get("score") || 0);
+  const set = searchParams.get("set") || "Unknown";
   const stage = searchParams.get("stage") || "Unknown";
 
   useEffect(() => {
+    const completedSections: Record<string, number> = JSON.parse(sessionStorage.getItem('completedSections') || '[]');
+
+    // Sum the scores of all stages
+    // const totalScore = 0;
+    const totalScore = Object.values(completedSections).reduce((sum, score) => sum + score, 0);
+    console.log(totalScore);
+
+    // Check if all 8 sections are completed (i.e., exactly 8 keys exist)
+    const allSectionsCompleted = Object.keys(completedSections).length === 8 && totalScore > 0;
+
+    console.log("All sections Completed: " + allSectionsCompleted, "Total Score: " + totalScore);
+
     if (score > 0) {
       setBackgroundAudioSrc("./soundeffects/winningsound.mp3");
-      generateCertificate();
       // playBackgroundMusic();
+    }
+
+    if (allSectionsCompleted) {
+      generateCertificate();
+
+      // Retrieve the existing completed sets or initialize as an empty array
+      let completedSets: string[] = JSON.parse(sessionStorage.getItem("completedSets") || "[]");
+
+      // Add a new completed set name (assuming `stage` contains the set name)
+      const newCompletedSet = set;
+      if (!completedSets.includes(newCompletedSet)) {
+        completedSets.push(newCompletedSet);
+      }
+
+      // Store the updated list back into sessionStorage
+      sessionStorage.setItem("completedSets", JSON.stringify(completedSets));
+
+      sessionStorage.removeItem("completedSections");
+
+      router.push("/set");
     }
   }, [score, isMuted]);
 
@@ -114,7 +146,7 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
   const handleReturnToStages = () => {
     setBackgroundAudioSrc("./songs/bgm1.mp3");
     playBackgroundMusic(); // Resume background music
-    router.push(`/game-map?set=${encodeURIComponent("Set 1")}`);
+    router.push(`/game-map?set=${encodeURIComponent(set)}`);
   };
 
   return (
