@@ -70,12 +70,15 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
     const buzzerSound = buzzerSoundRef.current;
 
     if (correctSound) {
+      correctSound.volume = 0.2;
       correctSound.addEventListener("ended", resumeBGM);
     }
     if (wrongSound) {
+      wrongSound.volume = 0.2;
       wrongSound.addEventListener("ended", resumeBGM);
     }
     if (buzzerSound) {
+      buzzerSound.volume = 0.2;
       buzzerSound.addEventListener("ended", resumeBGM);
     }
 

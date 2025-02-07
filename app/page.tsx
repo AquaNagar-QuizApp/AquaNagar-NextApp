@@ -225,7 +225,7 @@ export default function Home() {
             transition={{ duration: 0.5, delay: 0.8 }}
           >
             <motion.button
-              className="px-6 py-3 bg-blue-700 text-white font-semibold"
+              className="px-6 py-3 bg-blue-700 text-white font-semibold rounded-lg"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.6 }}
