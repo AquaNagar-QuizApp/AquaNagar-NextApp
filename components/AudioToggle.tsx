@@ -5,14 +5,16 @@ import LogoutButton from "./Logout";
 const AudioToggleButton = () => {
     const { isMuted, toggleMute } = useAudio();
     
-    let isLoggedIn : boolean;
+    // let isLoggedIn : boolean;
 
     // Retrieve the value and handle potential null cases
     const storedLogin = sessionStorage.getItem("isLoggedIn");
       
     if (storedLogin !== null) {
-        if(storedLogin === "true")
-            isLoggedIn = true;
+        if(storedLogin === "true"){
+            
+        }
+            // isLoggedIn = true;
     } else {
         return null;
     }

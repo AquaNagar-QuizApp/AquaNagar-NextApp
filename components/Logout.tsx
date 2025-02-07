@@ -8,12 +8,12 @@ const LogoutButton = () => {
     const router = useRouter();
     const { stopBackgroundMusic } = useAudio();
     
-    let isLoggedIn : boolean;
+    // let isLoggedIn : boolean;
 
     const handleLogout = () => {
         sessionStorage.removeItem("isLoggedIn"); // Clear login session
         sessionStorage.removeItem("currentUser"); // Clear user data if stored
-        isLoggedIn = false;
+        // isLoggedIn = false;
         stopBackgroundMusic();
         router.push("/");
       };
@@ -22,8 +22,10 @@ const LogoutButton = () => {
     const storedLogin = sessionStorage.getItem("isLoggedIn");
       
     if (storedLogin !== null) {
-        if(storedLogin === "true")
-            isLoggedIn = true;
+        if(storedLogin === "true"){
+            
+        }
+            // isLoggedIn = true;
     } else {
         return null;
     }

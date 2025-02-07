@@ -88,7 +88,7 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
       generateCertificate(totalScore);
 
       // Retrieve the existing completed sets or initialize as an empty array
-      let completedSets: string[] = JSON.parse(sessionStorage.getItem("completedSets") || "[]");
+      const completedSets: string[] = JSON.parse(sessionStorage.getItem("completedSets") || "[]");
 
       // Add a new completed set name (assuming `stage` contains the set name)
       const newCompletedSet = set;
