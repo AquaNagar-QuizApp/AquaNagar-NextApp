@@ -19,7 +19,14 @@ export const AudioProvider = ({ children }: { children: React.ReactNode }) => {
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
-    const [backgroundAudioSrc, setBackgroundAudioSrc] = useState("./songs/bgm1.mp3"); // Default BGM
+    const [backgroundAudioSrc, setBackgroundAudioSrc] = useState("./songs/bgm.mp3"); // Default BGM
+    // const [volume, setVolume] = useState(0.3); // Default volume
+
+    // useEffect(() => {
+    //     if (audioRef.current) {
+    //         audioRef.current.volume = volume; // Set volume dynamically
+    //     }
+    // }, [volume]);
 
 
     // useEffect(() => {
@@ -51,6 +58,7 @@ export const AudioProvider = ({ children }: { children: React.ReactNode }) => {
         if (audioRef.current && !isMuted) {
             if (!isPlaying) {
                 audioRef.current.play();
+                audioRef.current.volume = 0.1;
                 setIsPlaying(true);
             } else {
                 audioRef.current.load();
@@ -73,7 +81,7 @@ export const AudioProvider = ({ children }: { children: React.ReactNode }) => {
             setIsPlaying(false);  // Update state
         }
     };
-    
+
 
     const toggleMute = () => {
         setIsMuted((prev) => !prev);

@@ -283,7 +283,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
 
 
   const handleReturnToStages = () => {
-    setBackgroundAudioSrc("./songs/bgm1.mp3");
+    setBackgroundAudioSrc("./songs/bgm.mp3");
     playBackgroundMusic(); // Resume background music
 
     if (typeof window !== 'undefined') {
@@ -294,7 +294,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
   };
 
   const handleSelectAnotherSet = () => {
-    setBackgroundAudioSrc("./songs/bgm1.mp3");
+    setBackgroundAudioSrc("./songs/bgm.mp3");
     playBackgroundMusic(); // Resume background music
     router.push("/set");
   }
