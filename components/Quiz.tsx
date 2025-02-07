@@ -101,9 +101,11 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
         setScore((prevScore) => {
           const finalScore = answered && selectedOption === correctAnswer ? prevScore + 5 : prevScore;
           if (finalScore > 0) {
-            const completedSections = JSON.parse(sessionStorage.getItem("completedSections") || "{}");
-            completedSections[stage] = score + (answered && selectedOption === correctAnswer ? 5 : 0);
-            sessionStorage.setItem("completedSections", JSON.stringify(completedSections));
+            if (typeof window !== 'undefined') {
+              const completedSections = JSON.parse(sessionStorage.getItem("completedSections") || "{}");
+              completedSections[stage] = score + (answered && selectedOption === correctAnswer ? 5 : 0);
+              sessionStorage.setItem("completedSections", JSON.stringify(completedSections));
+            }
           }
           onComplete(finalScore);
           return finalScore;
@@ -174,9 +176,11 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
       if (currentQuestion === currentSectionQuestions.length - 1) {
         const finalScore = score + (selectedAnswer === correct ? 5 : 0);
         if (finalScore > 0) {
-          const completedSections = JSON.parse(sessionStorage.getItem("completedSections") || "{}");
-          completedSections[stage] = finalScore + (answered && selectedOption === correctAnswer ? 5 : 0);
-          sessionStorage.setItem("completedSections", JSON.stringify(completedSections));
+          if (typeof window !== 'undefined') {
+            const completedSections = JSON.parse(sessionStorage.getItem("completedSections") || "{}");
+            completedSections[stage] = finalScore + (answered && selectedOption === correctAnswer ? 5 : 0);
+            sessionStorage.setItem("completedSections", JSON.stringify(completedSections));
+          }
         }
         onComplete(finalScore); // Finalize the score
       } else {

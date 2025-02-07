@@ -20,7 +20,7 @@ export default function LoginPage() {
     setShowWaves(true)
     let count = 0
 
-    if (!isMuted){
+    if (!isMuted) {
       playBackgroundMusic();
     }
 
@@ -36,10 +36,11 @@ export default function LoginPage() {
       }
     }, 600) // Increased wave count every 600ms (faster than before)
 
-    // Simulate login
-    sessionStorage.setItem("isLoggedIn", "true")
-    sessionStorage.setItem("currentUser", JSON.stringify(userData))
-    console.log("User logged in:", userData)
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem("isLoggedIn", "true")
+      sessionStorage.setItem("currentUser", JSON.stringify(userData))
+    }
+    // console.log("User logged in:", userData)
   }
 
   return (

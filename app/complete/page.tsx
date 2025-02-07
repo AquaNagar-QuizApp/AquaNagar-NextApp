@@ -67,43 +67,48 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
   const stage = searchParams.get("stage") || "Unknown";
 
   useEffect(() => {
-    const completedSections: Record<string, number> = JSON.parse(sessionStorage.getItem('completedSections') || '[]');
+    // Check if we're in the browser environment
+    const isClient = typeof window !== 'undefined';
 
-    // Sum the scores of all stages
-    // const totalScore = 0;
-    const totalScore = Object.values(completedSections).reduce((sum, score) => sum + score, 0);
-    console.log(totalScore);
+    if (isClient) {
+      const completedSections: Record<string, number> = JSON.parse(sessionStorage.getItem('completedSections') || '[]');
 
-    // Check if all 8 sections are completed (i.e., exactly 8 keys exist)
-    const allSectionsCompleted = Object.keys(completedSections).length === 8 && totalScore > 0;
+      // Sum the scores of all stages
+      // const totalScore = 0;
+      const totalScore = Object.values(completedSections).reduce((sum, score) => sum + score, 0);
+      // console.log(totalScore);
 
-    console.log("All sections Completed: " + allSectionsCompleted, "Total Score: " + totalScore);
+      // Check if all 8 sections are completed (i.e., exactly 8 keys exist)
+      const allSectionsCompleted = Object.keys(completedSections).length === 8 && totalScore > 0;
 
-    if (score > 0) {
-      setBackgroundAudioSrc("./soundeffects/winningsound.mp3");
-      // playBackgroundMusic();
-    }
+      // console.log("All sections Completed: " + allSectionsCompleted, "Total Score: " + totalScore);
 
-    if (allSectionsCompleted) {
-      generateCertificate(totalScore);
-
-      // Retrieve the existing completed sets or initialize as an empty array
-      const completedSets: string[] = JSON.parse(sessionStorage.getItem("completedSets") || "[]");
-
-      // Add a new completed set name (assuming `stage` contains the set name)
-      const newCompletedSet = set;
-      if (!completedSets.includes(newCompletedSet)) {
-        completedSets.push(newCompletedSet);
+      if (score > 0) {
+        setBackgroundAudioSrc("./soundeffects/winningsound.mp3");
+        // playBackgroundMusic();
       }
 
-      // Store the updated list back into sessionStorage
-      sessionStorage.setItem("completedSets", JSON.stringify(completedSets));
+      if (allSectionsCompleted) {
+        generateCertificate(totalScore);
 
-      sessionStorage.removeItem("completedSections");
+        // Retrieve the existing completed sets or initialize as an empty array
+        const completedSets: string[] = JSON.parse(sessionStorage.getItem("completedSets") || "[]");
 
-      setBackgroundAudioSrc("./songs/bgm1.mp3");
-      playBackgroundMusic(); // Resume background music
-      router.push("/set");
+        // Add a new completed set name (assuming `stage` contains the set name)
+        const newCompletedSet = set;
+        if (!completedSets.includes(newCompletedSet)) {
+          completedSets.push(newCompletedSet);
+        }
+
+        // Store the updated list back into sessionStorage
+        sessionStorage.setItem("completedSets", JSON.stringify(completedSets));
+
+        sessionStorage.removeItem("completedSections");
+
+        setBackgroundAudioSrc("./songs/bgm1.mp3");
+        playBackgroundMusic(); // Resume background music
+        router.push("/set");
+      }
     }
   }, [score, isMuted]);
 
@@ -129,7 +134,12 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
     const fontUrl1 = "/fonts/MagnoliaScript.ttf"; // First font file
     const fontUrl2 = "/fonts/Poppins-Regular.ttf";
 
-    const userData = JSON.parse(sessionStorage.getItem("currentUser") || "{}");
+    const isClient = typeof window !== 'undefined';
+    let userData = "{}";
+
+    if (isClient) {
+      userData = JSON.parse(sessionStorage.getItem("currentUser") || "{}");
+    }
     // Second font file
 
     // Fetch both font files and convert them to Base64

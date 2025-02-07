@@ -123,8 +123,11 @@ const AudioPlayer = () => {
 
   useEffect(() => {
     const handleMouseClick = () => {
-      // Check if user is logged in based on localStorage
-      const isLoggedIn = sessionStorage.getItem("isLoggedIn") === "true";
+      let isLoggedIn: boolean = false;
+      if (typeof window !== 'undefined') {
+        // Check if user is logged in based on localStorage
+        isLoggedIn = sessionStorage.getItem("isLoggedIn") === "true";
+      }
 
       if (isLoggedIn && !isPlaying && !isMuted) {
         playBackgroundMusic();
