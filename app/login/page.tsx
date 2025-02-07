@@ -38,6 +38,7 @@ export default function LoginPage() {
 
     // Simulate login
     sessionStorage.setItem("isLoggedIn", "true")
+    sessionStorage.setItem("currentUser", JSON.stringify(userData))
     console.log("User logged in:", userData)
   }
 

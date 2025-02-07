@@ -2,7 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { AudioProvider } from '@/context/AudioContext'
 import AudioPlayer from '@/components/AudioPlayer'
-import AudioToggleButton from '@/components/AudioToggle'
+import AudioToggleButton  from '@/components/AudioToggle'
+import LogoutButton from '@/components/Logout'
 // import AudioPlayer from '@/components/AudioPlayer'
 
 export const metadata: Metadata = {
@@ -16,7 +17,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body>
         <AudioProvider>
           <AudioPlayer />
+          
           <AudioToggleButton />
+          
           {children}
         </AudioProvider>
       </body>
