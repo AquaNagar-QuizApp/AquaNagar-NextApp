@@ -176,7 +176,7 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
             console.error("Failed to read the first font file.");
             return;
           }
-          const base64Font1 = fontReader1.result.toString().split(",")[1]; // Extract the Base64 part
+          //const base64Font1 = fontReader1.result.toString().split(",")[1]; // Extract the Base64 part
 
           // Convert the second font blob to Base64
           const fontReader2 = new FileReader();
@@ -186,7 +186,7 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
               console.error("Failed to read the second font file.");
               return;
             }
-            const base64Font2 = fontReader2.result.toString().split(",")[1]; // Extract the Base64 part
+            //const base64Font2 = fontReader2.result.toString().split(",")[1]; // Extract the Base64 part
 
             // Initialize jsPDF
             const doc = new jsPDF({
