@@ -141,8 +141,8 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
 
     const level = getCertificateLevel(score);
     // URLs of the font files to fetch
-    const fontUrl1 = "/fonts/MagnoliaScript.ttf"; // First font file
-    const fontUrl2 = "/fonts/Poppins-Regular.ttf";
+    const fontUrl1 = "/fonts/open-sans.ttf"; // First font file
+    const fontUrl2 = "/fonts/noto-sans.ttf";
 
     const getUserData = (): User => {
       if (typeof window !== "undefined") {
@@ -196,12 +196,12 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
             });
 
             // Add the first custom font to jsPDF
-            doc.addFileToVFS("MagnoliaScript.ttf", base64Font1);
-            doc.addFont("MagnoliaScript.ttf", "MagnoliaScript", "normal", 'Identity-H');
+            doc.addFileToVFS("open-sans.ttf", base64Font1);
+            doc.addFont("open-sans.ttf", "open-sans", "normal", 'Identity-H');
 
             // Add the second custom font to jsPDF
-            doc.addFileToVFS("Poppins-Regular.ttf", base64Font2);
-            doc.addFont("Poppins-Regular.ttf", "Poppins-Regular", "normal", 'Identity-H');
+            doc.addFileToVFS("noto-sans.ttf", base64Font2);
+            doc.addFont("noto-sans.ttf", "noto-sans", "normal", 'Identity-H');
 
             const img = new Image();
 
@@ -216,12 +216,12 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
               doc.addImage(img, "JPEG", 0, 0, 800, 600);
 
               // Set the first font and add text
-              doc.setFont("MagnoliaScript");
+              doc.setFont("open-sans");
               doc.setFontSize(30);
               doc.text(`${userData.title}` + "." + `${userData.name}`, 400, 240, { align: "center" });
 
               // Set the second font and add text
-              doc.setFont("Poppins-Regular");
+              doc.setFont("noto-sans");
               doc.setFontSize(17);
               doc.text(`(${userData.designation} - ${userData.department})`, 400, 272, { align: "center" });
 
@@ -232,7 +232,7 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
               const year = today.getFullYear();
               const formattedDate = `${day}/${month}/${year}`;
 
-              doc.setFont("Poppins-Regular");
+              doc.setFont("noto-sans");
               doc.setFontSize(19);
               doc.text(`${formattedDate}`, 672, 448, { align: "center" });
 
