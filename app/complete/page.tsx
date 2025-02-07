@@ -346,11 +346,15 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       {/* <audio ref={winningSoundRef} src="./soundeffects/winningsound.mp3" /> */}
-      {score > 0 && <Confetti width={window.innerWidth} height={window.innerHeight} />}
+      {(allSectionsCompleted && totalScore > 0) || (!allSectionsCompleted && score > 0)
+      // score > 0 
+      && <Confetti width={window.innerWidth} height={window.innerHeight} />}
 
       <h1
         className={`text-4xl sm:text-6xl font-bold mb-8 text-center 
-        ${score > 0 ? "text-white animate-bounce" : "text-yellow-300"}`}
+        ${(allSectionsCompleted && totalScore > 0) || (!allSectionsCompleted && score > 0)
+          // score > 0 
+          ? "text-white animate-bounce" : "text-yellow-300"}`}
       >
         {allSectionsCompleted ? "All Stages Completed!" : score > 0 ? "Congratulations!" : "Don't Give Up!"}
       </h1>
@@ -375,7 +379,8 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
               ? "with a score of"
               : "but didn't score any points."}
         </p>
-        {score > 0 && (
+        {/* {score > 0 && ( */}
+        {((allSectionsCompleted && totalScore > 0) || (!allSectionsCompleted && score > 0)) && (
           <p className="text-6xl font-bold animate-pulse text-blue-800">
             {allSectionsCompleted ? totalScore : score}
           </p>

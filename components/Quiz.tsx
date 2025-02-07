@@ -51,12 +51,12 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
 
     if (typeof window !== "undefined") {
       const storedData = sessionStorage.getItem("completedSections");
-  
+
       if (storedData) {
         const parsedData: Record<string, number>[] = JSON.parse(storedData); // Parse as an array of objects
-  
+
         const sectionCount = parsedData.length; // Get the number of completed sections
-  
+
         // Set background audio based on whether the count is even or odd
         setBackgroundAudioSrc(sectionCount % 2 === 0 ? "./songs/quizaudio1.mp3" : "./songs/quizaudio2.mp3");
       }
@@ -115,12 +115,12 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
         // sessionStorage.setItem("completedSections", JSON.stringify(completedSections));
         setScore((prevScore) => {
           const finalScore = answered && selectedOption === correctAnswer ? prevScore + 5 : prevScore;
-          if (finalScore > 0) {
-            if (typeof window !== 'undefined') {
-              const completedSections = JSON.parse(sessionStorage.getItem("completedSections") || "{}");
-              completedSections[stage] = score + (answered && selectedOption === correctAnswer ? 5 : 0);
-              sessionStorage.setItem("completedSections", JSON.stringify(completedSections));
-            }
+          // if (finalScore > 0) {
+          if (typeof window !== 'undefined') {
+            const completedSections = JSON.parse(sessionStorage.getItem("completedSections") || "{}");
+            completedSections[stage] = score + (answered && selectedOption === correctAnswer ? 5 : 0);
+            sessionStorage.setItem("completedSections", JSON.stringify(completedSections));
+            // }
           }
           onComplete(finalScore);
           return finalScore;
@@ -132,6 +132,7 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
 
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
+    let isTimeoutTriggered = false;
 
     if (!answered && timeLeft > 0) {
       timer = setInterval(() => {
@@ -144,7 +145,9 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
           return prevTime - 1;
         });
       }, 1000);
-    } else if (timeLeft === 0 && !answered) {
+    } else if (timeLeft === 0 && !answered && !isTimeoutTriggered) {
+      isTimeoutTriggered = true;
+
       const correct = quizSet.questions[currentQuestion].correctAnswer;
       setCorrectAnswer(correct);
       setHighlighted(true);
@@ -157,7 +160,7 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
     return () => {
       if (timer) clearInterval(timer);
     };
-  }, [timeLeft, answered, handleNextQuestion, currentQuestion, quizSet]);
+  }, [timeLeft, answered, isMuted, currentQuestion, quizSet]);
 
   const handleAnswer = (selectedAnswer: string) => {
     const currentSectionQuestions = quizSet.questions;
@@ -190,12 +193,12 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
       // Ensure last question triggers completion
       if (currentQuestion === currentSectionQuestions.length - 1) {
         const finalScore = score + (selectedAnswer === correct ? 5 : 0);
-        if (finalScore > 0) {
-          if (typeof window !== 'undefined') {
-            const completedSections = JSON.parse(sessionStorage.getItem("completedSections") || "{}");
-            completedSections[stage] = finalScore + (answered && selectedOption === correctAnswer ? 5 : 0);
-            sessionStorage.setItem("completedSections", JSON.stringify(completedSections));
-          }
+        // if (finalScore > 0) {
+        if (typeof window !== 'undefined') {
+          const completedSections = JSON.parse(sessionStorage.getItem("completedSections") || "{}");
+          completedSections[stage] = finalScore + (answered && selectedOption === correctAnswer ? 5 : 0);
+          sessionStorage.setItem("completedSections", JSON.stringify(completedSections));
+          // }
         }
         onComplete(finalScore); // Finalize the score
       } else {
