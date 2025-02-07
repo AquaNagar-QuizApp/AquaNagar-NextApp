@@ -197,11 +197,11 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
 
             // Add the first custom font to jsPDF
             doc.addFileToVFS("MagnoliaScript.ttf", base64Font1);
-            doc.addFont("MagnoliaScript.ttf", "MagnoliaScript", "normal");
+            doc.addFont("MagnoliaScript.ttf", "MagnoliaScript", "normal", 'Identity-H');
 
             // Add the second custom font to jsPDF
             doc.addFileToVFS("Poppins-Regular.ttf", base64Font2);
-            doc.addFont("Poppins-Regular.ttf", "Poppins-Regular", "normal");
+            doc.addFont("Poppins-Regular.ttf", "Poppins-Regular", "normal", 'Identity-H');
 
             const img = new Image();
 
