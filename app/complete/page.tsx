@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { JSX } from "react/jsx-runtime"
 import { jsPDF } from "jspdf";
 import { useAudio } from "@/context/AudioContext"
+import { User } from "@/types"
 
 
 interface StageScoreSectionProps {
@@ -127,6 +128,15 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
     return "Bronze"; // Optional case if percentage < 60
   };
 
+  const getDefaultUser = (): User => ({
+    name: "",
+    department: "",
+    designation: "",
+    email: "",
+    mobile: "",
+    title: "",
+  });
+
   const generateCertificate = (score: number): void => {
 
     const level = getCertificateLevel(score);
@@ -134,12 +144,22 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
     const fontUrl1 = "/fonts/MagnoliaScript.ttf"; // First font file
     const fontUrl2 = "/fonts/Poppins-Regular.ttf";
 
-    const isClient = typeof window !== 'undefined';
-    let userData = "{}";
+    const getUserData = (): User => {
+      if (typeof window !== "undefined") {
+        const storedData = sessionStorage.getItem("currentUser");
+        return storedData ? JSON.parse(storedData) : getDefaultUser();
+      }
+      return getDefaultUser(); // Default values for SSR or undefined sessionStorage
+    };
 
-    if (isClient) {
-      userData = JSON.parse(sessionStorage.getItem("currentUser") || "{}");
-    }
+    // const isClient = typeof window !== 'undefined';
+    const userData: User = getUserData();
+
+    // if (isClient) {
+    //   userData = JSON.parse(sessionStorage.getItem("currentUser") || "{}");
+    // }
+
+    
     // Second font file
 
     // Fetch both font files and convert them to Base64
