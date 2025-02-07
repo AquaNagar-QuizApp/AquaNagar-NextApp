@@ -1,5 +1,4 @@
 "use client";
-import { usePathname } from "next/navigation";
 import { createContext, useContext, useState, useRef, useEffect } from "react";
 
 interface AudioContextType {
@@ -8,6 +7,7 @@ interface AudioContextType {
     backgroundAudioSrc: string;
     playBackgroundMusic: () => void;
     pauseBackgroundMusic: () => void;
+    stopBackgroundMusic: () => void;
     toggleMute: () => void;
     setBackgroundAudioSrc: (src: string) => void; // Function to update the audio source
 }
@@ -19,7 +19,6 @@ export const AudioProvider = ({ children }: { children: React.ReactNode }) => {
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
-    const pathname = usePathname(); // Get current route
     const [backgroundAudioSrc, setBackgroundAudioSrc] = useState("./songs/bgm1.mp3"); // Default BGM
 
 
@@ -67,6 +66,15 @@ export const AudioProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
+    const stopBackgroundMusic = () => {
+        if (audioRef.current && isPlaying) {
+            audioRef.current.pause();  // Pause the audio
+            audioRef.current.currentTime = 0;  // Reset playback position to start
+            setIsPlaying(false);  // Update state
+        }
+    };
+    
+
     const toggleMute = () => {
         setIsMuted((prev) => !prev);
         if (audioRef.current) {
@@ -110,7 +118,7 @@ export const AudioProvider = ({ children }: { children: React.ReactNode }) => {
     }, [backgroundAudioSrc]); // React when src changes
 
     return (
-        <AudioContext.Provider value={{ isPlaying, isMuted, backgroundAudioSrc, playBackgroundMusic, pauseBackgroundMusic, toggleMute, setBackgroundAudioSrc }}>
+        <AudioContext.Provider value={{ isPlaying, isMuted, backgroundAudioSrc, playBackgroundMusic, pauseBackgroundMusic, stopBackgroundMusic, toggleMute, setBackgroundAudioSrc }}>
             {children}
             {/* Hidden audio element for background music */}
             {/* <audio ref={audioRef} loop>

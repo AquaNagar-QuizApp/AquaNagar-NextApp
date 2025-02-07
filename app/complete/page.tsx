@@ -7,6 +7,7 @@ import { JSX } from "react/jsx-runtime"
 import { jsPDF } from "jspdf";
 import { useAudio } from "@/context/AudioContext"
 
+
 interface StageScoreSectionProps {
   windowSize: { width: number; height: number };
   router: ReturnType<typeof useRouter>; // Router type
@@ -67,7 +68,7 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pa
   useEffect(() => {
     if (score > 0) {
       setBackgroundAudioSrc("./soundeffects/winningsound.mp3");
-      generateCertificate();
+      generateCertificate(score);
       // playBackgroundMusic();
     }
   }, [score, isMuted]);
@@ -78,36 +79,112 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pa
     }
   }, [backgroundAudioSrc]);
 
-  const generateCertificate = (): void => {
-    const doc = new jsPDF({
-      orientation: "landscape",
-      unit: "px",
-      format: [800, 600],
-    });
+  const getCertificateLevel = (marksObtained: number): string => {
+    const percentage = (marksObtained / 400) * 100;
+  
+    if (percentage >= 80) return "Gold";
+    else if (percentage >= 70) return "Silver";
+    else if (percentage >= 60) return "Bronze";
+    
+    return "No Level"; // Optional case if percentage < 60
+  };
 
-    const img = new Image();
-    img.src = "./certificates/gold-certificate.png";
+  const generateCertificate = (score :number ): void => {
 
-    img.onload = function () {
-      doc.addImage(img, "JPEG", 0, 0, 800, 600);
+    const level = getCertificateLevel(score);
+    // URLs of the font files to fetch
+    const fontUrl1 = "/fonts/MagnoliaScript.ttf"; // First font file
+    const fontUrl2 = "/fonts/Poppins-Regular.ttf";
+    
+    const userData = JSON.parse(sessionStorage.getItem("currentUser") || "{}");
+    // Second font file
+  
+    // Fetch both font files and convert them to Base64
+    Promise.all([
+      fetch(fontUrl1).then((response) => response.blob()),
+      fetch(fontUrl2).then((response) => response.blob()),
+    ])
+      .then(([fontBlob1, fontBlob2]) => {
+        // Convert the first font blob to Base64
+        const fontReader1 = new FileReader();
+        fontReader1.onloadend = () => {
 
-      doc.setFont("times", "bold");
-      doc.setFontSize(36);
-      doc.text("Congratulations!", 400, 200, { align: "center" });
+          if (!fontReader1.result) {
+            console.error("Failed to read the first font file.");
+            return;
+          }
+          const base64Font1 = fontReader1.result.toString().split(",")[1]; // Extract the Base64 part
+  
+          // Convert the second font blob to Base64
+          const fontReader2 = new FileReader();
+          fontReader2.onloadend = () => {
 
-      doc.setFontSize(30);
-      doc.text(`You have completed the ${stage} stage`, 400, 270, { align: "center" });
+            if (!fontReader2.result) {
+              console.error("Failed to read the second font file.");
+              return;
+            }
+            const base64Font2 = fontReader2.result.toString().split(",")[1]; // Extract the Base64 part
+  
+            // Initialize jsPDF
+            const doc = new jsPDF({
+              orientation: "landscape",
+              unit: "px",
+              format: [800, 600],
+            });
+  
+            // Add the first custom font to jsPDF
+            doc.addFileToVFS("MagnoliaScript.ttf", base64Font1);
+            doc.addFont("MagnoliaScript.ttf", "MagnoliaScript", "normal");
+  
+            // Add the second custom font to jsPDF
+            doc.addFileToVFS("Poppins-Regular.ttf", base64Font2);
+            doc.addFont("Poppins-Regular.ttf", "Poppins-Regular", "normal");
+  
+            const img = new Image();
 
-      doc.setFontSize(26);
-      doc.text(`Score: ${score}`, 400, 330, { align: "center" });
+              if(level == "Gold")
+                img.src = "./certificates/gold-certificate.png";
+              else if(level == "Silver")
+                img.src = "./certificates/Silver_Certificate.png";
+              else
+                img.src = "./certificates/Bronze_Certificate.png";
 
-      const today = new Date();
-      const formattedDate = today.toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" });
-      doc.setFontSize(20);
-      doc.text(`Date: ${formattedDate}`, 400, 390, { align: "center" });
+              img.onload = function () {
+              doc.addImage(img, "JPEG", 0, 0, 800, 600);
 
-      doc.save(`Certificate_${stage}.pdf`);
-    };
+              // Set the first font and add text
+              doc.setFont("MagnoliaScript");
+              doc.setFontSize(30);
+              doc.text(`${userData.title}` + "." + `${userData.name}`, 400, 240, { align: "center" });
+    
+              // Set the second font and add text
+              doc.setFont("Poppins-Regular");
+              doc.setFontSize(17);
+              doc.text(`(${userData.designation} - ${userData.department})`, 400, 272, { align: "center" });
+    
+              // Add the date
+              const today = new Date();
+              const day = String(today.getDate()).padStart(2, "0");
+              const month = String(today.getMonth() + 1).padStart(2, "0");
+              const year = today.getFullYear();
+              const formattedDate = `${day}/${month}/${year}`;
+
+              doc.setFont("Poppins-Regular");
+              doc.setFontSize(19);
+              doc.text(`${formattedDate}`, 672, 448, { align: "center" });
+    
+              // Save the PDF
+              doc.save(`Certificate_${level}.pdf`);
+          }
+            
+          };
+          fontReader2.readAsDataURL(fontBlob2); // Convert the second font blob to a data URL
+        };
+        fontReader1.readAsDataURL(fontBlob1); // Convert the first font blob to a data URL
+      })
+      .catch((error) => {
+        console.error("Error loading font files:", error);
+      });
   };
 
 
