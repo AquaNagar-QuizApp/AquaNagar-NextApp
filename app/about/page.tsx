@@ -207,9 +207,9 @@ export default function About() {
                   <h3 className="text-xl font-semibold">How to Play</h3>
                   <div className="pl-4 space-y-2">
                     <p>1. Select any question set to begin.</p>
-                    <p>2. Complete each stage's questions within the time limit.</p>
-                    <p>3. After completing a stage, you'll return to the stages page.</p>
-                    <p>4. Continue selecting and completing stages until you've finished all eight.</p>
+                    <p>2. Complete each stage&apos;s questions within the time limit.</p>
+                    <p>3. After completing a stage, you&apos;ll return to the stages page.</p>
+                    <p>4. Continue selecting and completing stages until you&apos;ve finished all eight.</p>
                   </div>
                 </section>
 

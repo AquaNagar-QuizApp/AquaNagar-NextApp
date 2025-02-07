@@ -1,6 +1,4 @@
 "use client";
-
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { LogOut } from "lucide-react"; // Importing an icon (optional)
 import { useAudio } from "@/context/AudioContext";
@@ -10,14 +8,14 @@ const LogoutButton = () => {
     const router = useRouter();
     const { stopBackgroundMusic } = useAudio();
     
-    let isLoggedIn : Boolean;
+    let isLoggedIn : boolean;
 
     const handleLogout = () => {
         sessionStorage.removeItem("isLoggedIn"); // Clear login session
         sessionStorage.removeItem("currentUser"); // Clear user data if stored
         isLoggedIn = false;
         stopBackgroundMusic();
-        router.push("/"); // Redirect to login page
+        router.push("/");
       };
 
     // Retrieve the value and handle potential null cases
@@ -28,7 +26,6 @@ const LogoutButton = () => {
             isLoggedIn = true;
     } else {
         return null;
-        isLoggedIn = false;
     }
 
     

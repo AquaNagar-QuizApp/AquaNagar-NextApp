@@ -1,12 +1,11 @@
 "use client";
 import { useAudio } from "@/context/AudioContext";
-import { useEffect, useState } from "react";
 import LogoutButton from "./Logout";
 
 const AudioToggleButton = () => {
     const { isMuted, toggleMute } = useAudio();
     
-    let isLoggedIn : Boolean;
+    let isLoggedIn : boolean;
 
     // Retrieve the value and handle potential null cases
     const storedLogin = sessionStorage.getItem("isLoggedIn");
@@ -16,7 +15,6 @@ const AudioToggleButton = () => {
             isLoggedIn = true;
     } else {
         return null;
-        isLoggedIn = false;
     }
 
     

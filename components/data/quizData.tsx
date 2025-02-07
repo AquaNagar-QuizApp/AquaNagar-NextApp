@@ -1,4 +1,4 @@
-import { Question, QuizSet, QuizSetName, Stage } from "@/types";
+import { Question, QuizSet, Stage } from "@/types";
 
 // Stage 1 - Plan A Water Supply System
 // const getQuestionsForStage1 = (): Question[] => [

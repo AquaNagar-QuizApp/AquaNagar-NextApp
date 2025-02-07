@@ -3,8 +3,6 @@ import './globals.css'
 import { AudioProvider } from '@/context/AudioContext'
 import AudioPlayer from '@/components/AudioPlayer'
 import AudioToggleButton  from '@/components/AudioToggle'
-import LogoutButton from '@/components/Logout'
-// import AudioPlayer from '@/components/AudioPlayer'
 
 export const metadata: Metadata = {
   title: 'Aqua Nagar',
@@ -17,9 +15,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body>
         <AudioProvider>
           <AudioPlayer />
-          
           <AudioToggleButton />
-          
           {children}
         </AudioProvider>
       </body>

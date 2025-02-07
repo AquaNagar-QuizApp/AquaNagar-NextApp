@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { useAudio } from "@/context/AudioContext"
-import { QuizSet, Stage } from "@/types"
+import { Stage } from "@/types"
 
 // interface QuizSet {
 //   sections: Question[][]
