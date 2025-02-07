@@ -101,6 +101,8 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
 
       sessionStorage.removeItem("completedSections");
 
+      setBackgroundAudioSrc("./songs/bgm1.mp3");
+      playBackgroundMusic(); // Resume background music
       router.push("/set");
     }
   }, [score, isMuted]);
@@ -113,24 +115,23 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
 
   const getCertificateLevel = (marksObtained: number): string => {
     const percentage = (marksObtained / 400) * 100;
-  
+
     if (percentage >= 80) return "Gold";
     else if (percentage >= 70) return "Silver";
-    else if (percentage >= 60) return "Bronze";
-    
-    return "No Level"; // Optional case if percentage < 60
+    // else if (percentage >= 60) return "Bronze";
+    return "Bronze"; // Optional case if percentage < 60
   };
 
-  const generateCertificate = (score :number ): void => {
+  const generateCertificate = (score: number): void => {
 
     const level = getCertificateLevel(score);
     // URLs of the font files to fetch
     const fontUrl1 = "/fonts/MagnoliaScript.ttf"; // First font file
     const fontUrl2 = "/fonts/Poppins-Regular.ttf";
-    
+
     const userData = JSON.parse(sessionStorage.getItem("currentUser") || "{}");
     // Second font file
-  
+
     // Fetch both font files and convert them to Base64
     Promise.all([
       fetch(fontUrl1).then((response) => response.blob()),
@@ -146,7 +147,7 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
             return;
           }
           const base64Font1 = fontReader1.result.toString().split(",")[1]; // Extract the Base64 part
-  
+
           // Convert the second font blob to Base64
           const fontReader2 = new FileReader();
           fontReader2.onloadend = () => {
@@ -156,44 +157,44 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
               return;
             }
             const base64Font2 = fontReader2.result.toString().split(",")[1]; // Extract the Base64 part
-  
+
             // Initialize jsPDF
             const doc = new jsPDF({
               orientation: "landscape",
               unit: "px",
               format: [800, 600],
             });
-  
+
             // Add the first custom font to jsPDF
             doc.addFileToVFS("MagnoliaScript.ttf", base64Font1);
             doc.addFont("MagnoliaScript.ttf", "MagnoliaScript", "normal");
-  
+
             // Add the second custom font to jsPDF
             doc.addFileToVFS("Poppins-Regular.ttf", base64Font2);
             doc.addFont("Poppins-Regular.ttf", "Poppins-Regular", "normal");
-  
+
             const img = new Image();
 
-              if(level == "Gold")
-                img.src = "./certificates/gold-certificate.png";
-              else if(level == "Silver")
-                img.src = "./certificates/Silver_Certificate.png";
-              else
-                img.src = "./certificates/Bronze_Certificate.png";
+            if (level == "Gold")
+              img.src = "./certificates/gold-certificate.png";
+            else if (level == "Silver")
+              img.src = "./certificates/Silver_Certificate.png";
+            else
+              img.src = "./certificates/Bronze_Certificate.png";
 
-              img.onload = function () {
+            img.onload = function () {
               doc.addImage(img, "JPEG", 0, 0, 800, 600);
 
               // Set the first font and add text
               doc.setFont("MagnoliaScript");
               doc.setFontSize(30);
               doc.text(`${userData.title}` + "." + `${userData.name}`, 400, 240, { align: "center" });
-    
+
               // Set the second font and add text
               doc.setFont("Poppins-Regular");
               doc.setFontSize(17);
               doc.text(`(${userData.designation} - ${userData.department})`, 400, 272, { align: "center" });
-    
+
               // Add the date
               const today = new Date();
               const day = String(today.getDate()).padStart(2, "0");
@@ -204,11 +205,11 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
               doc.setFont("Poppins-Regular");
               doc.setFontSize(19);
               doc.text(`${formattedDate}`, 672, 448, { align: "center" });
-    
+
               // Save the PDF
               doc.save(`Certificate_${level}.pdf`);
-          }
-            
+            }
+
           };
           fontReader2.readAsDataURL(fontBlob2); // Convert the second font blob to a data URL
         };

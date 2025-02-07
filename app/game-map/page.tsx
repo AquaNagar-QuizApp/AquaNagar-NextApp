@@ -175,15 +175,12 @@ function GameMapContent() {
   // Memoizing searchParams to avoid unnecessary re-renders
   const set = useMemo(() => searchParams.get("set"), [searchParams]);
 
-  console.log(completedSections);
-
   // Retrieve sessionStorage data on mount
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedData = sessionStorage.getItem("completedSections");
       if (storedData) {
         setCompletedSections(JSON.parse(storedData));
-        console.log(storedData);
       }
     }
   }, []);
