@@ -10,7 +10,7 @@ import { User } from "@/types"
 
 
 interface StageScoreSectionProps {
-  windowSize: { width: number; height: number };
+  // windowSize: { width: number; height: number };
   router: ReturnType<typeof useRouter>; // Router type
   // winningSoundRef: RefObject<HTMLAudioElement | null>; // Ref for the winning sound
   isMuted: boolean;
@@ -45,7 +45,8 @@ export default function Complete(): JSX.Element {
       <div className="min-h-screen bg-gradient-to-br from-teal-500 to-blue-700 flex flex-col items-center justify-center">
         {/* Suspense is used to prevent hydration errors */}
         <Suspense fallback={<div className="text-white text-xl">Loading...</div>}>
-          <StageScoreSection windowSize={windowSize}
+          <StageScoreSection
+            // windowSize={windowSize}
             router={router}
             // winningSoundRef={winningSoundRef} // Pass the ref for the winning sound
             isMuted={isMuted}
@@ -61,7 +62,7 @@ export default function Complete(): JSX.Element {
 }
 
 
-function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, playBackgroundMusic, setBackgroundAudioSrc }: StageScoreSectionProps) {
+function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackgroundMusic, setBackgroundAudioSrc }: StageScoreSectionProps) {
   const searchParams = useSearchParams();
   const score = Number(searchParams.get("score") || 0);
   const set = searchParams.get("set") || "Unknown";
@@ -93,13 +94,13 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
       if (allSectionsCompleted && !storedAllStagesCompleted) {
         setAllSectionsCompleted(true);
         sessionStorage.setItem("allStagesCompleted", "true");
-      } else if(storedAllStagesCompleted){
+      } else if (storedAllStagesCompleted) {
         // setAllSectionsCompleted(false);
         sessionStorage.removeItem("allStagesCompleted");
       } else {
         setAllSectionsCompleted(storedAllStagesCompleted === "true");
       }
-  
+
 
       // setAllSectionsCompleted(allCompleted);
 
@@ -112,12 +113,12 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
 
       if (allSectionsCompleted) {
         const completedSets: string[] = JSON.parse(sessionStorage.getItem("completedSets") || "[]");
-  
+
         if (!completedSets.includes(set)) {
           completedSets.push(set);
           sessionStorage.setItem("completedSets", JSON.stringify(completedSets));
         }
-  
+
         sessionStorage.removeItem("completedSections");
       }
 
@@ -250,7 +251,7 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
 
               // Set the second font and add text
               // doc.setFont("noto-sans");
-              doc.setFont('times', 'normal'); 
+              doc.setFont('times', 'normal');
               doc.setFontSize(17);
               doc.text(`(${userData.designation} - ${userData.department})`, 400, 272, { align: "center" });
 
@@ -262,7 +263,7 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
               const formattedDate = `${day}/${month}/${year}`;
 
               // doc.setFont("noto-sans");
-              doc.setFont('times', 'normal'); 
+              doc.setFont('times', 'normal');
               doc.setFontSize(19);
               doc.text(`${formattedDate}`, 672, 448, { align: "center" });
 
