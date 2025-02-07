@@ -67,20 +67,41 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
   const set = searchParams.get("set") || "Unknown";
   const stage = searchParams.get("stage") || "Unknown";
 
-  useEffect(() => {
-    // Check if we're in the browser environment
-    const isClient = typeof window !== 'undefined';
+  const [totalScore, setTotalScore] = useState(0);
+  const [allSectionsCompleted, setAllSectionsCompleted] = useState(false);
 
-    if (isClient) {
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
       const completedSections: Record<string, number> = JSON.parse(sessionStorage.getItem('completedSections') || '[]');
 
       // Sum the scores of all stages
       // const totalScore = 0;
       const totalScore = Object.values(completedSections).reduce((sum, score) => sum + score, 0);
-      // console.log(totalScore);
+      setTotalScore(totalScore);
+      // console.log(totalScore);      
 
-      // Check if all 8 sections are completed (i.e., exactly 8 keys exist)
+      // Check if all 8 sections are completed
+      const storedAllStagesCompleted = sessionStorage.getItem("allStagesCompleted");
       const allSectionsCompleted = Object.keys(completedSections).length === 8 && totalScore > 0;
+      // let allCompleted = Object.keys(completedSections).length === 8 && totalScore > 0;
+
+      // If the flag exists in sessionStorage, use it
+      // if (sessionStorage.getItem("allStagesCompleted") === "true") {
+      //   allCompleted = true;
+      // }
+
+      if (allSectionsCompleted && !storedAllStagesCompleted) {
+        setAllSectionsCompleted(true);
+        sessionStorage.setItem("allStagesCompleted", "true");
+      } else if(storedAllStagesCompleted){
+        // setAllSectionsCompleted(false);
+        sessionStorage.removeItem("allStagesCompleted");
+      } else {
+        setAllSectionsCompleted(storedAllStagesCompleted === "true");
+      }
+  
+
+      // setAllSectionsCompleted(allCompleted);
 
       // console.log("All sections Completed: " + allSectionsCompleted, "Total Score: " + totalScore);
 
@@ -90,26 +111,39 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
       }
 
       if (allSectionsCompleted) {
-        generateCertificate(totalScore);
-
-        // Retrieve the existing completed sets or initialize as an empty array
         const completedSets: string[] = JSON.parse(sessionStorage.getItem("completedSets") || "[]");
-
-        // Add a new completed set name (assuming `stage` contains the set name)
-        const newCompletedSet = set;
-        if (!completedSets.includes(newCompletedSet)) {
-          completedSets.push(newCompletedSet);
+  
+        if (!completedSets.includes(set)) {
+          completedSets.push(set);
+          sessionStorage.setItem("completedSets", JSON.stringify(completedSets));
         }
-
-        // Store the updated list back into sessionStorage
-        sessionStorage.setItem("completedSets", JSON.stringify(completedSets));
-
+  
         sessionStorage.removeItem("completedSections");
-
-        setBackgroundAudioSrc("./songs/bgm1.mp3");
-        playBackgroundMusic(); // Resume background music
-        router.push("/set");
       }
+
+      // if (allSectionsCompleted) {
+      //   // generateCertificate(totalScore);
+
+      //   // Retrieve the existing completed sets or initialize as an empty array
+      //   const completedSets: string[] = JSON.parse(sessionStorage.getItem("completedSets") || "[]");
+
+      //   // Add a new completed set name (assuming `stage` contains the set name)
+      //   const newCompletedSet = set;
+      //   if (!completedSets.includes(newCompletedSet)) {
+      //     completedSets.push(newCompletedSet);
+      //   }
+
+      //   // Store the updated list back into sessionStorage
+      //   sessionStorage.setItem("completedSets", JSON.stringify(completedSets));
+
+      //   sessionStorage.setItem("allStagesCompleted", "true");
+
+      //   sessionStorage.removeItem("completedSections");
+
+      //   // setBackgroundAudioSrc("./songs/bgm1.mp3");
+      //   // playBackgroundMusic(); // Resume background music
+      //   // router.push("/set");
+      // }
     }
   }, [score, isMuted]);
 
@@ -154,13 +188,6 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
 
     // const isClient = typeof window !== 'undefined';
     const userData: User = getUserData();
-
-    // if (isClient) {
-    //   userData = JSON.parse(sessionStorage.getItem("currentUser") || "{}");
-    // }
-
-    
-    // Second font file
 
     // Fetch both font files and convert them to Base64
     Promise.all([
@@ -254,38 +281,118 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
   const handleReturnToStages = () => {
     setBackgroundAudioSrc("./songs/bgm1.mp3");
     playBackgroundMusic(); // Resume background music
+
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem("allStagesCompleted");
+    }
+
     router.push(`/game-map?set=${encodeURIComponent(set)}`);
   };
+
+  const handleSelectAnotherSet = () => {
+    setBackgroundAudioSrc("./songs/bgm1.mp3");
+    playBackgroundMusic(); // Resume background music
+    router.push("/set");
+  }
+
+  const handleDownloadCertificate = () => {
+    generateCertificate(totalScore);
+  }
+
+  // return (
+  //   <div className="flex flex-col items-center justify-center min-h-screen">
+  //     {/* <audio ref={winningSoundRef} src="./soundeffects/winningsound.mp3" /> */}
+  //     {score > 0 && <Confetti width={windowSize.width} height={windowSize.height} />}
+
+  //     <h1
+  //       className={`text-4xl sm:text-6xl font-bold mb-8 text-center 
+  //       ${score > 0 ? "text-white animate-bounce" : "text-yellow-300"}`}
+  //     >
+  //       {score > 0 ? "Congratulations!" : "Don't Give Up!"}
+  //     </h1>
+
+  //     <div className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-lg p-8 mb-8 text-center">
+  //       <p className="text-3xl text-white mb-4">
+  //         {score > 0 ? "You have successfully completed" : "You have attempted"}
+  //       </p>
+  //       <p className="text-4xl text-white mb-4">
+  //         <strong>{stage} Stage</strong>
+  //       </p>
+  //       <p className="text-3xl text-white mb-4">{score > 0 ? "with a score of" : "but didn't score any points."}</p>
+  //       {score > 0 && <p className={"text-6xl font-bold animate-pulse text-blue-800"}>{score}</p>}
+  //     </div>
+
+  //     <button
+  //       className="px-6 py-2 bg-blue-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-blue-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+  //       onClick={handleReturnToStages}
+  //     >
+  //       Return to Stages Page
+  //     </button>
+  //   </div>
+  // );
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       {/* <audio ref={winningSoundRef} src="./soundeffects/winningsound.mp3" /> */}
-      {score > 0 && <Confetti width={windowSize.width} height={windowSize.height} />}
+      {score > 0 && <Confetti width={window.innerWidth} height={window.innerHeight} />}
 
       <h1
         className={`text-4xl sm:text-6xl font-bold mb-8 text-center 
         ${score > 0 ? "text-white animate-bounce" : "text-yellow-300"}`}
       >
-        {score > 0 ? "Congratulations!" : "Don't Give Up!"}
+        {allSectionsCompleted ? "All Stages Completed!" : score > 0 ? "Congratulations!" : "Don't Give Up!"}
       </h1>
 
       <div className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-lg p-8 mb-8 text-center">
         <p className="text-3xl text-white mb-4">
-          {score > 0 ? "You have successfully completed" : "You have attempted"}
+          {allSectionsCompleted
+            ? "You have successfully completed all stages."
+            : score > 0
+              ? "You have successfully completed"
+              : "You have attempted"}
         </p>
-        <p className="text-4xl text-white mb-4">
-          <strong>{stage} Stage</strong>
+        {!allSectionsCompleted && (
+          <p className="text-4xl text-white mb-4">
+            <strong>{stage} Stage</strong>
+          </p>
+        )}
+        <p className="text-3xl text-white mb-4">
+          {allSectionsCompleted
+            ? "Your total score is:"
+            : score > 0
+              ? "with a score of"
+              : "but didn't score any points."}
         </p>
-        <p className="text-3xl text-white mb-4">{score > 0 ? "with a score of" : "but didn't score any points."}</p>
-        {score > 0 && <p className={"text-6xl font-bold animate-pulse text-blue-800"}>{score}</p>}
+        {score > 0 && (
+          <p className="text-6xl font-bold animate-pulse text-blue-800">
+            {allSectionsCompleted ? totalScore : score}
+          </p>
+        )}
       </div>
 
-      <button
-        className="px-6 py-2 bg-blue-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-blue-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
-        onClick={handleReturnToStages}
-      >
-        Return to Stages Page
-      </button>
+      {allSectionsCompleted ? (
+        <>
+          <button
+            className="px-6 py-2 bg-green-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-green-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 mb-4"
+            onClick={handleSelectAnotherSet}
+          >
+            Return to Select Another Set
+          </button>
+          <button
+            className="px-6 py-2 bg-yellow-600 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-yellow-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50"
+            onClick={handleDownloadCertificate}
+          >
+            Download Certificate
+          </button>
+        </>
+      ) : (
+        <button
+          className="px-6 py-2 bg-blue-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-blue-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+          onClick={handleReturnToStages}
+        >
+          Return to Stages Page
+        </button>
+      )}
     </div>
   );
-}
+};
