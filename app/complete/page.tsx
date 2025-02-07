@@ -195,13 +195,13 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
               format: [800, 600],
             });
 
-            // Add the first custom font to jsPDF
-            doc.addFileToVFS("open-sans.ttf", base64Font1);
-            doc.addFont("open-sans.ttf", "open-sans", "normal", 'Identity-H');
+            // // Add the first custom font to jsPDF
+            // doc.addFileToVFS("open-sans.ttf", base64Font1);
+            // doc.addFont("open-sans.ttf", "open-sans", "normal", 'Identity-H');
 
-            // Add the second custom font to jsPDF
-            doc.addFileToVFS("noto-sans.ttf", base64Font2);
-            doc.addFont("noto-sans.ttf", "noto-sans", "normal", 'Identity-H');
+            // // Add the second custom font to jsPDF
+            // doc.addFileToVFS("noto-sans.ttf", base64Font2);
+            // doc.addFont("noto-sans.ttf", "noto-sans", "normal", 'Identity-H');
 
             const img = new Image();
 
@@ -216,12 +216,14 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
               doc.addImage(img, "JPEG", 0, 0, 800, 600);
 
               // Set the first font and add text
-              doc.setFont("open-sans");
+              // doc.setFont("open-sans");
+              doc.setFont('helvetica', 'bold');
               doc.setFontSize(30);
               doc.text(`${userData.title}` + "." + `${userData.name}`, 400, 240, { align: "center" });
 
               // Set the second font and add text
-              doc.setFont("noto-sans");
+              // doc.setFont("noto-sans");
+              doc.setFont('times', 'normal'); 
               doc.setFontSize(17);
               doc.text(`(${userData.designation} - ${userData.department})`, 400, 272, { align: "center" });
 
@@ -232,7 +234,8 @@ function StageScoreSection({ windowSize, router, isMuted, backgroundAudioSrc, pl
               const year = today.getFullYear();
               const formattedDate = `${day}/${month}/${year}`;
 
-              doc.setFont("noto-sans");
+              // doc.setFont("noto-sans");
+              doc.setFont('times', 'normal'); 
               doc.setFontSize(19);
               doc.text(`${formattedDate}`, 672, 448, { align: "center" });
 
