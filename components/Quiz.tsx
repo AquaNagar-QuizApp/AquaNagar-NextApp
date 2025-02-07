@@ -26,7 +26,7 @@ interface QuizProps {
 
 export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
   // const [currentSection, setCurrentSection] = useState<number>(0)
-  const currentSection = 0
+  // const currentSection = 0
   const [currentQuestion, setCurrentQuestion] = useState<number>(0)
   const [score, setScore] = useState<number>(0)
   const [timeLeft, setTimeLeft] = useState<number>(30)
@@ -35,7 +35,7 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
   const [correctAnswer, setCorrectAnswer] = useState<string | null>(null);
   const [highlighted, setHighlighted] = useState<boolean>(false);
 
-  const { isMuted, playBackgroundMusic, pauseBackgroundMusic } = useAudio();
+  const { isMuted, playBackgroundMusic, pauseBackgroundMusic, setBackgroundAudioSrc } = useAudio();
 
   const correctSoundRef = useRef<HTMLAudioElement | null>(null);
   const wrongSoundRef = useRef<HTMLAudioElement | null>(null);
@@ -48,6 +48,21 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
         playBackgroundMusic();
       }
     };
+
+    if (typeof window !== "undefined") {
+      const storedData = sessionStorage.getItem("completedSections");
+  
+      if (storedData) {
+        const parsedData: Record<string, number>[] = JSON.parse(storedData); // Parse as an array of objects
+  
+        const sectionCount = parsedData.length; // Get the number of completed sections
+  
+        // Set background audio based on whether the count is even or odd
+        setBackgroundAudioSrc(sectionCount % 2 === 0 ? "./songs/quizaudio1.mp3" : "./songs/quizaudio2.mp3");
+      }
+    }
+
+    // setBackgroundAudioSrc("./songs/quizaudio1.mp3");
 
     // Add event listeners to sound elements
     const correctSound = correctSoundRef.current;
@@ -112,7 +127,7 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
         });
       }, 500); // Wait for exit animation (500ms)
     }
-  }, [quizSet, currentSection, currentQuestion, answered, selectedOption, correctAnswer, onComplete]);
+  }, [quizSet, currentQuestion, answered, selectedOption, correctAnswer, onComplete]);
 
 
   useEffect(() => {
@@ -142,7 +157,7 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
     return () => {
       if (timer) clearInterval(timer);
     };
-  }, [timeLeft, answered, handleNextQuestion, currentQuestion, quizSet, currentSection]);
+  }, [timeLeft, answered, handleNextQuestion, currentQuestion, quizSet]);
 
   const handleAnswer = (selectedAnswer: string) => {
     const currentSectionQuestions = quizSet.questions;

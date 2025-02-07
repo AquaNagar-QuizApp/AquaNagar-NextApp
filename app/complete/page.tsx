@@ -22,23 +22,23 @@ interface StageScoreSectionProps {
 
 
 export default function Complete(): JSX.Element {
-  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
+  // const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
   const router = useRouter()
 
   const { isMuted, backgroundAudioSrc, playBackgroundMusic, setBackgroundAudioSrc } = useAudio();
 
 
 
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowSize({ width: window.innerWidth, height: window.innerHeight })
-    }
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     setWindowSize({ width: window.innerWidth, height: window.innerHeight })
+  //   }
 
-    handleResize()
-    window.addEventListener("resize", handleResize)
+  //   handleResize()
+  //   window.addEventListener("resize", handleResize)
 
-    return () => window.removeEventListener("resize", handleResize)
-  }, [])
+  //   return () => window.removeEventListener("resize", handleResize)
+  // }, [])
 
   return (
     <main className="min-h-screen relative overflow-auto">
@@ -75,10 +75,15 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
     if (typeof window !== 'undefined') {
       const completedSections: Record<string, number> = JSON.parse(sessionStorage.getItem('completedSections') || '[]');
 
+
+      const totalScore = Object.values(completedSections).reduce((sum, score) => sum + score, 0);
+      // setTotalScore(totalScore);
+       // Persist final score
+
       // Sum the scores of all stages
       // const totalScore = 0;
-      const totalScore = Object.values(completedSections).reduce((sum, score) => sum + score, 0);
-      setTotalScore(totalScore);
+      // const totalScore = Object.values(completedSections).reduce((sum, score) => sum + score, 0);
+      // setTotalScore(totalScore);
       // console.log(totalScore);      
 
       // Check if all 8 sections are completed
@@ -94,9 +99,12 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
       if (allSectionsCompleted && !storedAllStagesCompleted) {
         setAllSectionsCompleted(true);
         sessionStorage.setItem("allStagesCompleted", "true");
+        setTotalScore(totalScore);
+        sessionStorage.setItem("finalTotalScore", totalScore.toString());
       } else if (storedAllStagesCompleted) {
         // setAllSectionsCompleted(false);
         sessionStorage.removeItem("allStagesCompleted");
+        sessionStorage.removeItem("finalTotalScore");
       } else {
         setAllSectionsCompleted(storedAllStagesCompleted === "true");
       }
@@ -375,20 +383,34 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
       </div>
 
       {allSectionsCompleted ? (
-        <>
+        // <>
+        //   <button
+        //     className="px-6 py-2 bg-green-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-green-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 mb-4"
+        //     onClick={handleSelectAnotherSet}
+        //   >
+        //     Return to Select Another Set
+        //   </button>
+        //   <button
+        //     className="px-6 py-2 bg-yellow-600 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-yellow-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50"
+        //     onClick={handleDownloadCertificate}
+        //   >
+        //     Download Certificate
+        //   </button>
+        // </>
+        <div className="flex flex-col md:flex-row justify-between items-center w-full gap-4">
           <button
-            className="px-6 py-2 bg-green-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-green-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 mb-4"
+            className="px-6 py-2 w-full md:w-auto bg-green-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-green-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50"
             onClick={handleSelectAnotherSet}
           >
-            Return to Select Another Set
+            Return to Select Set
           </button>
           <button
-            className="px-6 py-2 bg-yellow-600 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-yellow-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50"
+            className="px-6 py-2 w-full md:w-auto bg-yellow-600 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-yellow-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50"
             onClick={handleDownloadCertificate}
           >
-            Download Certificate
+            ⬇️ Download Certificate
           </button>
-        </>
+        </div>
       ) : (
         <button
           className="px-6 py-2 bg-blue-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-blue-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
