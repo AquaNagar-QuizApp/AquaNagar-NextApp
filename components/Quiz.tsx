@@ -297,7 +297,7 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
             <motion.img
               src={currentQuestionData.imageUrl || "/placeholder.svg"}
               alt="Question Image"
-              className="w-full h-48 object-cover rounded-md"
+              className="w-full max-w-2xl mx-auto h-48 aspect-video object-contain rounded-md" // h-auto uses entire height of original image
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}

@@ -9,7 +9,10 @@ import { AnimatedBackground } from "@/components/AnimatedBackground"
 export default function RoleSelection() {
   const router = useRouter()
   const [selectedRole, setSelectedRole] = useState<string | null>(null)
-  console.log(selectedRole);
+
+  if (typeof window !== "undefined" && selectedRole) {
+    sessionStorage.setItem("selectedRole", JSON.stringify(selectedRole));
+  }
 
   const containerVariants = {
     hidden: { opacity: 0 },

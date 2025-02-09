@@ -1,10 +1,12 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
+import { useAudio } from "@/context/AudioContext";
 
+// Array of case study stages
 const caseStudies = [
   "In the first phase of the game, you’ll work with urban planners to focus on integrated planning that combines technical, environmental, and social dimensions to create a sustainable, efficient, and inclusive Water Supply System.",
   "You are expected to design a Water Supply System (WSS) that minimizes cost, water loss, and energy loss while ensuring resilience, safety, and reliability.",
@@ -16,12 +18,26 @@ const caseStudies = [
   "Once the system is operational, you’ll monitor its performance. Use data from smart meters and sensors to assess water production, energy consumption, and system efficiency."
 ];
 
+// Array of audio files corresponding to each case study stage
+const audioFiles = [
+  "./stages/stage1.mp3",
+  "./stages/stage2.mp3",
+  "./stages/stage3.mp3",
+  "./stages/stage4.mp3",
+  "./stages/stage5.mp3",
+  "./stages/stage6.mp3",
+  "./stages/stage7.mp3",
+  "./stages/stage8.mp3"
+];
+
 function StagesResult() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [currentPart, setCurrentPart] = useState(0);
   const [stageTitle, setStageTitle] = useState("");
   const stageParam = searchParams.get("stage");
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { isMuted } = useAudio();
 
   useEffect(() => {
     const stageIndexParam = searchParams.get("stageIndex");
@@ -36,56 +52,42 @@ function StagesResult() {
     }
   }, [searchParams.toString()]);
 
-  // Auto route to next stage after animation completes
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     const set = searchParams.get("set");
-  //     if (stageParam && set) {
-  //       router.push(`/quiz?stage=${encodeURIComponent(stageParam)}&set=${encodeURIComponent(set)}`);
-  //     } else {
-  //       console.error("Stage is missing");
-  //     }
-  //   }, 5000); // Change page after 5 seconds
-
-  //   return () => clearTimeout(timer); // Cleanup on unmount
-  // }, [currentPart]);
-
   useEffect(() => {
-    const textLength = caseStudies[currentPart].length;
-    const animationTime = textLength * 0.05 + 0.1; // Calculate the required animation time
+    if (currentPart === null) return; // Prevent playing when not yet set
 
-    const timer = setTimeout(() => {
-      const set = searchParams.get("set");
-      if (stageParam && set) {
-        router.push(`/quiz?stage=${encodeURIComponent(stageParam)}&set=${encodeURIComponent(set)}`);
-      } else {
-        console.error("Stage is missing");
+    // Create new audio object when currentPart changes
+    const audio = new Audio(audioFiles[currentPart]);
+    audioRef.current = audio;
+    audio.muted = isMuted; // Set mute/unmute state
+    audio.play();
+
+    // Navigate to quiz after the audio finishes
+    audio.onended = () => {
+      navigateToQuiz();
+    };
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause(); // Stop audio when component unmounts
+        audioRef.current = null;
       }
-    }, animationTime * 1000 + 2000); // Convert to milliseconds
-
-    return () => clearTimeout(timer); // Cleanup on unmount
+    };
   }, [currentPart]);
 
+  // Handle muting/unmuting when isMuted changes
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.muted = isMuted;
+    }
+  }, [isMuted]);
 
-  // const handlePrevious = () => {
-  //   if (currentPart > 0) {
-  //     setCurrentPart(currentPart - 1);
-  //   }
-  // };
-
-  // const handleNext = () => {
-  //   if (currentPart < caseStudies.length - 1) {
-  //     setCurrentPart(currentPart + 1);
-  //   } else {
-  //     router.push("/challenge");
-  //   }
-  // };
-
-  // const handleSkip = () => {
-  //   setTimeout(() => {
-  //     router.push("/challenge");
-  //   }, 100);
-  // };
+  function navigateToQuiz() {
+    const set = searchParams.get("set");
+    if (stageParam && set) {
+      router.push(`/quiz?stage=${encodeURIComponent(stageParam)}&set=${encodeURIComponent(set)}`);
+    } else {
+      console.error("Stage is missing");
+    }
+  }
 
   return (
     <main className="min-h-screen relative overflow-hidden">
@@ -125,8 +127,8 @@ function StagesResult() {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{
-                        delay: index * 0.05,
-                        duration: 0.1,
+                        delay: 2 + index * 0.05,
+                        duration: 0.5,
                       }}
                     >
                       {char}

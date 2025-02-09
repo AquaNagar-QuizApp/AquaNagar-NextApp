@@ -14,9 +14,14 @@ export type Stage = {
   questions: Question[];
 };
 
-export type QuizSet = {
+export type Set = {
   setName: string;
   stages: Stage[];
+};
+
+export type Role = {
+  roleName: string;
+  quizSets: Set[];
 };
 
 // export interface QuizSet {
@@ -43,7 +48,7 @@ export interface LoginError {
 }
 
 export interface QuizProps {
-  quizSet: QuizSet
+  quizSet: Set
   onComplete: (score: number) => void
 }
 

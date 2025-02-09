@@ -63,16 +63,16 @@ export default function LoginPage() {
         <AnimatePresence>
           {showWaves && (
             <motion.div
-              className="flex items-center justify-center space-x-4 text-white text-2xl font-semibold"
+              className="flex flex-col items-center justify-center text-white text-2xl font-semibold"
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.5 }}
               transition={{ duration: 0.5 }}
             >
               {/* <AudioPlayer/> */}
-              <div>{"🌀".repeat(waveCount)}</div>
+              <div className="whitespace-nowrap">{"🌀".repeat(waveCount)}</div>
               {waveCount <= 5 && (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="mt-2">
                   Adventure awaits...
                 </motion.div>
               )}
@@ -83,4 +83,3 @@ export default function LoginPage() {
     </main>
   )
 }
-

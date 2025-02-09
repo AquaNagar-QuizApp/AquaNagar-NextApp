@@ -6,13 +6,14 @@ import { useAudio } from "@/context/AudioContext";
 
 const LogoutButton = () => {
     const router = useRouter();
-    const { stopBackgroundMusic } = useAudio();
+    const { toggleMute, stopBackgroundMusic } = useAudio();
 
     const handleLogout = () => {
         if (typeof window !== 'undefined') {
             sessionStorage.clear(); // Clears all sessionStorage data
             // sessionStorage.removeItem("isLoggedIn"); // Clear login session
             // sessionStorage.removeItem("currentUser"); // Clear user data if stored
+            toggleMute();
             stopBackgroundMusic();
             router.push("/");
         }

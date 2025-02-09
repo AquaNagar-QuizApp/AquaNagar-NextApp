@@ -41,7 +41,7 @@ export default function Complete(): JSX.Element {
   // }, [])
 
   return (
-    <main className="min-h-screen relative overflow-auto">
+    <main className="min-h-screen relative overflow-hidden">
       <div className="min-h-screen bg-gradient-to-br from-teal-500 to-blue-700 flex flex-col items-center justify-center">
         {/* Suspense is used to prevent hydration errors */}
         <Suspense fallback={<div className="text-white text-xl">Loading...</div>}>
