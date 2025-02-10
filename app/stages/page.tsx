@@ -65,12 +65,34 @@ function StagesResult() {
     audio.onended = () => {
       navigateToQuiz();
     };
-    return () => {
+
+    // Cleanup function to stop audio when leaving the page
+    const stopAudio = () => {
       if (audioRef.current) {
-        audioRef.current.pause(); // Stop audio when component unmounts
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0; // Reset audio position
         audioRef.current = null;
       }
     };
+
+    // Listen for page unload or tab switch
+    window.addEventListener("beforeunload", stopAudio);
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) stopAudio();
+    });
+
+    return () => {
+      stopAudio(); // Stop audio when unmounting
+      window.removeEventListener("beforeunload", stopAudio);
+      document.removeEventListener("visibilitychange", stopAudio);
+    };
+
+    // return () => {
+    //   if (audioRef.current) {
+    //     audioRef.current.pause(); // Stop audio when component unmounts
+    //     audioRef.current = null;
+    //   }
+    // };
   }, [currentPart]);
 
   // Handle muting/unmuting when isMuted changes

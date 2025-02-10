@@ -78,7 +78,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
 
       const totalScore = Object.values(completedSections).reduce((sum, score) => sum + score, 0);
       // setTotalScore(totalScore);
-       // Persist final score
+      // Persist final score
 
       // Sum the scores of all stages
       // const totalScore = 0;
@@ -292,7 +292,9 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
 
   const handleReturnToStages = () => {
     setBackgroundAudioSrc("./songs/bgm.mp3");
-    playBackgroundMusic(); // Resume background music
+    if (!isMuted) {
+      playBackgroundMusic(); // Resume background music
+    }
 
     if (typeof window !== 'undefined') {
       sessionStorage.removeItem("allStagesCompleted");
@@ -347,14 +349,14 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
     <div className="flex flex-col items-center justify-center min-h-screen">
       {/* <audio ref={winningSoundRef} src="./soundeffects/winningsound.mp3" /> */}
       {(allSectionsCompleted && totalScore > 0) || (!allSectionsCompleted && score > 0)
-      // score > 0 
-      && <Confetti width={window.innerWidth} height={window.innerHeight} />}
+        // score > 0 
+        && <Confetti width={window.innerWidth} height={window.innerHeight} />}
 
       <h1
         className={`text-4xl sm:text-6xl font-bold mb-8 text-center 
         ${(allSectionsCompleted && totalScore > 0) || (!allSectionsCompleted && score > 0)
-          // score > 0 
-          ? "text-white animate-bounce" : "text-yellow-300"}`}
+            // score > 0 
+            ? "text-white animate-bounce" : "text-yellow-300"}`}
       >
         {allSectionsCompleted ? "All Stages Completed!" : score > 0 ? "Congratulations!" : "Don't Give Up!"}
       </h1>

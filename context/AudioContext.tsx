@@ -62,7 +62,10 @@ export const AudioProvider = ({ children }: { children: React.ReactNode }) => {
                 setIsPlaying(true);
             } else {
                 audioRef.current.load();
-                audioRef.current.play();
+                // audioRef.current.play();
+                audioRef.current
+                    .play()
+                    .catch((error) => console.error("Audio play error:", error));
             }
         }
     };

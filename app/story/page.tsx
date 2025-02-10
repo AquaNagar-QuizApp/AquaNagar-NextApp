@@ -36,23 +36,45 @@ export default function Story() {
 
   // Play audio after the first letter becomes visible
   useEffect(() => {
+    if (!firstLetterVisible) return;
     // Set up audio when currentPart changes
-    if (firstLetterVisible) {
-      const audio = new Audio(audioFiles[currentPart]);
-      audioRef.current = audio;
-      audio.muted = isMuted; // Set initial mute state
-      audio.play();
+    const audio = new Audio(audioFiles[currentPart]);
+    audioRef.current = audio;
+    audio.muted = isMuted; // Set initial mute state
+    audio.play();
 
-      // Automatically move to the next story part when the audio ends
-      audio.onended = () => {
-        if (currentPart < storyParts.length - 1) {
-          setCurrentPart((prev) => prev + 1);
-          setFirstLetterVisible(false);
-        } else {
-          router.push("/challenge");
-        }
-      };
-    }
+    // Automatically move to the next story part when the audio ends
+    audio.onended = () => {
+      if (currentPart < storyParts.length - 1) {
+        setCurrentPart((prev) => prev + 1);
+        setFirstLetterVisible(false);
+      } else {
+        router.push("/challenge");
+      }
+    };
+
+    // Function to stop audio
+    const stopAudio = () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        audioRef.current = null;
+      }
+    };
+
+    // Handle page unload or visibility change
+    const handleVisibilityChange = () => {
+      if (document.hidden) stopAudio();
+    };
+
+    window.addEventListener("beforeunload", stopAudio);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      stopAudio();
+      window.removeEventListener("beforeunload", stopAudio);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
   }, [firstLetterVisible, currentPart, router]);
 
   useEffect(() => {
