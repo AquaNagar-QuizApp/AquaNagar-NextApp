@@ -68,8 +68,20 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
   const set = searchParams.get("set") || "Unknown";
   const stage = searchParams.get("stage") || "Unknown";
 
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const [totalScore, setTotalScore] = useState(0);
   const [allSectionsCompleted, setAllSectionsCompleted] = useState(false);
+
+  useEffect(() => {
+    setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+
+    const handleResize = () => {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -344,17 +356,18 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
   //     </button>
   //   </div>
   // );
+  const showConfetti = (allSectionsCompleted && totalScore > 0) || (!allSectionsCompleted && score > 0);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       {/* <audio ref={winningSoundRef} src="./soundeffects/winningsound.mp3" /> */}
-      {(allSectionsCompleted && totalScore > 0) || (!allSectionsCompleted && score > 0)
+      {showConfetti
         // score > 0 
-        && <Confetti width={window.innerWidth} height={window.innerHeight} />}
+        && <Confetti width={windowSize.width} height={windowSize.height} />}
 
       <h1
         className={`text-4xl sm:text-6xl font-bold mb-8 text-center 
-        ${(allSectionsCompleted && totalScore > 0) || (!allSectionsCompleted && score > 0)
+        ${(showConfetti)
             // score > 0 
             ? "text-white animate-bounce" : "text-yellow-300"}`}
       >
@@ -389,7 +402,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
         )}
       </div>
 
-      {allSectionsCompleted ? (
+      {allSectionsCompleted && totalScore > 0 ? (
         <div className="flex flex-col md:flex-row justify-between items-center w-full gap-4">
           <button
             className="px-6 py-2 w-full md:w-auto bg-green-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-green-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50"
