@@ -128,7 +128,7 @@ export default function About() {
     { level: "Gold", threshold: 80, className: "text-yellow-400" },
     { level: "Silver", threshold: 70, className: "text-gray-600" },
     { level: "Bronze", threshold: 60, className: "text-amber-600" },
-    { level: "Participation", threshold: 50, className: "text-black-600" }
+    // { level: "Participation", threshold: 50, className: "text-black-600" }
   ];
 
   return (
@@ -196,10 +196,10 @@ export default function About() {
                 <section className="space-y-3 text-left">
                   <h3 className="text-xl font-semibold">Quiz Structure</h3>
                   <div className="pl-4 space-y-2">
-                    <p>• Choose from 4 different question sets</p>
-                    <p>• Each set contains 8 stages</p>
-                    <p>• 10 questions per stage</p>
-                    <p>• 30 seconds time limit per question</p>
+                    <p>• Choose from 4 different question sets.</p>
+                    <p>• Each set contains 8 stages.</p>
+                    <p>• 10 questions per stage.</p>
+                    <p>• 30 seconds time limit per question.</p>
                   </div>
                 </section>
 
@@ -226,10 +226,10 @@ export default function About() {
                 </section>
 
                 <section className="space-y-3 text-left">
-                  <h3 className="text-xl font-semibold">If You Score Below 50%</h3>
+                  <h3 className="text-xl font-semibold">If You Score Below 60%</h3>
                   <div className="pl-4 space-y-2">
-                    <p>You have two options:</p>
-                    <p>• Retry the same set to improve your score.</p>
+                    {/* <p>You have two options:</p>
+                    <p>• Retry the same set to improve your score.</p> */}
                     <p>• Try a different set to earn your certificate.</p>
                   </div>
                 </section>

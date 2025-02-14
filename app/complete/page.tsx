@@ -141,30 +141,6 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
 
         sessionStorage.removeItem("completedSections");
       }
-
-      // if (allSectionsCompleted) {
-      //   // generateCertificate(totalScore);
-
-      //   // Retrieve the existing completed sets or initialize as an empty array
-      //   const completedSets: string[] = JSON.parse(sessionStorage.getItem("completedSets") || "[]");
-
-      //   // Add a new completed set name (assuming `stage` contains the set name)
-      //   const newCompletedSet = set;
-      //   if (!completedSets.includes(newCompletedSet)) {
-      //     completedSets.push(newCompletedSet);
-      //   }
-
-      //   // Store the updated list back into sessionStorage
-      //   sessionStorage.setItem("completedSets", JSON.stringify(completedSets));
-
-      //   sessionStorage.setItem("allStagesCompleted", "true");
-
-      //   sessionStorage.removeItem("completedSections");
-
-      //   // setBackgroundAudioSrc("./songs/bgm1.mp3");
-      //   // playBackgroundMusic(); // Resume background music
-      //   // router.push("/set");
-      // }
     }
   }, [score, isMuted]);
 
