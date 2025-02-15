@@ -9,10 +9,12 @@ import { AnimatedBackground } from "@/components/AnimatedBackground"
 
 export default function SetSelection(): JSX.Element {
   const router = useRouter()
-  const quizSets: QuizSetName[] = ["Set 1", "Set 2", "Set 3", "Set 4"]
+  //const quizSets: QuizSetName[] = ["Set 1", "Set 2", "Set 3", "Set 4"]
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
     // State to store completed sets
     const [completedSets, setCompletedSets] = useState<string[]>([]);
+    const [quizSets, setQuizSets] = useState<QuizSetName[]>([]);
 
   const onSelect = (set: QuizSetName) => {
     // setSelectedSet(set)
@@ -48,6 +50,19 @@ export default function SetSelection(): JSX.Element {
         console.log("Completed Sets:", storedData);
       }
     }
+
+    const fetchQuizSets = async () => {
+      try {
+        const response = await fetch(apiBaseUrl + "/api/Sets"); // Replace with your API endpoint
+        const data = await response.json();
+        const setNames = data.map((set: { setId: number; setName: string }) => set.setName);
+        setQuizSets(setNames); // Assuming API returns an array of strings
+      } catch (error) {
+        console.error("Error fetching quiz sets:", error);
+      }
+    };
+
+    fetchQuizSets();
   }, []);
 
   return (
