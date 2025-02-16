@@ -8,11 +8,6 @@ import { AnimatedBackground } from "@/components/AnimatedBackground"
 
 export default function RoleSelection() {
   const router = useRouter()
-  const [selectedRole, setSelectedRole] = useState<string | null>(null)
-
-  if (typeof window !== "undefined" && selectedRole) {
-    sessionStorage.setItem("selectedRole", JSON.stringify(selectedRole));
-  }
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -36,20 +31,45 @@ export default function RoleSelection() {
     {
       title: "Engineer",
       emoji: "👨‍💻",
-      route: "/engineer",
+      roleId: 1
     },
     {
       title: "Non-Engineer",
       emoji: "👥",
-      route: "/non-engineer",
-    },
+      roleId: 2
+    }
   ]
 
-  const handleRoleSelect = (role: string) => {
-    setSelectedRole(role)
-    setTimeout(() => {
-      router.push("/about")
-    }, 100)
+  const handleRoleSelect = async (role: string) => {
+    // setSelectedRole(role)
+    let userID = null;
+    let roleId = roles.find((r) => r.title === role)?.roleId || 0;
+
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("selectedRole", JSON.stringify(role));
+      sessionStorage.setItem("roleID", roleId.toString());
+      userID = sessionStorage.getItem("userID");
+    }
+
+    try {
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+      const response = await fetch(`${apiBaseUrl}/api/users/update-role/${userID}/${role}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" }
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update role.");
+      }
+
+      // Redirect after updating role
+      setTimeout(() => {
+        router.push("/about");
+      }, 100);
+    } catch (error: any) {
+      console.error("Error updating role:", error.message);
+      alert(error.message || "Something went wrong.");
+    }
   }
 
   return (

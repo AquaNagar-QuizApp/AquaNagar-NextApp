@@ -1,5 +1,12 @@
 export type QuizSetName = "Set 1" | "Set 2" | "Set 3" | "Set 4"
-export type Title = "Mr" | "Mrs" | "Ms" | "Dr"
+// export type TitleOption = "Mr" | "Mrs" | "Ms" | "Dr"
+export enum Title {
+  Mr = 0,
+  Mrs = 1,
+  Ms = 2,
+  Dr = 3
+}
+
 
 export interface Question {
   type: "text" | "image"
@@ -45,6 +52,7 @@ export interface LoginError {
   email: string
   mobile: string
   title: string
+  mobileAndEmail: string
 }
 
 export interface QuizProps {
