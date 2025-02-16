@@ -202,7 +202,8 @@ function GameMapContent() {
 
   const handleStageClick = (stage: string, stageIndex: number) => {
     if (set) {
-      router.push(`/stages?set=${encodeURIComponent(set)}&stageIndex=${encodeURIComponent(stageIndex)}&stage=${encodeURIComponent(stage)}`);
+      const setNumber = set.replace(/\D/g, ""); // Removes all non-numeric characters
+      router.push(`/stages?set=${encodeURIComponent(setNumber)}&stageIndex=${encodeURIComponent(stageIndex)}&stage=${encodeURIComponent(stage)}`);
     } else {
       console.error("Set is missing");
     }
@@ -246,7 +247,7 @@ function GameMapContent() {
                 whileTap={isCompleted ? {} : { scale: 0.95 }} // Disable tap effect when completed
                 >
                 <Button
-                  onClick={() => handleStageClick(stage, index)}
+                  onClick={() => handleStageClick(stage, index+1)}
                   disabled={isCompleted} // Disable button
                   className="w-full h-full py-4 px-1 text-lg font-semibold text-center break-words whitespace-normal flex items-center justify-between md:w-64 md:h-20"
                 >
