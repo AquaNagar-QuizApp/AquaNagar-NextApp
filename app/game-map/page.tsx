@@ -6,16 +6,16 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Droplet, PenTool, Building2, FlaskRoundIcon as Flask, Cloud, Receipt, Banknote, BarChart3 } from "lucide-react"
 import React, { Suspense, useEffect, useMemo, useState } from "react"
 
-const stages = [
-  "Plan A Water Supply System",
-  "Design the Water Supply System",
-  "Building the Infrastructure",
-  "Water Treatment",
-  "Smart Water Networks",
-  "Metering, Billing, and Collection",
-  "Non-Revenue Water Management",
-  "Performance Assessment & Operational Excellence"
-];
+// const stages = [
+//   "Plan A Water Supply System",
+//   "Design the Water Supply System",
+//   "Building the Infrastructure",
+//   "Water Treatment",
+//   "Smart Water Networks",
+//   "Metering, Billing, and Collection",
+//   "Non-Revenue Water Management",
+//   "Performance Assessment & Operational Excellence",
+// ];
 
 const icons = [
   Droplet, PenTool, Building2, Flask, Cloud, Receipt, Banknote, BarChart3
@@ -155,6 +155,7 @@ const icons = [
 // }
 
 export default function GameMap() {
+  
   return (
     <main className="min-h-screen relative overflow-auto">
       <AnimatedBackground />
@@ -171,10 +172,10 @@ function GameMapContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [completedSections, setCompletedSections] = useState<Record<string, number>>({});
-
+  const [stages, setQuizSections] = useState<string[]>([]);
   // Memoizing searchParams to avoid unnecessary re-renders
   const set = useMemo(() => searchParams.get("set"), [searchParams]);
-
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   // Retrieve sessionStorage data on mount
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -183,6 +184,20 @@ function GameMapContent() {
         setCompletedSections(JSON.parse(storedData));
       }
     }
+
+    const fetchSections = async () => {
+      try {
+        const response = await fetch(apiBaseUrl + "/api/Sections"); // Replace with your API endpoint
+        const data: { sectionId: number; sectionName: string }[] = await response.json();
+
+        // Extract only `sectionName`
+        const names = data.map((section) => section.sectionName);
+        setQuizSections(names); // Assuming API returns an array of strings
+      } catch (error) {
+        console.error("Error fetching quiz sets:", error);
+      }
+    };
+    fetchSections();
   }, []);
 
   const handleStageClick = (stage: string, stageIndex: number) => {
