@@ -52,7 +52,8 @@ export default function RoleSelection() {
     }
 
     try {
-      const response = await fetch(`http://localhost:10000/api/users/update-role/${userID}/${role}`, {
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+      const response = await fetch(`${apiBaseUrl}/api/users/update-role/${userID}/${role}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" }
       });

@@ -165,7 +165,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
     designation: "",
     email: "",
     mobile: "",
-    title: Title.Mr,
+    title: "",
   });
 
   const generateCertificate = (score: number): void => {

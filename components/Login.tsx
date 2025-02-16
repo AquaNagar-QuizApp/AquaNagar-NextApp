@@ -91,7 +91,9 @@ export function Login({ onLogin }: LoginProps): JSX.Element {
         title: Number(formData.title), // Ensure title is sent as a number
       };
 
-      const response = await fetch("http://localhost:10000/login", {
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+      const response = await fetch(apiBaseUrl + "/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
