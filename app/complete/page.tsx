@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { JSX } from "react/jsx-runtime"
 import { jsPDF } from "jspdf";
 import { useAudio } from "@/context/AudioContext"
-import { User } from "@/types"
+import { Title, User } from "@/types"
 
 
 interface StageScoreSectionProps {
@@ -165,7 +165,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
     designation: "",
     email: "",
     mobile: "",
-    title: "",
+    title: Title.Mr,
   });
 
   const generateCertificate = (score: number): void => {

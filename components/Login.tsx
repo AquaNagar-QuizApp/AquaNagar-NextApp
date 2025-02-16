@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import type { LoginError, LoginProps, Title, User } from "@/types"
+import { LoginError, LoginProps, Title, User } from "@/types"
 
 export function Login({ onLogin }: LoginProps): JSX.Element {
   const [formData, setFormData] = useState<User>({
@@ -23,6 +23,7 @@ export function Login({ onLogin }: LoginProps): JSX.Element {
     designation: "",
     email: "",
     mobile: "",
+    mobileAndEmail: ""
   })
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -30,32 +31,12 @@ export function Login({ onLogin }: LoginProps): JSX.Element {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    // const newErrors: LoginError = {
-    //   title: !formData.title, // Required check
-
-    //   name: !formData.name ||
-    //     !/^[A-Za-z\s]+$/.test(formData.name) ||  // Only alphabets and spaces allowed
-    //     !(formData.name.length < 50), // Max length check
-
-    //   department: !formData.department ||
-    //     !/^[A-Za-z\s]+$/.test(formData.department), // No numbers or special characters allowed
-
-    //   designation: !formData.designation ||
-    //     /^\d+$/.test(formData.designation) || // Cannot be entirely numeric
-    //     /[^A-Za-z\s\d]/.test(formData.designation), // No special characters allowed
-
-    //   email: !formData.email ||
-    //     !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email), // Strict email validation
-
-    //   mobile: !formData.mobile ||
-    //     !/^[6-9]\d{9}$/.test(formData.mobile), // Must start with 6-9 and have 10 digits
-    // };
-
-    const newErrors: LoginError = {
-      title: !formData.title ? "Title is required" : "",
+    let newErrors: LoginError = {
+      //!formData.title ? "Title is required" : "",
+      title: formData.title === "" ? "Title is required" : "",
 
       name: !formData.name
         ? "Name is required"
@@ -92,40 +73,71 @@ export function Login({ onLogin }: LoginProps): JSX.Element {
           : !/^[6-9]\d{9}$/.test(formData.mobile)
             ? "Mobile number must start with 6, 7, 8, or 9"
             : "",
+
+      mobileAndEmail: ""
     };
-
-    // const newErrors: LoginError = {
-    //   name: false,
-    //   department: false,
-    //   designation: false,
-    //   email: false,
-    //   mobile: false,
-    //   title: false
-    // }
-    // // Custom validation for all fields
-    // if (!formData.title) newErrors.title = true
-    // if (!formData.name) newErrors.name = true
-    // if (!formData.department) newErrors.department = true
-    // if (!formData.designation) newErrors.designation = true
-    // if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = true
-    // if (!formData.mobile || !/^\d{10}$/.test(formData.mobile)) newErrors.mobile = true
-
-    // if (Object.keys(newErrors).length === 0) {
-    //   console.log('Form Submitted', formData)
-    // } else {
-    //   setErrors(newErrors)
-    // }
 
     if (Object.values(newErrors).some((error) => error)) {
       setErrors(newErrors);
-    } else {
-      onLogin(formData);
+      return;
+    }
+    // else {
+    //   onLogin(formData);
+    // }
+
+    try {
+      const user = {
+        ...formData,
+        title: Number(formData.title), // Ensure title is sent as a number
+      };
+
+      const response = await fetch("http://localhost:10000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(user)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.text();
+        throw new Error(errorData || "Login failed");
+      }
+
+      const data = await response.json();
+
+      // Store JWT token and user details in session storage
+      if (typeof window !== "undefined") {
+        // sessionStorage.setItem("isLoggedIn", "true");
+        // sessionStorage.setItem("currentUser", JSON.stringify(data.user)); // Store user details
+        sessionStorage.setItem("accessToken", data.accessToken); // Store JWT token
+        sessionStorage.setItem("userID", data.user.userId);
+      }
+
+      onLogin(formData); // Call onLogin only if API is successful
+    } catch (error: any) {
+      console.error("Login failed:", error.message);
+      // alert(error.message || "Invalid login credentials");
+      // setErrors((prevErrors) => ({
+      //   ...prevErrors,
+      //   mobileAndEmail: error.message || "Invalid login credentials",
+      // }));
+
+      setErrors({
+        title: "",
+        name: "",
+        department: "",
+        designation: "",
+        email: "",
+        mobile: "",
+        mobileAndEmail: error.message || "Invalid login credentials",
+      });
     }
   }
 
-  const handleTitleChange = (value: Title) => {
-    setFormData((prev) => ({ ...prev, title: value }))
-  }
+  const handleTitleChange = (value: number) => {
+    setFormData((prev) => ({ ...prev, title: value as Title }));
+  };
 
   const formVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -137,74 +149,16 @@ export function Login({ onLogin }: LoginProps): JSX.Element {
     visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
   }
 
-  const titleOptions: Title[] = ["Mr", "Mrs", "Ms", "Dr"];
+  // const titleOptions: TitleOption[] = ["Mr", "Mrs", "Ms", "Dr"];
+
+  const titleOptions = Object.keys(Title)
+    .filter((key) => isNaN(Number(key))) // Get only string keys (Mr, Mrs, etc.)
+    .map((key) => ({
+      label: key, // "Mr", "Mrs", etc.
+      value: String(Title[key as keyof typeof Title]) // Convert enum number to string
+    }));
 
   return (
-    // <motion.form
-    //   onSubmit={handleSubmit}
-    //   className="space-y-4"
-    //   initial="hidden"
-    //   animate="visible"
-    //   variants={formVariants}
-    // >
-    //   <motion.div variants={inputVariants} className="flex items-center gap-4 w-full">
-    //     {/* Title Dropdown */}
-    //     <div className="w-1/3">
-    //       <Label htmlFor="title">Title</Label>
-    //       <Select onValueChange={handleTitleChange} value={formData.title} required>
-    //         <SelectTrigger className="w-full">
-    //           <SelectValue placeholder="Select a title" />
-    //         </SelectTrigger>
-    //         <SelectContent className="bg-white shadow-lg rounded-lg">
-    //           {titleOptions.map((title) => (
-    //             <SelectItem
-    //               key={title}
-    //               value={title}
-    //               className="w-full px-4 py-2 bg-white text-gray-900 cursor-pointer 
-    // hover:bg-gray-100 hover:text-blue-600 
-    // focus:bg-blue-100 focus:text-blue-700
-    // aria-selected:bg-blue-200 aria-selected:text-blue-900 pl-8"
-    //             >
-    //               {title}
-    //             </SelectItem>
-    //           ))}
-    //         </SelectContent>
-    //       </Select>
-    //     </div>
-    //     {/* Name Input Field */}
-    //     <div className="w-2/3">
-    //       <Label htmlFor="name">Name</Label>
-    //       <Input id="name" name="name" value={formData.name} onChange={handleChange} required />
-    //     </div>
-    //   </motion.div>
-
-    //   <motion.div variants={inputVariants}>
-    //     <Label htmlFor="department">Department</Label>
-    //     <Input id="department" name="department" value={formData.department} onChange={handleChange} required />
-    //   </motion.div>
-    //   <motion.div variants={inputVariants}>
-    //     <Label htmlFor="designation">Designation</Label>
-    //     <Input id="designation" name="designation" value={formData.designation} onChange={handleChange} required />
-    //   </motion.div>
-    //   <motion.div variants={inputVariants}>
-    //     <Label htmlFor="email">Email</Label>
-    //     <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} required />
-    //   </motion.div>
-    //   <motion.div variants={inputVariants}>
-    //     <Label htmlFor="mobile">Mobile</Label>
-    //     <Input id="mobile" name="mobile" type="tel" value={formData.mobile} onChange={handleChange} required />
-    //   </motion.div>
-    //   <motion.div
-    //     initial={{ opacity: 0, y: 20 }}
-    //     animate={{ opacity: 1, y: 0 }}
-    //     transition={{ delay: 0.5, duration: 0.5 }}
-    //   >
-    //     <Button type="submit" className="w-full bg-blue-700 text-white py-2 rounded-lg hover:bg-blue-600 mt-4">
-    //       Login
-    //     </Button>
-    //   </motion.div>
-    // </motion.form>
-
     <motion.form
       onSubmit={handleSubmit}
       className="space-y-4"
@@ -212,13 +166,18 @@ export function Login({ onLogin }: LoginProps): JSX.Element {
       animate="visible"
       variants={formVariants}
     >
+      {errors.mobileAndEmail &&
+        <div>
+          <p className="text-red-600 text-sm min-h-[20px]">{errors.mobileAndEmail}</p>
+        </div>
+      }
       <motion.div variants={inputVariants} className="flex items-start gap-4 w-full">
         {/* Title Dropdown */}
         <div className="w-1/3">
           <Label htmlFor="title">Title</Label>
           <Select
-            onValueChange={handleTitleChange}
-            value={formData.title}
+            onValueChange={(value) => handleTitleChange(Number(value))}
+            value={String(formData.title)}
             required={false} // Remove native required
           >
             <SelectTrigger className="w-full">
@@ -227,14 +186,14 @@ export function Login({ onLogin }: LoginProps): JSX.Element {
             <SelectContent className="bg-white shadow-lg rounded-lg">
               {titleOptions.map((title) => (
                 <SelectItem
-                  key={title}
-                  value={title}
+                  key={title.value}
+                  value={title.value}
                   className="w-full px-4 py-2 bg-white text-gray-900 cursor-pointer 
                   hover:bg-gray-100 hover:text-blue-600 
                   focus:bg-blue-100 focus:text-blue-700
                   aria-selected:bg-blue-200 aria-selected:text-blue-900 pl-8"
                 >
-                  {title}
+                  {title.label}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -319,4 +278,3 @@ export function Login({ onLogin }: LoginProps): JSX.Element {
     </motion.form>
   )
 }
-

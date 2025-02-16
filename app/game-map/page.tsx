@@ -14,7 +14,7 @@ const stages = [
   "Smart Water Networks",
   "Metering, Billing, and Collection",
   "Non-Revenue Water Management",
-  "Performance Assessment & Operational Excellence",
+  "Performance Assessment & Operational Excellence"
 ];
 
 const icons = [
