@@ -67,10 +67,12 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
   const score = Number(searchParams.get("score") || 0);
   const set = searchParams.get("set") || "Unknown";
   const stage = searchParams.get("stage") || "Unknown";
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const [totalScore, setTotalScore] = useState(0);
   const [allSectionsCompleted, setAllSectionsCompleted] = useState(false);
+  // const [stagesSummary, setStagesSummary] = useState<{ isAllSectionsCompleted: boolean; totalScore: number }>();
 
   useEffect(() => {
     setWindowSize({ width: window.innerWidth, height: window.innerHeight });
@@ -83,66 +85,87 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const completedSections: Record<string, number> = JSON.parse(sessionStorage.getItem('completedSections') || '[]');
+  const fetchSectionsSummary = async () => {
+    try {
+      if (typeof window !== "undefined") {
+        const userId = sessionStorage.getItem("userID");
+        const roleId = sessionStorage.getItem("roleID");
+        const setId = sessionStorage.getItem("currentSet");
 
+        if (!userId || !roleId || !setId) {
+          console.error("Missing userID, roleID, or setID in sessionStorage.");
+          return;
+        }
 
-      const totalScore = Object.values(completedSections).reduce((sum, score) => sum + score, 0);
-      // setTotalScore(totalScore);
-      // Persist final score
+        const responseUri = `${apiBaseUrl}/api/Sections/set/${setId}/user/${userId}/role/${roleId}/summary`;
+      const response = await fetch(responseUri);
+      const stagesSummary: { isAllSectionsCompleted: boolean; totalScore: number } = await response.json();
 
-      // Sum the scores of all stages
-      // const totalScore = 0;
-      // const totalScore = Object.values(completedSections).reduce((sum, score) => sum + score, 0);
-      // setTotalScore(totalScore);
-      // console.log(totalScore);      
-
-      // Check if all 8 sections are completed
-      const storedAllStagesCompleted = sessionStorage.getItem("allStagesCompleted");
-      const allSectionsCompleted = Object.keys(completedSections).length === 8 && totalScore > 0;
-      // let allCompleted = Object.keys(completedSections).length === 8 && totalScore > 0;
-
-      // If the flag exists in sessionStorage, use it
-      // if (sessionStorage.getItem("allStagesCompleted") === "true") {
-      //   allCompleted = true;
-      // }
-
-      if (allSectionsCompleted && !storedAllStagesCompleted) {
-        setAllSectionsCompleted(true);
-        sessionStorage.setItem("allStagesCompleted", "true");
-        setTotalScore(totalScore);
-        sessionStorage.setItem("finalTotalScore", totalScore.toString());
-      } else if (storedAllStagesCompleted) {
-        // setAllSectionsCompleted(false);
-        sessionStorage.removeItem("allStagesCompleted");
-        sessionStorage.removeItem("finalTotalScore");
-      } else {
-        setAllSectionsCompleted(storedAllStagesCompleted === "true");
+      if (stagesSummary.isAllSectionsCompleted){
+        sessionStorage.removeItem("currentSet");
       }
 
+      setAllSectionsCompleted(stagesSummary.isAllSectionsCompleted);
+      setTotalScore(stagesSummary.totalScore);
+      }
+      
 
-      // setAllSectionsCompleted(allCompleted);
+      // setStagesSummary(stagesSummary);
+    } catch (error) {
+      console.error("Error fetching quiz stages summary:", error);
+    }
+  };
 
-      // console.log("All sections Completed: " + allSectionsCompleted, "Total Score: " + totalScore);
+  useEffect(() => {
+      fetchSectionsSummary();
 
       if (score > 0) {
         setBackgroundAudioSrc("./soundeffects/winningsound.mp3");
         // playBackgroundMusic();
       }
-
-      if (allSectionsCompleted) {
-        const completedSets: string[] = JSON.parse(sessionStorage.getItem("completedSets") || "[]");
-
-        if (!completedSets.includes(set)) {
-          completedSets.push(set);
-          sessionStorage.setItem("completedSets", JSON.stringify(completedSets));
-        }
-
-        sessionStorage.removeItem("completedSections");
-      }
-    }
   }, [score, isMuted]);
+
+  // useEffect(() => {
+  //   if (typeof window !== 'undefined') {
+  //     const completedSections: Record<string, number> = JSON.parse(sessionStorage.getItem('completedSections') || '[]');
+
+
+  //     const totalScore = Object.values(completedSections).reduce((sum, score) => sum + score, 0);   
+
+  //     // Check if all 8 sections are completed
+  //     const storedAllStagesCompleted = sessionStorage.getItem("allStagesCompleted");
+  //     const allSectionsCompleted = Object.keys(completedSections).length === 8 && totalScore > 0;
+
+  //     if (allSectionsCompleted && !storedAllStagesCompleted) {
+  //       setAllSectionsCompleted(true);
+  //       sessionStorage.setItem("allStagesCompleted", "true");
+  //       setTotalScore(totalScore);
+  //       sessionStorage.setItem("finalTotalScore", totalScore.toString());
+  //     } else if (storedAllStagesCompleted) {
+  //       // setAllSectionsCompleted(false);
+  //       sessionStorage.removeItem("allStagesCompleted");
+  //       sessionStorage.removeItem("finalTotalScore");
+  //     } else {
+  //       setAllSectionsCompleted(storedAllStagesCompleted === "true");
+  //     }
+
+  //     if (score > 0) {
+  //       setBackgroundAudioSrc("./soundeffects/winningsound.mp3");
+  //       // playBackgroundMusic();
+  //     }
+
+  //     if (allSectionsCompleted) {
+  //       const completedSets: string[] = JSON.parse(sessionStorage.getItem("completedSets") || "[]");
+
+  //       if (!completedSets.includes(set)) {
+  //         completedSets.push(set);
+  //         sessionStorage.setItem("completedSets", JSON.stringify(completedSets));
+  //       }
+
+  //       sessionStorage.removeItem("completedSections");
+  //     }
+  //   }
+  // }, [score, isMuted]);
 
   useEffect(() => {
     if (!isMuted) {
@@ -243,7 +266,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
               // doc.setFont("open-sans");
               doc.setFont('helvetica', 'bold');
               doc.setFontSize(30);
-              doc.text(`${userData.title}` + "." + `${userData.name}`, 400, 240, { align: "center" });
+              doc.text(`${Title[userData.title as Title]}` + "." + `${userData.name}`, 400, 240, { align: "center" });
 
               // Set the second font and add text
               // doc.setFont("noto-sans");

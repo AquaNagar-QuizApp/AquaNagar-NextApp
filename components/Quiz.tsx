@@ -34,6 +34,8 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [correctAnswer, setCorrectAnswer] = useState<string | null>(null);
   const [highlighted, setHighlighted] = useState<boolean>(false);
+  // const [progressSaved, setProgressSaved] = useState<boolean>(false);
+  const progressSavedRef = useRef<boolean>(false);
 
   const { isMuted, playBackgroundMusic, pauseBackgroundMusic, setBackgroundAudioSrc } = useAudio();
 
@@ -123,7 +125,10 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
             const completedSections = JSON.parse(sessionStorage.getItem("completedSections") || "{}");
             completedSections[stage] = score + (answered && selectedOption === correctAnswer ? 5 : 0);
             sessionStorage.setItem("completedSections", JSON.stringify(completedSections));
-            // }
+          }
+          if (!progressSavedRef.current) {
+            progressSavedRef.current = true;
+            saveUserProgress(finalScore);
           }
           onComplete(finalScore);
           return finalScore;
@@ -131,6 +136,44 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
       }, 500); // Wait for exit animation (500ms)
     }
   }, [quizSet, currentQuestion, answered, selectedOption, correctAnswer, onComplete]);
+
+  const saveUserProgress = async (score: number) => {
+    try {
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+      let userProgressData;
+      if (typeof window !== 'undefined') {
+        userProgressData = {
+          UserId: sessionStorage.getItem("userID"),
+          RoleId: sessionStorage.getItem("roleID"),
+          SetId: sessionStorage.getItem("currentSet"),
+          SectionId: sessionStorage.getItem("currentStage"),
+          IsCompleted: true,
+          ScoreObtained: score
+        };
+      }
+
+      const response = await fetch(`${apiBaseUrl}/api/userProgress/save-progress`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userProgressData),
+      });
+
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(errorMessage || "Failed to save progress.");
+      }
+
+      const data = await response.json();
+      console.log("Progress saved successfully:", data);
+
+      if (typeof window !== 'undefined') {
+        sessionStorage.removeItem("currentStage");
+      }
+    } catch (error: any) {
+      console.error("Error saving progress:", error.message);
+      alert("Failed to save progress.");
+    }
+  };
 
 
   useEffect(() => {
@@ -203,8 +246,9 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
           sessionStorage.setItem("completedSections", JSON.stringify(completedSections));
           // }
         }
+        saveUserProgress(finalScore);
         onComplete(finalScore); // Finalize the score
-      } else {
+      } else if (currentQuestion !== quizSet.questions.length - 1) {
         handleNextQuestion();
       }
     }, 2000); // Wait for animation before moving to next

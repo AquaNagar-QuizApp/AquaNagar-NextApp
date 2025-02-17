@@ -139,12 +139,12 @@ const getQuestionsForStage2 = (): Question[] => [
         type: "text",
         question: "How does lifecycle cost analysis benefit decision-makers in WSS design?",
         options: [
-            "It highlights only the initial investment",
-            "It helps to evaluate long-term financial implications, including maintenance and operational costs",
-            "It focuses only on capital expenditures",
-            "It eliminates the need for contingency planning",
+            "Highlights only the initial investment",
+            "Helps to evaluate long-term financial implications, including maintenance & operational costs",
+            "Focuses only on capital expenditures",
+            "Eliminates the need for contingency planning",
         ],
-        correctAnswer: "It helps to evaluate long-term financial implications, including maintenance and operational costs",
+        correctAnswer: "Helps to evaluate long-term financial implications, including maintenance & operational costs",
     },
     {
         type: "text",
@@ -478,7 +478,7 @@ const getQuestionsForStage3 = (): Question[] => [
         type: "text",
         question: "Which technique is used to compare project benefits against costs?",
         options: ["EVM", "CBA", "LCCA", "PERT"],
-        correctAnswer: "CBA (Cost-Benefit Analysis)",
+        correctAnswer: "CBA",
     },
     {
         type: "text",
@@ -495,7 +495,7 @@ const getQuestionsForStage3 = (): Question[] => [
         type: "text",
         question: "Which tool integrates geographical data for decision-making in urban projects?",
         options: ["BIM", "GIS", "EVM", "CPM"],
-        correctAnswer: "GIS (Geographic Information Systems)",
+        correctAnswer: "GIS",
     },
     {
         type: "text",
@@ -534,7 +534,7 @@ const getQuestionsForStage3 = (): Question[] => [
         type: "text",
         question: "Which technique is used to assess the economic justification of a project?",
         options: ["LCCA", "CBA", "EVM", "TQM"],
-        correctAnswer: "CBA (Cost-Benefit Analysis)",
+        correctAnswer: "CBA",
     },
     {
         type: "text",
