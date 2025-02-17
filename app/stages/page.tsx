@@ -77,14 +77,10 @@ function StagesResult() {
 
     // Listen for page unload or tab switch
     window.addEventListener("beforeunload", stopAudio);
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) stopAudio();
-    });
 
     return () => {
       stopAudio(); // Stop audio when unmounting
       window.removeEventListener("beforeunload", stopAudio);
-      document.removeEventListener("visibilitychange", stopAudio);
     };
 
     // return () => {

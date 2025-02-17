@@ -35,13 +35,11 @@ export default function RoleSelection() {
   const roles = [
     {
       title: "Engineer",
-      emoji: "👨‍💻",
-      route: "/engineer",
+      emoji: "👨‍💻"
     },
     {
       title: "Non-Engineer",
-      emoji: "👥",
-      route: "/non-engineer",
+      emoji: "👥"
     },
   ]
 

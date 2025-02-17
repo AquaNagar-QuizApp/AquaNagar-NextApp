@@ -46,10 +46,10 @@ export default function LoginPage() {
   return (
     <main className="min-h-screen relative overflow-auto">
       <AnimatedBackground />
-      <div className="relative z-10 h-screen flex flex-col items-center justify-center px-4 py-6">
+      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-6">
         {showInitialContent && (
           <motion.div
-            className="max-w-md w-full bg-white bg-opacity-20 backdrop-blur-lg rounded-xl p-8"
+            className="max-w-md w-full bg-white bg-opacity-30 backdrop-blur-lg rounded-xl p-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
