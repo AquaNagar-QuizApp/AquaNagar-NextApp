@@ -14,12 +14,17 @@ export default function SetSelection(): JSX.Element {
 
     // State to store completed sets
     const [completedSets, setCompletedSets] = useState<string[]>([]);
-    const [quizSets, setQuizSets] = useState<QuizSetName[]>([]);
+    // const [quizSets, setQuizSets] = useState<QuizSetName[]>([]);
+    const [quizSets, setQuizSets] = useState<{ setId: number; setName: string; isCompleted: boolean }[]>([]);
 
-  const onSelect = (set: QuizSetName) => {
+  const handleSetSelection = (setId: number, setName: string) => {
+    if (typeof window !== "undefined") {
+      // const setNumber = set.replace(/\D/g, ""); // Removes all non-numeric characters
+      sessionStorage.setItem("currentSet", JSON.stringify(setId));
+    }
     // setSelectedSet(set)
     setTimeout(() => {
-      router.push(`/game-map?set=${encodeURIComponent(set)}`)
+      router.push(`/game-map?set=${encodeURIComponent(setName)}`)
     }, 100)
   };
 
@@ -53,10 +58,18 @@ export default function SetSelection(): JSX.Element {
 
     const fetchQuizSets = async () => {
       try {
-        const response = await fetch(apiBaseUrl + "/api/Sets"); // Replace with your API endpoint
-        const data = await response.json();
-        const setNames = data.map((set: { setId: number; setName: string }) => set.setName);
-        setQuizSets(setNames); // Assuming API returns an array of strings
+        let responseUri: string = "";
+        if (typeof window !== "undefined") {
+          const userId = sessionStorage.getItem("userID");
+          const roleId = sessionStorage.getItem("roleID");
+          responseUri = `${apiBaseUrl}/api/Sets/user/${userId}/role/${roleId}`
+        }
+        const response = await fetch(responseUri);
+        // const data = await response.json();
+        // const setNames = data.map((set: { setId: number; setName: string; isCompleted: boolean }) => set.setName);
+        const sets: { setId: number; setName: string; isCompleted: boolean }[] = await response.json();
+
+        setQuizSets(sets); // Assuming API returns an array of strings
       } catch (error) {
         console.error("Error fetching quiz sets:", error);
       }
@@ -78,26 +91,23 @@ export default function SetSelection(): JSX.Element {
           <motion.h2 className="text-4xl font-bold text-center text-gray-800 mb-8" variants={itemVariants}>
             Choose a Quiz Set
           </motion.h2>
-          {/* <motion.p className="text-center text-gray-600 mb-8" variants={itemVariants}>
-            Choose the option that best describes you.
-          </motion.p> */}
           <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-8" variants={containerVariants}>
             {quizSets.map((set) => {
-              const isCompleted = completedSets.includes(set);
+              // const isCompleted = completedSets.includes(set);
 
               return (
-                <motion.div key={set} variants={itemVariants}>
+                <motion.div key={set.setId} variants={itemVariants}>
                   <motion.div
-                    className={`px-6 py-2 rounded-lg font-semibold backdrop-blur-lg ${isCompleted
+                    className={`px-6 py-2 rounded-lg font-semibold backdrop-blur-lg ${set.isCompleted
                         ? "bg-gray-400 text-gray-700 cursor-not-allowed" // Disabled state
                         : "bg-blue-700 text-white"
                       }`}
-                    whileHover={isCompleted ? {} : { scale: 1.05, transition: { duration: 0.2 } }}
-                    whileTap={isCompleted ? {} : { scale: 0.95 }}
+                    whileHover={set.isCompleted ? {} : { scale: 1.05, transition: { duration: 0.2 } }}
+                    whileTap={set.isCompleted ? {} : { scale: 0.95 }}
                   >
-                    <Button onClick={() => onSelect(set)} className="w-full h-full py-8 text-lg font-semibold" disabled={isCompleted}>
+                    <Button onClick={() => handleSetSelection(set.setId, set.setName)} className="w-full h-full py-8 text-lg font-semibold" disabled={set.isCompleted}>
                       {/* {set} */}
-                      {isCompleted ? `✅ ${set} (Completed)` : set}
+                      {set.isCompleted ? `✅ ${set.setName} (Completed)` : set.setName}
                     </Button>
                   </motion.div>
                 </motion.div>

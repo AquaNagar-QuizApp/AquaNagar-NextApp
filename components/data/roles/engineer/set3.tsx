@@ -851,13 +851,13 @@ const getQuestionsForStage6 = (): Question[] => [
         question:
             "What is the primary difference between AMI (Advanced Metering Infrastructure) and AMR (Automatic Meter Reading)?",
         options: [
-            "AMI uses manual readings while AMR uses automated systems.",
-            "AMI allows two-way communication between the meter and the supplier, while AMR does not.",
-            "AMI is used only for electricity meters.",
-            "AMR requires fixed wired connections for communication.",
+            "AMI uses manual readings while AMR uses automated systems",
+            "AMI allows two-way communication between meter and supplier, while AMR does not",
+            "AMI is used only for electricity meters",
+            "AMR requires fixed wired connections for communication",
         ],
         correctAnswer:
-            "AMI allows two-way communication between the meter and the supplier, while AMR does not.",
+            "AMI allows two-way communication between meter and supplier, while AMR does not",
     },
     {
         type: "text",

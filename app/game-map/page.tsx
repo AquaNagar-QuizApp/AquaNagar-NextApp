@@ -22,7 +22,7 @@ const icons = [
 ];
 
 export default function GameMap() {
-  
+
   return (
     <main className="min-h-screen relative overflow-auto">
       <AnimatedBackground />
@@ -39,7 +39,9 @@ function GameMapContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [completedSections, setCompletedSections] = useState<Record<string, number>>({});
-  const [stages, setQuizSections] = useState<string[]>([]);
+  // const [stages, setQuizStages] = useState<string[]>([]);
+  const [stages, setQuizStages] = useState<{ sectionId: number; sectionName: string; isCompleted: boolean }[]>([]);
+
   // Memoizing searchParams to avoid unnecessary re-renders
   const set = useMemo(() => searchParams.get("set"), [searchParams]);
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -54,23 +56,33 @@ function GameMapContent() {
 
     const fetchSections = async () => {
       try {
-        const response = await fetch(apiBaseUrl + "/api/Sections"); // Replace with your API endpoint
-        const data: { sectionId: number; sectionName: string }[] = await response.json();
+        let responseUri: string = "";
+        if (typeof window !== "undefined") {
+          const userId = sessionStorage.getItem("userID");
+          const roleId = sessionStorage.getItem("roleID");
+          const setId = sessionStorage.getItem("currentSet");
+          responseUri = `${apiBaseUrl}/api/Sections/set/${setId}/user/${userId}/role/${roleId}`
+        }
+        const response = await fetch(responseUri);
+        const stages: { sectionId: number; sectionName: string; isCompleted: boolean }[] = await response.json();
 
         // Extract only `sectionName`
-        const names = data.map((section) => section.sectionName);
-        setQuizSections(names); // Assuming API returns an array of strings
+        // const names = data.map((section) => section.sectionName);
+        setQuizStages(stages);
       } catch (error) {
-        console.error("Error fetching quiz sets:", error);
+        console.error("Error fetching quiz stages:", error);
       }
     };
     fetchSections();
   }, []);
 
-  const handleStageClick = (stage: string, stageIndex: number) => {
+  const handleStageClick = (stage: string, stageNumber: number) => {
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("currentStage", JSON.stringify(stageNumber));
+    }
     if (set) {
       const setNumber = set.replace(/\D/g, ""); // Removes all non-numeric characters
-      router.push(`/stages?set=${encodeURIComponent(setNumber)}&stageIndex=${encodeURIComponent(stageIndex)}&stage=${encodeURIComponent(stage)}`);
+      router.push(`/stages?set=${encodeURIComponent(setNumber)}&stageIndex=${encodeURIComponent(stageNumber)}&stage=${encodeURIComponent(stage)}`);
     } else {
       console.error("Set is missing");
     }
@@ -100,28 +112,28 @@ function GameMapContent() {
         Game Stages
       </motion.h2>
       <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-6" variants={containerVariants}>
-        {stages.map((stage, index) => {
-          const isCompleted = completedSections.hasOwnProperty(stage); // Check if stage is completed
+        {stages.map((stage) => {
+          // const isCompleted = completedSections.hasOwnProperty(stage); // Check if stage is completed
           return (
-            <motion.div key={index + 1} variants={itemVariants}>
+            <motion.div key={stage.sectionId} variants={itemVariants}>
               <motion.div
                 // className={`px-6 py-4 ${isCompleted ? 'bg-gray-500' : 'bg-blue-700'} text-white rounded-lg font-semibold backdrop-blur-lg`}
-                className={`px-6 py-4 rounded-lg font-semibold backdrop-blur-lg ${isCompleted
+                className={`px-6 py-4 rounded-lg font-semibold backdrop-blur-lg ${stage.isCompleted
                   ? "bg-gray-400 text-gray-700 cursor-not-allowed" // Disabled state
                   : "bg-blue-700 text-white"
-                }`}
-                whileHover={isCompleted ? {} : { scale: 1.05, transition: { duration: 0.2 } }} // Disable hover effect when completed
-                whileTap={isCompleted ? {} : { scale: 0.95 }} // Disable tap effect when completed
-                >
+                  }`}
+                whileHover={stage.isCompleted ? {} : { scale: 1.05, transition: { duration: 0.2 } }} // Disable hover effect when completed
+                whileTap={stage.isCompleted ? {} : { scale: 0.95 }} // Disable tap effect when completed
+              >
                 <Button
-                  onClick={() => handleStageClick(stage, index+1)}
-                  disabled={isCompleted} // Disable button
+                  onClick={() => handleStageClick(stage.sectionName, stage.sectionId)}
+                  disabled={stage.isCompleted} // Disable button
                   className="w-full h-full py-4 px-1 text-lg font-semibold text-center break-words whitespace-normal flex items-center justify-between md:w-64 md:h-20"
                 >
-                  {React.createElement(icons[index], {
+                  {React.createElement(icons[stage.sectionId - 1], {
                     style: { width: '32px', height: '32px', }
                   })}
-                  <span className="ml-2">{stage}</span>
+                  <span className="ml-2">{stage.sectionName}</span>
                 </Button>
               </motion.div>
             </motion.div>

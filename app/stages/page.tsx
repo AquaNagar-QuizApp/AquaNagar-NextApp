@@ -47,7 +47,7 @@ function StagesResult() {
     if (stageIndexParam) {
       const index = parseInt(stageIndexParam, 10);
       if (!isNaN(index) && index >= 0 && index < caseStudies.length) {
-        setCurrentPart(index);
+        setCurrentPart(index - 1);
         setStageTitle(stageName ? decodeURIComponent(stageName) : "Unknown Stage");
       }
     }
@@ -78,14 +78,14 @@ function StagesResult() {
 
     // Listen for page unload or tab switch
     window.addEventListener("beforeunload", stopAudio);
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) stopAudio();
-    });
+    // document.addEventListener("visibilitychange", () => {
+    //   if (document.hidden) stopAudio();
+    // });
 
     return () => {
       stopAudio(); // Stop audio when unmounting
       window.removeEventListener("beforeunload", stopAudio);
-      document.removeEventListener("visibilitychange", stopAudio);
+      // document.removeEventListener("visibilitychange", stopAudio);
     };
 
     // return () => {

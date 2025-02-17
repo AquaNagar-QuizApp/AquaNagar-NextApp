@@ -63,17 +63,17 @@ export default function Story() {
     };
 
     // Handle page unload or visibility change
-    const handleVisibilityChange = () => {
-      if (document.hidden) stopAudio();
-    };
+    // const handleVisibilityChange = () => {
+    //   if (document.hidden) stopAudio();
+    // };
 
     window.addEventListener("beforeunload", stopAudio);
-    document.addEventListener("visibilitychange", handleVisibilityChange);
+    // document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
       stopAudio();
       window.removeEventListener("beforeunload", stopAudio);
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      // document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [firstLetterVisible, currentPart, router]);
 
