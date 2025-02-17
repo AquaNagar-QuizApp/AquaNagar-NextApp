@@ -35,7 +35,8 @@ function StagesResult() {
   const searchParams = useSearchParams();
   const [currentPart, setCurrentPart] = useState(0);
   const [stageTitle, setStageTitle] = useState("");
-  const stageParam = searchParams.get("stage");
+  const stageParam = searchParams.get("stageIndex");
+  const stageNameText = searchParams.get("stage");
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { isMuted } = useAudio();
 
@@ -104,8 +105,11 @@ function StagesResult() {
 
   function navigateToQuiz() {
     const set = searchParams.get("set");
-    if (stageParam && set) {
-      router.push(`/quiz?stage=${encodeURIComponent(stageParam)}&set=${encodeURIComponent(set)}`);
+    if (stageParam && set && stageNameText) {
+      router.push(
+        `/quiz?stage=${encodeURIComponent(stageParam)}&set=${encodeURIComponent(set)}&stageNameText=${encodeURIComponent(stageNameText)}`
+      );
+      
     } else {
       console.error("Stage is missing");
     }
