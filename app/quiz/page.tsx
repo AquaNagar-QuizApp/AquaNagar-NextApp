@@ -1,107 +1,79 @@
-// "use client"
+"use client"
 
-// import { useRouter, useSearchParams } from "next/navigation"
-// import { motion } from "framer-motion"
-// import { AnimatedBackground } from "@/components/AnimatedBackground"
-// import { Quiz } from "@/components/Quiz"
-// import type { QuizSet, QuizSetName } from "@/types"
-// import { JSX } from "react"
 
-// // This would typically come from an API or database
-// const quizSets: Record<QuizSetName, QuizSet> = {
-//   "Set 1": {
-//     name: "Set 1",
-//     sections: [
-//       [
-//         {
-//           type: "text",
-//           question: "What is the main source of freshwater on Earth?",
-//           options: ["Oceans", "Rivers", "Groundwater", "Glaciers"],
-//           correctAnswer: "Groundwater",
-//         },
-//         // Add more questions for this section
-//       ],
-//       // Add more sections
-//     ],
-//   },
-//   "Set 2": {
-//     name: "Set 2",
-//     sections: [
-//       [
-//         {
-//           type: "image",
-//           question: "Which of these is a water conservation method?",
-//           imageUrl: "/placeholder.svg?height=200&width=300",
-//           options: ["Drip irrigation", "Flood irrigation", "Sprinkler system", "Manual watering"],
-//           correctAnswer: "Drip irrigation",
-//         },
-//         // Add more questions for this section
-//       ],
-//       // Add more sections
-//     ],
-//   },
-//   "Set 3": { name: "Set 3", sections: [[]] }, // Add actual questions
-//   "Set 4": { name: "Set 4", sections: [[]] }, // Add actual questions
-// }
-
-// export default function QuizPage(): JSX.Element {
-//   const router = useRouter()
-//   const searchParams = useSearchParams()
-//   const stage = searchParams.get("stage")
-//   const quizSetName = searchParams.get("set") as QuizSetName | null
-
-//   const handleQuizCompletion = (score: number): void => {
-//     router.push(
-//       `/certificate?stage=${encodeURIComponent(stage ?? "")}&set=${encodeURIComponent(quizSetName ?? "")}&score=${score}`,
-//     )
-//   }
-
-//   if (!stage || !quizSetName || !(quizSetName in quizSets)) {
-//     return <div>Error: Missing or invalid stage or quiz set information</div>
-//   }
-
-//   const quizSet = quizSets[quizSetName]
-
-//   return (
-//     <main className="min-h-screen relative overflow-hidden">
-//       <AnimatedBackground />
-//       <div className="relative z-10 h-screen flex flex-col items-center justify-center">
-//         <motion.div
-//           className="max-w-2xl w-full bg-white bg-opacity-20 backdrop-blur-lg rounded-xl p-8"
-//           initial={{ opacity: 0, y: 20 }}
-//           animate={{ opacity: 1, y: 0 }}
-//           transition={{ duration: 0.5 }}
-//         >
-//           <h2 className="text-2xl font-semibold text-white mb-6 text-center">
-//             {stage} - {quizSet.name}
-//           </h2>
-//           <Quiz quizSet={quizSet} onComplete={handleQuizCompletion} />
-//         </motion.div>
-//       </div>
-//     </main>
-//   )
-// }
 
 import { JSX, Suspense } from "react"
 import { AnimatedBackground } from "@/components/AnimatedBackground"
 import { QuizContent } from "@/components/QuizContent"
+import { useState, useEffect } from "react";
+import { FaStar } from "react-icons/fa"; // Import star icon for scores
+import { SidebarVariation1 } from "@/app/side-bar-page/sidebar3"
+import { useRouter, useSearchParams } from "next/navigation"
 
+
+interface Stage {
+  name: string
+  score: number
+  maxScore: number
+  unit: string
+  isCompleted: boolean
+}
+
+const stages: Stage[] = [
+  { name: "Plan A Water Supply System", score: 0, maxScore: 6100, unit: "million cubic feet", isCompleted: false },
+  { name: "Design the Water Supply System", score: 0, maxScore: 150, unit: "crores", isCompleted: false },
+  { name: "Building the Infrastructure", score: 0, maxScore: 24, unit: "month delay", isCompleted: false },
+  { name: "Water Treatment", score: 0, maxScore: 100, unit: "cases", isCompleted: false },
+  { name: "Smart Water Networks", score: 0, maxScore: 13700, unit: "cubic feet", isCompleted: false },
+  { name: "Metering, Billing, and Collection", score: 0, maxScore: 500, unit: "kWh", isCompleted: false },
+  { name: "Non-Revenue Water Management", score: 0, maxScore: 13000, unit: "cubic feet", isCompleted: false },
+  { name: "Performance Assessment & Operational Excellence", score: 0, maxScore: 0, unit: "dissatisfied", isCompleted: false },
+]
+
+function getStagesFromSession(): Stage[] {
+  // Retrieve completed sections from sessionStorage
+  let completedSections: Record<string, number> = {};
+
+  if (typeof window !== 'undefined') {
+    completedSections = JSON.parse(sessionStorage.getItem('completedSections') || '{}');
+  }
+
+    // Prepare the stages list by merging session data
+    return stages.map((stage) => ({
+      ...stage,
+      isCompleted: stage.name in completedSections, // Check if stage exists in session
+      score: completedSections[stage.name] ?? stage.score, // Use session score if present, else original score
+    }));
+  
+}
 export default function QuizPage(): JSX.Element {
+  const [currentStageIndex, setCurrentStageIndex] = useState(2);
+  const [stagesData, setStagesData] = useState<Stage[]>([]);
+  const searchParams = useSearchParams()
+  const stageName = searchParams.get("stage")
+  // Load data when the component mounts
+  useEffect(() => {
+    setStagesData(getStagesFromSession());
+  }, []);
+
   return (
     <main className="min-h-screen relative overflow-auto">
       <AnimatedBackground />
-      {/* <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-6">
-        <div className="max-w-2xl w-full bg-white bg-opacity-20 backdrop-blur-lg rounded-xl p-8">
-          <Suspense fallback={<div className="text-center text-white">Loading quiz...</div>}>
-            <QuizContent />
-          </Suspense>
-        </div>
-      </div> */}
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-6 ">
-        <div className="max-w-3xl w-full bg-white bg-opacity-20 backdrop-blur-lg rounded-xl p-4 ">
-          <Suspense fallback={<div className="text-center text-white">Loading quiz...</div>}>
-            <QuizContent />
-          </Suspense>
+      <div className="relative z-10 min-h-screen flex items-center justify-center">
+        <div className="flex w-full max-w-6xl h-full">
+          
+          {stageName &&
+            <SidebarVariation1 stages={stagesData} currentStageName={stageName} />}
+
+          {/* Right Side Content */}
+          <div className="w-3/4 p-6">
+
+            <div className="bg-white bg-opacity-20 backdrop-blur-lg rounded-xl p-4 mt-6">
+              <Suspense fallback={<div className="text-center text-white">Loading quiz...</div>}>
+                <QuizContent />
+              </Suspense>
+            </div>
+          </div>
         </div>
       </div>
     </main>
