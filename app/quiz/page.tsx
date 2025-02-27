@@ -61,7 +61,10 @@ export default function QuizPage(): JSX.Element {
         <div className="flex w-full max-w-6xl h-full">
           
           {stageName &&
-            <SidebarVariation1 stages={stagesData} currentStageName={stageName} />}
+            <Suspense fallback={<div className="text-center text-white">Loading quiz...</div>}>
+                <SidebarVariation1 stages={stagesData} currentStageName={stageName} />
+            </Suspense>
+            }
 
           {/* Right Side Content */}
           <div className="w-3/4 p-6">
