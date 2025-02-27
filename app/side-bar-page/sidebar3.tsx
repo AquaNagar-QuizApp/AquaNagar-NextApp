@@ -1,5 +1,5 @@
 "use client"
-import { Trophy, CheckCircle, PlayCircle, PauseCircle, Lock, Crown } from "lucide-react"
+import { Trophy, CheckCircle, PlayCircle, PauseCircle} from "lucide-react"
 
 interface Stage {
   name: string

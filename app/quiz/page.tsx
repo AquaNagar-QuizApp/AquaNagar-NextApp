@@ -7,7 +7,7 @@ import { AnimatedBackground } from "@/components/AnimatedBackground"
 import { QuizContent } from "@/components/QuizContent"
 import { useState, useEffect } from "react";
 import { SidebarVariation1 } from "@/app/side-bar-page/sidebar3"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 
 
 interface Stage {
@@ -46,7 +46,6 @@ function getStagesFromSession(): Stage[] {
   
 }
 export default function QuizPage(): JSX.Element {
-  const [currentStageIndex, setCurrentStageIndex] = useState(2);
   const [stagesData, setStagesData] = useState<Stage[]>([]);
   const searchParams = useSearchParams()
   const stageName = searchParams.get("stage")
