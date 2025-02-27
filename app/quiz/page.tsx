@@ -6,7 +6,6 @@ import { JSX, Suspense } from "react"
 import { AnimatedBackground } from "@/components/AnimatedBackground"
 import { QuizContent } from "@/components/QuizContent"
 import { useState, useEffect } from "react";
-import { FaStar } from "react-icons/fa"; // Import star icon for scores
 import { SidebarVariation1 } from "@/app/side-bar-page/sidebar3"
 import { useRouter, useSearchParams } from "next/navigation"
 
