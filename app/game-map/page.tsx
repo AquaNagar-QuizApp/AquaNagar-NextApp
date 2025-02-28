@@ -308,7 +308,7 @@ function SpinWheel() {
     // const selectedStage = stages[selectedIndex]
 
     const totalRotations = 1440; // Ensure multiple spins before stopping
-    let newRotation, selectedIndex, selectedStage;
+    // let newRotation, selectedIndex, selectedStage;
 
     // do {
     //   // Spin multiple rounds + random final angle
@@ -321,11 +321,11 @@ function SpinWheel() {
     // } while (completedSections[selectedStage]); // Re-roll if the stage is completed
 
     // Select a valid stage directly
-    selectedStage = availableStages[Math.floor(Math.random() * availableStages.length)];
-    selectedIndex = stages.indexOf(selectedStage); // Get correct index from original array
+    const selectedStage = availableStages[Math.floor(Math.random() * availableStages.length)];
+    const selectedIndex = stages.indexOf(selectedStage); // Get correct index from original array
 
     // Ensure correct rotation targeting selectedIndex
-    newRotation = rotation + totalRotations + (360 - (selectedIndex * 45 + 22.5));
+    const newRotation = rotation + totalRotations + (360 - (selectedIndex * 45 + 22.5));
 
     setRotation(newRotation);
 
