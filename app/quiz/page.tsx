@@ -5,7 +5,7 @@ import { AnimatedBackground } from "@/components/AnimatedBackground"
 import { QuizContent } from "@/components/QuizContent"
 import { useState, useEffect } from "react";
 import { LeftSidebarVariation } from "@/app/left-side-bar/page"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 
 
 interface Stage {
