@@ -25,7 +25,9 @@ const stages: Stage[] = [
   { name: "Metering, Billing, and Collection", score: 0, maxScore: 500, unit: "kWh", isCompleted: false },
   { name: "Non-Revenue Water Management", score: 0, maxScore: 13000, unit: "Cubic Feet", isCompleted: false },
   { name: "Performance Assessment & Operational Excellence", score: 0, maxScore: 0, unit: "Satisfaction", isCompleted: false },
-]
+];
+
+export const dynamic = "force-dynamic"; // ✅ Forces dynamic rendering
 
 function getStagesFromSession(): Stage[] {
   // Retrieve completed sections from sessionStorage
@@ -41,19 +43,16 @@ function getStagesFromSession(): Stage[] {
     isCompleted: stage.name in completedSections, // Check if stage exists in session
     score: completedSections[stage.name] ?? stage.score, // Use session score if present, else original score
   }));
-
 }
+
 export default function QuizPage(): JSX.Element {
   const [stagesData, setStagesData] = useState<Stage[]>([]);
   const searchParams = useSearchParams();
-  // const stageName = searchParams.get("stage")
-  const [stageName, setStageName] = useState<string | null>(null); // ✅ Store in state
-
+  const stageName = searchParams.get("stage");
   // Load data when the component mounts
   useEffect(() => {
     setStagesData(getStagesFromSession());
-    setStageName(searchParams.get("stage"));
-  }, [searchParams]);
+  }, []);
 
   return (
     <main className="min-h-screen relative overflow-auto">
@@ -73,7 +72,7 @@ export default function QuizPage(): JSX.Element {
           {/* Middle Content (50%) - Vertically Centered */}
           <div className="w-[52%] p-4 flex items-center justify-center min-h-screen">
             <div className="bg-white bg-opacity-20 backdrop-blur-lg rounded-xl p-4 h-auto">
-              <Suspense fallback={<div className="text-center text-white">Loading quiz...</div>}>
+              <Suspense fallback={<div className="text-center text-white">Loading...</div>}>
                 <QuizContent />
               </Suspense>
             </div>
