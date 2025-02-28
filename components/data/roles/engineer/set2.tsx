@@ -1,6 +1,6 @@
 import { Stage, Question } from "@/types";
 
-// Stage 1 - Plan A Water Supply System
+// Stage 1 - Plan a Water Supply System
 const getQuestionsForStage1 = (): Question[] => [
     {
         type: "image",
@@ -90,12 +90,12 @@ const getQuestionsForStage1 = (): Question[] => [
         type: "text",
         question: "Why are sensors and IoT devices critical in a sustainable WSS?",
         options: [
-            "They replace the need for human operators.",
-            "They provide real-time data for monitoring water quality, flow rates, and energy use.",
-            "They increase system downtime for upgrades.",
-            "They simplify system design.",
+            "They replace the need for human operators",
+            "They provide real-time data for monitoring water quality, flow rates, and energy use",
+            "They increase system downtime for upgrades",
+            "They simplify system design",
         ],
-        correctAnswer: "They provide real-time data for monitoring water quality, flow rates, and energy use.",
+        correctAnswer: "They provide real-time data for monitoring water quality, flow rates, and energy use",
     },
     {
         type: "text",
@@ -939,7 +939,7 @@ const getQuestionsForStage6 = (): Question[] => [
 
 // Generate stages for each set
 export const engineerSet2Stages: Stage[] = [
-    { stageName: "Plan A Water Supply System", questions: getQuestionsForStage1() },
+    { stageName: "Plan a Water Supply System", questions: getQuestionsForStage1() },
     { stageName: "Design the Water Supply System", questions: getQuestionsForStage2() },
     { stageName: "Building the Infrastructure", questions: getQuestionsForStage3() }, //5
     { stageName: "Water Treatment", questions: getQuestionsForStage4() }, //3

@@ -36,7 +36,7 @@ function StagesResult() {
   const [currentPart, setCurrentPart] = useState(0);
   const [stageTitle, setStageTitle] = useState("");
   const stageParam = searchParams.get("stage");
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const stageAudioRef = useRef<HTMLAudioElement | null>(null);
   const { isMuted } = useAudio();
 
   useEffect(() => {
@@ -55,23 +55,47 @@ function StagesResult() {
   useEffect(() => {
     if (currentPart === null) return; // Prevent playing when not yet set
 
+    // Reuse the same audio instance
+    if (!stageAudioRef.current) {
+      stageAudioRef.current = new Audio(audioFiles[currentPart]);
+      stageAudioRef.current.preload = "auto"; // Ensure the audio is loaded early
+    }
+
     // Create new audio object when currentPart changes
-    const audio = new Audio(audioFiles[currentPart]);
-    audioRef.current = audio;
-    audio.muted = isMuted; // Set mute/unmute state
-    audio.play();
+    // const audio = new Audio(audioFiles[currentPart]);
+    // audioRef.current = audio;
+    // audio.muted = isMuted; // Set mute/unmute state
+    // audio.play();
+
+    const stageAudio = stageAudioRef.current;
+    // If audio is already playing, stop it before setting a new source
+    if (!stageAudio.paused) {
+      stageAudio.pause();
+      stageAudio.currentTime = 0;
+    }
+
+    // Update source if needed
+    if (stageAudio.src !== audioFiles[currentPart]) {
+      stageAudio.src = audioFiles[currentPart];
+    }
+
+    // Apply mute setting before playing
+    stageAudio.muted = isMuted;
+
+    // Attempt to play audio, catching potential errors
+    stageAudio.play().catch((error) => console.error("Audio play failed:", error));
 
     // Navigate to quiz after the audio finishes
-    audio.onended = () => {
+    stageAudio.onended = () => {
       navigateToQuiz();
     };
 
     // Cleanup function to stop audio when leaving the page
     const stopAudio = () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0; // Reset audio position
-        audioRef.current = null;
+      if (stageAudioRef.current) {
+        stageAudioRef.current.pause();
+        stageAudioRef.current.currentTime = 0; // Reset audio position
+        stageAudioRef.current = null;
       }
     };
 
@@ -93,8 +117,8 @@ function StagesResult() {
 
   // Handle muting/unmuting when isMuted changes
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.muted = isMuted;
+    if (stageAudioRef.current) {
+      stageAudioRef.current.muted = isMuted;
     }
   }, [isMuted]);
 

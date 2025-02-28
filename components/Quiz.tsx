@@ -94,7 +94,7 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
         buzzerSound.removeEventListener("ended", resumeBGM);
       }
     };
-  }, [playBackgroundMusic]);
+  }, [playBackgroundMusic, setBackgroundAudioSrc, isMuted]);
 
   const handleNextQuestion = useCallback(() => {
     const currentSectionQuestions = quizSet.questions;

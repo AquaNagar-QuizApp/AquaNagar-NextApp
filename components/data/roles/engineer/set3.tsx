@@ -1,6 +1,6 @@
 import { Stage, Question } from "@/types";
 
-// Stage 1 - Plan A Water Supply System
+// Stage 1 - Plan a Water Supply System
 const getQuestionsForStage1 = (): Question[] => [
     {
         type: "image",
@@ -969,7 +969,7 @@ const getQuestionsForStage6 = (): Question[] => [
 
 // Generate stages for each set
 export const engineerSet3Stages: Stage[] = [
-    { stageName: "Plan A Water Supply System", questions: getQuestionsForStage1() },
+    { stageName: "Plan a Water Supply System", questions: getQuestionsForStage1() },
     { stageName: "Design the Water Supply System", questions: getQuestionsForStage2() },
     { stageName: "Building the Infrastructure", questions: getQuestionsForStage3() }, //5
     { stageName: "Water Treatment", questions: getQuestionsForStage4() }, //3

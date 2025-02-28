@@ -68,6 +68,49 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
   const set = searchParams.get("set") || "Unknown";
   const stage = searchParams.get("stage") || "Unknown";
 
+  const stageMessages: Record<string, [string, string, string]> = {
+    "Plan a Water Supply System": [
+      "You have successfully secured",
+      `${score} Million Cubic Feet`,
+      "of water storage capacity, ensuring a sustainable and resilient supply."
+    ],
+    "Design the Water Supply System": [
+      "You have successfully completed the water supply system, optimizing costs to",
+      `${score} Crores`,
+      "over its lifecycle, while maintaining efficiency and sustainability."
+    ],
+    "Building the Infrastructure": [
+      "You have successfully constructed, the water supply infrastructure in just",
+      `${score} Months`,
+      "ensuring timely access to clean water for the community."
+    ],
+    "Water Treatment": [
+      "You have successfully safeguarded public health by preventing",
+      `${score} Cases`,
+      "of waterborne diseases, through an optimized treatment system."
+    ],
+    "Smart Water Networks": [
+      "You have successfully reduced water losses by",
+      `${score} Cubic Feet per Day`,
+      "through the integration of SCADA technology, enhancing network efficiency."
+    ],
+    "Metering, Billing, and Collection": [
+      "You have successfully improved, operational efficiency, saved",
+      `${score} kWh`,
+      "of energy and promoting, sustainable resource management."
+    ],
+    "Non-Revenue Water Management": [
+      "You have successfully minimized leaks, and optimized distribution, conserving",
+      `${score} Cubic Feet per Day`,
+      "for effective utilization."
+    ],
+    "Performance Assessment & Operational Excellence": [
+      "You have successfully achieved",
+      `${score}% Customer Satisfaction`,
+      "ensuring reliable service and enhanced trust, in the water supply infrastructure."
+    ],
+  };
+
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const [totalScore, setTotalScore] = useState(0);
   const [allSectionsCompleted, setAllSectionsCompleted] = useState(false);
@@ -85,7 +128,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const completedSections: Record<string, number> = JSON.parse(sessionStorage.getItem('completedSections') || '[]');
+      const completedSections: Record<string, number> = JSON.parse(sessionStorage.getItem('completedSections') || '{}');
 
 
       const totalScore = Object.values(completedSections).reduce((sum, score) => sum + score, 0);
@@ -351,7 +394,26 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
       </h1>
 
       <div className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-lg p-8 mb-8 text-center">
-        <p className="text-3xl text-white mb-4">
+
+        <div className="text-center text-xl text-white mt-4">
+          {stageMessages[stage] && (
+            <>
+              {stageMessages[stage][0].split(",").map((part, index) => (
+                <p key={index} className="text-3xl text-white mt-4">
+                  {part.trim()}
+                </p>
+              ))}
+              <p className="text-6xl font-bold text-blue-800 mt-6 mb-6 italic">{stageMessages[stage][1]}</p>
+              {stageMessages[stage][2].split(",").map((part, index) => (
+                <p key={index} className="text-3xl text-white mt-4">
+                  {part.trim()}
+                </p>
+              ))}
+            </>
+          )}
+        </div>
+
+        {/* <p className="text-3xl text-white mb-4">
           {allSectionsCompleted
             ? "You have successfully completed all stages."
             : score > 0
@@ -371,11 +433,23 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
               : "but didn't score any points."}
         </p>
         {/* {score > 0 && ( */}
-        {((allSectionsCompleted && totalScore > 0) || (!allSectionsCompleted && score > 0)) && (
+        {/* {((allSectionsCompleted && totalScore > 0) || (!allSectionsCompleted && score > 0)) && (
           <p className="text-6xl font-bold animate-pulse text-blue-800">
             {allSectionsCompleted ? totalScore : score}
           </p>
-        )}
+
+        {/* Display Stage-Specific Message */}
+        {/* {!allSectionsCompleted && ( */}
+        {/* <div className="text-center text-xl text-white mt-4 italic">
+            {stageMessages[stage] && (
+              <>
+                <p>{stageMessages[stage][0]}</p>
+                <p className="text-6xl font-bold animate-pulse text-blue-800">{stageMessages[stage][1]}</p>
+                <p>{stageMessages[stage][2]}</p>
+              </>
+            )}
+          </div> */}
+
       </div>
 
       {allSectionsCompleted && totalScore > 0 ? (
@@ -384,7 +458,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
             className="px-6 py-2 w-full md:w-auto bg-green-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-green-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50"
             onClick={handleSelectAnotherSet}
           >
-            Return to Select Set
+            Return to Set Selection
           </button>
           <button
             className="px-6 py-2 w-full md:w-auto bg-yellow-600 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-yellow-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50"
@@ -398,7 +472,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
           className="px-6 py-2 bg-blue-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-blue-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
           onClick={handleReturnToStages}
         >
-          Return to Stages Page
+          Go to Spin Wheel
         </button>
       )}
     </div>
