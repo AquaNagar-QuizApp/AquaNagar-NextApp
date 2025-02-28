@@ -1,7 +1,8 @@
 "use client"
 
-import { Trophy, CheckCircle, PlayCircle, PauseCircle} from "lucide-react"
+import { Trophy, CheckCircle, PlayCircle, PauseCircle } from "lucide-react"
 import { useSearchParams } from "next/navigation"
+import { useEffect, useState } from "react"
 
 interface Stage {
   name: string
@@ -11,9 +12,42 @@ interface Stage {
   isCompleted: boolean
 }
 
-export default function LeftSidebarVariation({ stages }: { stages: Stage[] }) {
+const stages: Stage[] = [
+  { name: "Plan a Water Supply System", score: 0, maxScore: 6100, unit: "Million Cubic Feet", isCompleted: false },
+  { name: "Design the Water Supply System", score: 0, maxScore: 150, unit: "Crores", isCompleted: false },
+  { name: "Building the Infrastructure", score: 0, maxScore: 24, unit: "Months", isCompleted: false },
+  { name: "Water Treatment", score: 0, maxScore: 100, unit: "Cases", isCompleted: false },
+  { name: "Smart Water Networks", score: 0, maxScore: 13700, unit: "Cubic Feet", isCompleted: false },
+  { name: "Metering, Billing, and Collection", score: 0, maxScore: 500, unit: "kWh", isCompleted: false },
+  { name: "Non-Revenue Water Management", score: 0, maxScore: 13000, unit: "Cubic Feet", isCompleted: false },
+  { name: "Performance Assessment & Operational Excellence", score: 0, maxScore: 0, unit: "Satisfaction", isCompleted: false },
+];
+
+function getStagesFromSession(): Stage[] {
+  // Retrieve completed sections from sessionStorage
+  let completedSections: Record<string, number> = {};
+
+  if (typeof window !== 'undefined') {
+    completedSections = JSON.parse(sessionStorage.getItem('completedSections') || '{}');
+  }
+
+  // Prepare the stages list by merging session data
+  return stages.map((stage) => ({
+    ...stage,
+    isCompleted: stage.name in completedSections, // Check if stage exists in session
+    score: completedSections[stage.name] ?? stage.score, // Use session score if present, else original score
+  }));
+}
+
+export default function LeftSidebarVariation() {
   const searchParams = useSearchParams();
   const stageName = searchParams.get("stage");
+
+  const [stages, setStagesData] = useState<Stage[]>([]);
+  // Load data when the component mounts
+  useEffect(() => {
+    setStagesData(getStagesFromSession());
+  }, []);
 
   const completedStages = stages.filter((stage) => stage.isCompleted);
   const currentStage = stages.find((stage) => stage.name === stageName);
@@ -44,12 +78,12 @@ export default function LeftSidebarVariation({ stages }: { stages: Stage[] }) {
             <div
               key={index}
               className={`relative p-3 rounded-lg transition-all duration-300 ${isCompleted
-                  ? "bg-sky-700 text-white-300" // ✅ Completed: Gray color
-                  : isCurrent
-                    ? "bg-green-600 text-white" // 🎯 Current: Green color
-                    : isPlayable
-                      ? "bg-blue-600 text-white hover:bg-blue-500 cursor-pointer" // 🔵 Playable: Blue with hover effect
-                      : "bg-sky-800 text-gray-400 cursor-not-allowed" // 🔒 Locked: Gray
+                ? "bg-sky-700 text-white-300" // ✅ Completed: Gray color
+                : isCurrent
+                  ? "bg-green-600 text-white" // 🎯 Current: Green color
+                  : isPlayable
+                    ? "bg-blue-600 text-white hover:bg-blue-500 cursor-pointer" // 🔵 Playable: Blue with hover effect
+                    : "bg-sky-800 text-gray-400 cursor-not-allowed" // 🔒 Locked: Gray
                 }`}
             >
               {/* Stage Header */}
