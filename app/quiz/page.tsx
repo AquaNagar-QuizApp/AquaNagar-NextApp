@@ -5,8 +5,6 @@ import { AnimatedBackground } from "@/components/AnimatedBackground"
 import { QuizContent } from "@/components/QuizContent"
 import { useState, useEffect } from "react";
 import LeftSidebarVariation from "@/components/LeftSideBar"
-import { useSearchParams } from "next/navigation"
-
 
 interface Stage {
   name: string
@@ -27,8 +25,6 @@ const stages: Stage[] = [
   { name: "Performance Assessment & Operational Excellence", score: 0, maxScore: 0, unit: "Satisfaction", isCompleted: false },
 ];
 
-export const dynamic = "force-dynamic"; // ✅ Forces dynamic rendering
-
 function getStagesFromSession(): Stage[] {
   // Retrieve completed sections from sessionStorage
   let completedSections: Record<string, number> = {};
@@ -47,8 +43,7 @@ function getStagesFromSession(): Stage[] {
 
 export default function QuizPage(): JSX.Element {
   const [stagesData, setStagesData] = useState<Stage[]>([]);
-  const searchParams = useSearchParams();
-  const stageName = searchParams.get("stage");
+
   // Load data when the component mounts
   useEffect(() => {
     setStagesData(getStagesFromSession());
@@ -61,13 +56,11 @@ export default function QuizPage(): JSX.Element {
         <div className="flex w-full max-w-full h-full justify-between">
 
           {/* Left Sidebar (25%) */}
-          {stageName && (
-            <div className="w-1/4 p-4 flex items-center justify-center min-h-screen">
-              <div className="bg-blue-200 bg-opacity-20 backdrop-blur-lg rounded-xl p-4 h-auto">
-                <LeftSidebarVariation stages={stagesData} currentStageName={stageName} />
-              </div>
+          <div className="w-1/4 p-4 flex items-center justify-center min-h-screen">
+            <div className="bg-blue-200 bg-opacity-20 backdrop-blur-lg rounded-xl p-4 h-auto">
+              <LeftSidebarVariation stages={stagesData} />
             </div>
-          )}
+          </div>
 
           {/* Middle Content (50%) - Vertically Centered */}
           <div className="w-[52%] p-4 flex items-center justify-center min-h-screen">

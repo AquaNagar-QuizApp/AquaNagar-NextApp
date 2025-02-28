@@ -1,6 +1,7 @@
 "use client"
 
 import { Trophy, CheckCircle, PlayCircle, PauseCircle} from "lucide-react"
+import { useSearchParams } from "next/navigation"
 
 interface Stage {
   name: string
@@ -10,11 +11,13 @@ interface Stage {
   isCompleted: boolean
 }
 
-export default function LeftSidebarVariation({ stages, currentStageName }: { stages: Stage[]; currentStageName: string }) {
+export default function LeftSidebarVariation({ stages }: { stages: Stage[] }) {
+  const searchParams = useSearchParams();
+  const stageName = searchParams.get("stage");
 
   const completedStages = stages.filter((stage) => stage.isCompleted);
-  const currentStage = stages.find((stage) => stage.name === currentStageName);
-  const pendingStages = stages.filter((stage) => !stage.isCompleted && stage.name !== currentStageName);
+  const currentStage = stages.find((stage) => stage.name === stageName);
+  const pendingStages = stages.filter((stage) => !stage.isCompleted && stage.name !== stageName);
 
   const sortedStages = [
     ...completedStages, // ✅ Completed Stages First
@@ -33,9 +36,9 @@ export default function LeftSidebarVariation({ stages, currentStageName }: { sta
 
       <div className="space-y-4">
         {sortedStages.map((stage, index) => {
-          const isCurrent = stage?.name === currentStageName
+          const isCurrent = stage?.name === stageName
           const isCompleted = stage?.isCompleted
-          const isPlayable = !isCompleted && stage?.name === currentStageName // Next stage is playable
+          const isPlayable = !isCompleted && stage?.name === stageName // Next stage is playable
 
           return (
             <div
