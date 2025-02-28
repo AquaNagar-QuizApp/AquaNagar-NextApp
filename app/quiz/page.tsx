@@ -4,7 +4,7 @@ import { JSX, Suspense } from "react"
 import { AnimatedBackground } from "@/components/AnimatedBackground"
 import { QuizContent } from "@/components/QuizContent"
 import { useState, useEffect } from "react";
-import { LeftSidebarVariation } from "@/app/left-side-bar/page"
+import LeftSidebarVariation from "@/components/LeftSideBar"
 import { useSearchParams } from "next/navigation"
 
 

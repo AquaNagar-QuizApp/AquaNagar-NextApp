@@ -1,4 +1,5 @@
 "use client"
+
 import { Trophy, CheckCircle, PlayCircle, PauseCircle} from "lucide-react"
 
 interface Stage {
@@ -9,7 +10,7 @@ interface Stage {
   isCompleted: boolean
 }
 
-export function LeftSidebarVariation({ stages, currentStageName }: { stages: Stage[]; currentStageName: string }) {
+export default function LeftSidebarVariation({ stages, currentStageName }: { stages: Stage[]; currentStageName: string }) {
 
   const completedStages = stages.filter((stage) => stage.isCompleted);
   const currentStage = stages.find((stage) => stage.name === currentStageName);
