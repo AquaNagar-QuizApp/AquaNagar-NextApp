@@ -121,7 +121,7 @@
 import { motion } from "framer-motion";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 
 const stages = [
   "Plan a Water Supply System",
@@ -152,7 +152,9 @@ export default function GameMap() {
     <main className="min-h-screen relative overflow-hidden">
       <AnimatedBackground />
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-6">
-        <SpinWheel />
+        <Suspense fallback={<div>Loading...</div>}>
+          <SpinWheel />
+        </Suspense>
       </div>
     </main>
   );
@@ -284,9 +286,6 @@ function SpinWheel() {
       completedSections = JSON.parse(sessionStorage.getItem('completedSections') || '{}');
     }
 
-    // // Filter out completed stages
-    // const availableStages = stages.filter(stage => !completedSections[stage]);
-
     // Get a list of completed stage names
     const completedStages = Object.keys(completedSections);
 
@@ -299,26 +298,7 @@ function SpinWheel() {
       return;
     }
 
-    // Spin multiple rounds + random final angle
-    // const newRotation = rotation + 1440 + Math.floor(Math.random() * 360);
-    // setRotation(newRotation);
-
-    // // Adjust the calculation to align with the pointer
-    // const selectedIndex = (8 - Math.round(((newRotation % 360) + 22.5) / 45)) % 8
-    // const selectedStage = stages[selectedIndex]
-
     const totalRotations = 1440; // Ensure multiple spins before stopping
-    // let newRotation, selectedIndex, selectedStage;
-
-    // do {
-    //   // Spin multiple rounds + random final angle
-    //   newRotation = rotation + totalRotations + Math.floor(Math.random() * 360);
-
-    //   // Adjust calculation to align with the pointer
-    //   selectedIndex = (8 - Math.round(((newRotation % 360) + 22.5) / 45)) % 8;
-    //   selectedStage = stages[selectedIndex];
-
-    // } while (completedSections[selectedStage]); // Re-roll if the stage is completed
 
     // Select a valid stage directly
     const selectedStage = availableStages[Math.floor(Math.random() * availableStages.length)];
