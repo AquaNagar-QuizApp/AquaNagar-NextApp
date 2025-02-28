@@ -45,12 +45,15 @@ function getStagesFromSession(): Stage[] {
 }
 export default function QuizPage(): JSX.Element {
   const [stagesData, setStagesData] = useState<Stage[]>([]);
-  const searchParams = useSearchParams()
-  const stageName = searchParams.get("stage")
+  const searchParams = useSearchParams();
+  // const stageName = searchParams.get("stage")
+  const [stageName, setStageName] = useState<string | null>(null); // ✅ Store in state
+
   // Load data when the component mounts
   useEffect(() => {
     setStagesData(getStagesFromSession());
-  }, []);
+    setStageName(searchParams.get("stage"));
+  }, [searchParams]);
 
   return (
     <main className="min-h-screen relative overflow-auto">
