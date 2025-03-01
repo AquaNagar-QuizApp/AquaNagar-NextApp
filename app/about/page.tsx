@@ -126,8 +126,8 @@ export default function About() {
 
   const certificateInfo = [
     { level: "Gold", threshold: 80, className: "text-yellow-400" },
-    { level: "Silver", threshold: 70, className: "text-gray-600" },
-    { level: "Bronze", threshold: 60, className: "text-amber-600" },
+    { level: "Silver", threshold: 65, className: "text-gray-600" },
+    { level: "Bronze", threshold: 50, className: "text-amber-600" },
     // { level: "Participation", threshold: 50, className: "text-black-600" }
   ];
 
@@ -187,14 +187,14 @@ export default function About() {
                 src="./characters/Explainer.png" // Replace with your character image path
                 alt="Character"
                 className="absolute w-32 h-32 z-20"
-                style={{ top: "-5.5rem", left: "-2.8rem" }}
+                style={{ top: "-5.5rem", right: "-2.2rem" }}
                 initial={false} // Disable initial animation on server
                 animate={isMounted ? { x: 0, y: 0 } : { x: -50, y: -50 }} // Animate only on client
                 transition={{ type: "spring", stiffness: 50 }}
               />
               <div className="space-y-6 text-blue-100">
                 <section className="space-y-3 text-left">
-                  <h3 className="text-xl font-semibold">Quiz Structure</h3>
+                  <h3 className="text-xl font-semibold">Game Structure</h3>
                   <div className="pl-4 space-y-2">
                     <p>• Choose from 4 different question sets.</p>
                     <p>• Each set contains 8 stages.</p>
@@ -208,8 +208,8 @@ export default function About() {
                   <div className="pl-4 space-y-2">
                     <p>1. Select any question set to begin.</p>
                     <p>2. Complete each stage&apos;s questions within the time limit.</p>
-                    <p>3. After completing a stage, you&apos;ll return to the stages page.</p>
-                    <p>4. Continue selecting and completing stages until you&apos;ve finished all eight.</p>
+                    <p>3. After completing a stage, you&apos;ll return to the spin wheel page to select a stage.</p>
+                    <p>4. Continue playing and completing stages until you&apos;ve finished all eight.</p>
                   </div>
                 </section>
 
@@ -226,7 +226,7 @@ export default function About() {
                 </section>
 
                 <section className="space-y-3 text-left">
-                  <h3 className="text-xl font-semibold">If You Score Below 60%</h3>
+                  <h3 className="text-xl font-semibold">If You Score Below 50%</h3>
                   <div className="pl-4 space-y-2">
                     {/* <p>You have two options:</p>
                     <p>• Retry the same set to improve your score.</p> */}

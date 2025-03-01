@@ -790,17 +790,17 @@ const getQuestionsForStage5 = (): Question[] => [
         ],
         correctAnswer: "Reduced reliance on manual data collection",
     },
-    {
-        type: "text",
-        question: 'What does the term "Smart Meter" refer to in the context of a Smart Water Network?',
-        options: [
-            "A device that reduces water pressure",
-            "A sensor used to monitor water quality",
-            "A meter that automatically records and transmits water usage data",
-            "A tool used to measure air quality in water treatment plants",
-        ],
-        correctAnswer: "A meter that automatically records and transmits water usage data",
-    },
+    // {
+    //     type: "text",
+    //     question: 'What does the term "Smart Meter" refer to in the context of a Smart Water Network?',
+    //     options: [
+    //         "A device that reduces water pressure",
+    //         "A sensor used to monitor water quality",
+    //         "A meter that automatically records and transmits water usage data",
+    //         "A tool used to measure air quality in water treatment plants",
+    //     ],
+    //     correctAnswer: "A meter that automatically records and transmits water usage data",
+    // },
     {
         type: "text",
         question: "How does predictive maintenance enhance the efficiency of a Smart Water Network?",
@@ -856,17 +856,17 @@ const getQuestionsForStage5 = (): Question[] => [
         ],
         correctAnswer: "By providing real-time information and faster response to customer complaints",
     },
-    {
-        type: "text",
-        question: "Which of the following is used to detect leaks in a Smart Water Network?",
-        options: [
-            "Flow meters",
-            "Acoustic sensors",
-            "Chlorine sensors",
-            "Water pressure sensors",
-        ],
-        correctAnswer: "Acoustic sensors",
-    },
+    // {
+    //     type: "text",
+    //     question: "Which of the following is used to detect leaks in a Smart Water Network?",
+    //     options: [
+    //         "Flow meters",
+    //         "Acoustic sensors",
+    //         "Chlorine sensors",
+    //         "Water pressure sensors",
+    //     ],
+    //     correctAnswer: "Acoustic sensors",
+    // },
     {
         type: "text",
         question: 'What is the purpose of creating a "Smart Pressure Zone" within a Smart Water Network?',

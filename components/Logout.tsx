@@ -106,7 +106,7 @@ const LogoutButton = () => {
             {showPopup && (
                 <div ref={popupRef}
                     className="absolute top-12 right-4 bg-white bg-opacity-70 backdrop-blur-lg shadow-lg rounded-lg p-4 min-w-fit max-w-xs z-50">
-                    <p className="text-gray-500 text-sm">Welcome,</p>
+                    <p className="text-gray-500 text-sm">Hi,</p>
                     <p className="text-gray-800 font-medium">{username}</p>
                     <hr className="my-2 border-gray-400" />
                     <button

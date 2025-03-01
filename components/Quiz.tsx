@@ -5,28 +5,16 @@ import { Card } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { useAudio } from "@/context/AudioContext"
 import { Stage } from "@/types"
-
-// interface QuizSet {
-//   sections: Question[][]
-// }
-
-// interface Question {
-//   type: "text" | "image"
-//   question: string
-//   options: string[]
-//   correctAnswer: string
-//   imageUrl?: string
-// }
+import { Clock } from "lucide-react"
 
 interface QuizProps {
   quizSet: Stage
   stage: string
   onComplete: (score: number) => void
+  updateWrongAnswer: (wrongAnswers: number) => void
 }
 
-export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
-  // const [currentSection, setCurrentSection] = useState<number>(0)
-  // const currentSection = 0
+export function Quiz({ quizSet, stage, onComplete, updateWrongAnswer }: QuizProps): JSX.Element {
   const [currentQuestion, setCurrentQuestion] = useState<number>(0)
   const [score, setScore] = useState<number>(0)
   const [timeLeft, setTimeLeft] = useState<number>(30)
@@ -34,6 +22,7 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [correctAnswer, setCorrectAnswer] = useState<string | null>(null);
   const [highlighted, setHighlighted] = useState<boolean>(false);
+  const [wrongAnswers, setWrongAnswers] = useState(0); // Track wrong answers
 
   const { isMuted, playBackgroundMusic, pauseBackgroundMusic, setBackgroundAudioSrc } = useAudio();
 
@@ -61,8 +50,6 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
         setBackgroundAudioSrc(sectionCount % 2 === 0 ? "./songs/quizaudio1.mp3" : "./songs/quizaudio2.mp3");
       }
     }
-
-    // setBackgroundAudioSrc("./songs/quizaudio1.mp3");
 
     // Add event listeners to sound elements
     const correctSound = correctSoundRef.current;
@@ -101,7 +88,7 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
 
     if (currentQuestion < currentSectionQuestions.length - 1) {
       if (answered && selectedOption === correctAnswer) {
-        setScore((prev) => prev + 5);
+        setScore((prev) => prev + 1);
       }
       setCurrentQuestion((prev) => prev + 1);
       setTimeLeft(30);
@@ -112,18 +99,12 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
     } else {
       // Wait for animation before completing the quiz
       setTimeout(() => {
-        // Section completed, save section name & total score
-        // const completedSections = JSON.parse(sessionStorage.getItem("completedSections") || "{}");
-        // completedSections[currentSection] = score + (answered && selectedOption === correctAnswer ? 5 : 0);
-        // sessionStorage.setItem("completedSections", JSON.stringify(completedSections));
         setScore((prevScore) => {
-          const finalScore = answered && selectedOption === correctAnswer ? prevScore + 5 : prevScore;
-          // if (finalScore > 0) {
+          const finalScore = answered && selectedOption === correctAnswer ? prevScore + 1 : prevScore;
           if (typeof window !== 'undefined') {
             const completedSections = JSON.parse(sessionStorage.getItem("completedSections") || "{}");
-            completedSections[stage] = score + (answered && selectedOption === correctAnswer ? 5 : 0);
+            completedSections[stage] = score + (answered && selectedOption === correctAnswer ? 1 : 0);
             sessionStorage.setItem("completedSections", JSON.stringify(completedSections));
-            // }
           }
           onComplete(finalScore);
           return finalScore;
@@ -142,7 +123,6 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
         setTimeLeft((prevTime) => {
           if (prevTime === 1 && !isMuted) {
             pauseBackgroundMusic(); // Pauses the background music
-
             buzzerSoundRef.current?.play(); // Play buzzer sound 1 second before timeout
           }
           return prevTime - 1;
@@ -154,6 +134,9 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
       const correct = quizSet.questions[currentQuestion].correctAnswer;
       setCorrectAnswer(correct);
       setHighlighted(true);
+
+      setWrongAnswers((prevWrong) => prevWrong + 1); // Increment wrong answers
+      updateWrongAnswer(wrongAnswers + 1);
 
       setTimeout(() => {
         handleNextQuestion();
@@ -180,12 +163,17 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
     }
 
     if (selectedAnswer === correct) {
-      setScore((prevScore) => prevScore + 5);
+      setScore((prevScore) => prevScore + 1);
+      updateWrongAnswer(wrongAnswers);
+
       if (!isMuted) {
         pauseBackgroundMusic();
         correctSoundRef.current?.play(); // Play correct sound
       }
     } else {
+      setWrongAnswers((prevWrong) => prevWrong + 1); // Increment wrong answers
+      updateWrongAnswer(wrongAnswers + 1);
+
       if (!isMuted) {
         pauseBackgroundMusic();
         wrongSoundRef.current?.play(); // Play wrong sound
@@ -195,11 +183,11 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
     setTimeout(() => {
       // Ensure last question triggers completion
       if (currentQuestion === currentSectionQuestions.length - 1) {
-        const finalScore = score + (selectedAnswer === correct ? 5 : 0);
+        const finalScore = score + (selectedAnswer === correct ? 1 : 0);
         // if (finalScore > 0) {
         if (typeof window !== 'undefined') {
           const completedSections = JSON.parse(sessionStorage.getItem("completedSections") || "{}");
-          completedSections[stage] = finalScore + (answered && selectedOption === correctAnswer ? 5 : 0);
+          completedSections[stage] = finalScore + (answered && selectedOption === correctAnswer ? 1 : 0);
           sessionStorage.setItem("completedSections", JSON.stringify(completedSections));
           // }
         }
@@ -208,13 +196,6 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
         handleNextQuestion();
       }
     }, 2000); // Wait for animation before moving to next
-
-    // setTimeout(() => {
-    //   setSelectedOption(null);
-    //   setCorrectAnswer(null);
-    //   setHighlighted(false);
-    //   handleNextQuestion();
-    // }, 2000);
   };
 
 
@@ -261,7 +242,10 @@ export function Quiz({ quizSet, stage, onComplete }: QuizProps): JSX.Element {
           {/* Stage {currentSection + 1} -  */}
           Question {currentQuestion + 1}
         </h3>
-        <span className="text-lg font-medium">Time left: {timeLeft}s</span>
+        <div className="flex items-center gap-2 text-white">
+          <Clock className="h-5 w-5" />
+          <span className="text-lg font-medium">Time left: {timeLeft}s</span>
+        </div>
       </motion.div>
 
       <AnimatePresence mode="wait">

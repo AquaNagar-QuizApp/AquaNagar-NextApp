@@ -5,22 +5,24 @@ import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 
 interface Stage {
-  name: string
-  score: number
-  maxScore: number
-  unit: string
-  isCompleted: boolean
+  name: string;
+  score: number;
+  maxScore: number;
+  unit: string;
+  decrease: boolean;
+  incOrDecValue: number;
+  isCompleted: boolean;
 }
 
 const stages: Stage[] = [
-  { name: "Plan a Water Supply System", score: 0, maxScore: 6100, unit: "Million Cubic Feet", isCompleted: false },
-  { name: "Design the Water Supply System", score: 0, maxScore: 150, unit: "Crores", isCompleted: false },
-  { name: "Building the Infrastructure", score: 0, maxScore: 24, unit: "Months", isCompleted: false },
-  { name: "Water Treatment", score: 0, maxScore: 100, unit: "Cases", isCompleted: false },
-  { name: "Smart Water Networks", score: 0, maxScore: 13700, unit: "Cubic Feet", isCompleted: false },
-  { name: "Metering, Billing, and Collection", score: 0, maxScore: 500, unit: "kWh", isCompleted: false },
-  { name: "Non-Revenue Water Management", score: 0, maxScore: 13000, unit: "Cubic Feet", isCompleted: false },
-  { name: "Performance Assessment & Operational Excellence", score: 0, maxScore: 0, unit: "Satisfaction", isCompleted: false },
+  { name: "Plan a Water Supply System", score: 0, maxScore: 6100, unit: "Million Cubic Feet", decrease: true, incOrDecValue: 307, isCompleted: false },
+  { name: "Design the Water Supply System", score: 0, maxScore: 150, unit: "Crores", decrease: false, incOrDecValue: 5, isCompleted: false },
+  { name: "Building the Infrastructure", score: 0, maxScore: 24, unit: "Months", decrease: false, incOrDecValue: 1, isCompleted: false },
+  { name: "Water Treatment", score: 0, maxScore: 0, unit: "Cases", decrease: false, incOrDecValue: 100, isCompleted: false },
+  { name: "Smart Water Networks", score: 0, maxScore: 0, unit: "Cubic Feet", decrease: false, incOrDecValue: 13700, isCompleted: false },
+  { name: "Metering, Billing, and Collection", score: 0, maxScore: 0, unit: "kWh", decrease: false, incOrDecValue: 500, isCompleted: false },
+  { name: "Non-Revenue Water Management", score: 0, maxScore: 0, unit: "Cubic Feet", decrease: false, incOrDecValue: 13000, isCompleted: false },
+  { name: "Performance Assessment & Operational Excellence", score: 0, maxScore: 100, unit: "% Satisfied", decrease: true, incOrDecValue: 2.5, isCompleted: false }
 ];
 
 function getStagesFromSession(): Stage[] {
@@ -32,11 +34,19 @@ function getStagesFromSession(): Stage[] {
   }
 
   // Prepare the stages list by merging session data
-  return stages.map((stage) => ({
-    ...stage,
-    isCompleted: stage.name in completedSections, // Check if stage exists in session
-    score: completedSections[stage.name] ?? stage.score, // Use session score if present, else original score
-  }));
+  return stages.map((stage) => {
+    const completedValue = completedSections[stage.name];
+
+    return {
+      ...stage,
+      isCompleted: stage.name in completedSections,
+      score: completedValue !== undefined // Ensure we process even if the value is 0
+        ? (stage.decrease
+            ? stage.maxScore - (10 - completedValue) * stage.incOrDecValue // Decreasing impact scenario
+            : stage.maxScore + (10 - completedValue) * stage.incOrDecValue) // Increasing impact scenario
+        : stage.score
+    };
+  });
 }
 
 export default function LeftSidebarVariation() {
@@ -90,13 +100,13 @@ export default function LeftSidebarVariation() {
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   {isCompleted ? (
-                    <CheckCircle className="w-5 h-5 text-green-400" /> // ✅ Completed Icon
+                    <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" /> // ✅ Completed Icon
                   ) : isCurrent ? (
-                    <PauseCircle className="w-5 h-5 text-yellow-400" /> // 👑 Current Stage
+                    <PauseCircle className="w-5 h-5 text-yellow-400 flex-shrink-0" /> // 👑 Current Stage
                   ) : isPlayable ? (
-                    <PauseCircle className="w-5 h-5 text-yellow-400" /> // ▶️ Playable Next Stage
+                    <PauseCircle className="w-5 h-5 text-yellow-400 flex-shrink-0" /> // ▶️ Playable Next Stage
                   ) : (
-                    <PlayCircle className="w-5 h-5 text-white-400" /> // ▶️ Playable Next Stage
+                    <PlayCircle className="w-5 h-5 text-white-400 flex-shrink-0" /> // ▶️ Playable Next Stage
                   )}
                   <span className="text-sm font-medium">{stage?.name}</span>
                 </div>
@@ -105,19 +115,10 @@ export default function LeftSidebarVariation() {
               {/* Show Progress Bar Only for Completed and Current Stage */}
               {(isCompleted) && (
                 <>
-                  {/* <div className="w-full bg-gray-600 rounded-full h-2">
-                    <div
-                      className={`h-2 rounded-full transition-all duration-500 ${
-                        isCompleted ? "bg-green-500" : "bg-yellow-400"
-                      }`}
-                      style={{ width: `${(stage.score / stage.maxScore) * 100}%` }}
-                    />
-                  </div> */}
-
                   {/* Score Display */}
-                  <div className="flex justify-between text-xs mt-2">
-                    <span className="text-white-300">{stage.unit}</span>
-                    <span className="text-white-300">{stage.score}/{stage.maxScore}</span>
+                  <div className="flex justify-end text-xs mt-2">
+                    {/* <span className="text-white-300">{stage.unit}</span> */}
+                    <span className="text-white-300">{stage.score} {stage.unit}</span>
                   </div>
                 </>
               )}

@@ -5,6 +5,7 @@ import { Quiz } from "@/components/Quiz"
 import type { QuizSetName, Role, Set, Stage } from "@/types"
 import { quizDataByRole } from "@/components/data/quizData"
 import { JSX } from "react"
+import { useImpact } from "@/context/ImpactContext"
 
 export function QuizContent(): JSX.Element {
   const router = useRouter()
@@ -13,6 +14,8 @@ export function QuizContent(): JSX.Element {
   const quizSetName = searchParams.get("set") as QuizSetName | null
   let selectedQuizSet: Set | undefined;
   let selectedStage: Stage | undefined;
+
+  const { updateWrongAnswer } = useImpact();
 
   if (typeof window !== "undefined") {
     const storedRole = sessionStorage.getItem("selectedRole");
@@ -40,31 +43,17 @@ export function QuizContent(): JSX.Element {
     }
   }
 
-  // // Find the quiz set
-  // const selectedQuizSet: Set | undefined = quizDataByRole.find(set => set.setName === quizSetName);
-  // // const selectedQuizSet = quizData.find(set => set.setName === quizSetName);
-
-  // // Find the specific stage within the selected quiz set
-  // const selectedStage: Stage | undefined = selectedQuizSet?.stages.find(s => s.stageName === stageName);
-
   const handleQuizCompletion = (score: number): void => {
-    // router.push(
-    //   `/certificate?stage=${encodeURIComponent(stage ?? "")}&set=${encodeURIComponent(quizSetName ?? "")}&score=${score}`,
-    // )
-
     router.push(`/complete?set=${encodeURIComponent(quizSetName ?? "")}&stage=${encodeURIComponent(stageName ?? "")}&score=${score}`);
   }
 
-  // if (!stage || !quizSetName || !(quizSetName in quizData)) {
-  //   return <div className="text-white">Error: Missing or invalid stage or quiz set information</div>
-  // }
   if (!stageName || !selectedQuizSet || !selectedStage) {
     return <div className="text-white">Error: Missing or invalid stage or quiz set information</div>;
   }
 
   return (
     <>
-      <Quiz quizSet={selectedStage} stage={stageName} onComplete={handleQuizCompletion} />
+      <Quiz quizSet={selectedStage} stage={stageName} onComplete={handleQuizCompletion} updateWrongAnswer={updateWrongAnswer} />
     </>
   )
 }

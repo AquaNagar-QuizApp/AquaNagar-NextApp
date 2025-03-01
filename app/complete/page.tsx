@@ -20,6 +20,15 @@ interface StageScoreSectionProps {
   setBackgroundAudioSrc: (src: string) => void; // Function to update the audio source
 }
 
+interface Stage {
+  name: string;
+  score: number;
+  maxScore: number;
+  unit: string;
+  decrease: boolean;
+  incOrDecValue: number;
+  message: [string, string, string]; // Tuple for stage messages
+}
 
 export default function Complete(): JSX.Element {
   // const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
@@ -68,48 +77,120 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
   const set = searchParams.get("set") || "Unknown";
   const stage = searchParams.get("stage") || "Unknown";
 
-  const stageMessages: Record<string, [string, string, string]> = {
-    "Plan a Water Supply System": [
-      "You have successfully secured",
-      `${score} Million Cubic Feet`,
-      "of water storage capacity, ensuring a sustainable and resilient supply."
-    ],
-    "Design the Water Supply System": [
-      "You have successfully completed the water supply system, optimizing costs to",
-      `${score} Crores`,
-      "over its lifecycle, while maintaining efficiency and sustainability."
-    ],
-    "Building the Infrastructure": [
-      "You have successfully constructed, the water supply infrastructure in just",
-      `${score} Months`,
-      "ensuring timely access to clean water for the community."
-    ],
-    "Water Treatment": [
-      "You have successfully safeguarded public health by preventing",
-      `${score} Cases`,
-      "of waterborne diseases, through an optimized treatment system."
-    ],
-    "Smart Water Networks": [
-      "You have successfully reduced water losses by",
-      `${score} Cubic Feet per Day`,
-      "through the integration of SCADA technology, enhancing network efficiency."
-    ],
-    "Metering, Billing, and Collection": [
-      "You have successfully improved, operational efficiency, saved",
-      `${score} kWh`,
-      "of energy and promoting, sustainable resource management."
-    ],
-    "Non-Revenue Water Management": [
-      "You have successfully minimized leaks, and optimized distribution, conserving",
-      `${score} Cubic Feet per Day`,
-      "for effective utilization."
-    ],
-    "Performance Assessment & Operational Excellence": [
-      "You have successfully achieved",
-      `${score}% Customer Satisfaction`,
-      "ensuring reliable service and enhanced trust, in the water supply infrastructure."
-    ],
-  };
+  const stages: Stage[] = [
+    {
+      name: "Plan a Water Supply System",
+      score: 0,
+      maxScore: 6100,
+      unit: "Million Cubic Feet",
+      decrease: true,
+      incOrDecValue: 307,
+      message: [
+        "You have successfully secured",
+        "Million Cubic Feet",
+        "of water storage capacity, ensuring a sustainable and resilient supply."
+      ]
+    },
+    {
+      name: "Design the Water Supply System",
+      score: 0,
+      maxScore: 150,
+      unit: "Crores",
+      decrease: false,
+      incOrDecValue: 5,
+      message: [
+        "You have successfully completed the water supply system, optimizing costs to",
+        "Crores",
+        "over its lifecycle, while maintaining efficiency and sustainability."
+      ]
+    },
+    {
+      name: "Building the Infrastructure",
+      score: 0,
+      maxScore: 24,
+      unit: "Months",
+      decrease: false,
+      incOrDecValue: 1,
+      message: [
+        "You have successfully constructed, the water supply infrastructure in just",
+        "Months",
+        "ensuring timely access to clean water for the community."
+      ]
+    },
+    {
+      name: "Water Treatment",
+      score: 0,
+      maxScore: 0,
+      unit: "Cases",
+      decrease: false,
+      incOrDecValue: 100,
+      message: [
+        "You have successfully safeguarded public health by preventing",
+        "Cases",
+        "of waterborne diseases, through an optimized treatment system."
+      ]
+    },
+    {
+      name: "Smart Water Networks",
+      score: 0,
+      maxScore: 0,
+      unit: "Cubic Feet",
+      decrease: false,
+      incOrDecValue: 13700,
+      message: [
+        "You have successfully reduced water losses by",
+        "Cubic Feet per Day",
+        "through the integration of SCADA technology, enhancing network efficiency."
+      ]
+    },
+    {
+      name: "Metering, Billing, and Collection",
+      score: 0,
+      maxScore: 0,
+      unit: "kWh",
+      decrease: false,
+      incOrDecValue: 500,
+      message: [
+        "You have successfully improved, operational efficiency, by saved",
+        "kWh",
+        "of energy and promoting, sustainable resource management."
+      ]
+    },
+    {
+      name: "Non-Revenue Water Management",
+      score: 0,
+      maxScore: 0,
+      unit: "Cubic Feet",
+      decrease: false,
+      incOrDecValue: 13000,
+      message: [
+        "You have successfully minimized leaks, and optimized distribution, conserving",
+        "Cubic Feet per Day",
+        "for effective utilization."
+      ]
+    },
+    {
+      name: "Performance Assessment & Operational Excellence",
+      score: 0,
+      maxScore: 100,
+      unit: "% Satisfied",
+      decrease: true,
+      incOrDecValue: 2.5,
+      message: [
+        "You have successfully achieved",
+        "% Customer Satisfaction",
+        "ensuring reliable service and enhanced trust, in the water supply infrastructure."
+      ]
+    }
+  ];
+
+  const currentStage = stages.find(s => s.name === stage);
+
+  const computedScore = currentStage
+    ? currentStage.decrease
+      ? currentStage.maxScore - (10 - (score ?? 0)) * currentStage.incOrDecValue
+      : currentStage.maxScore + (10 - (score ?? 0)) * currentStage.incOrDecValue
+    : 0;
 
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const [totalScore, setTotalScore] = useState(0);
@@ -194,12 +275,12 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
   }, [backgroundAudioSrc]);
 
   const getCertificateLevel = (marksObtained: number): string => {
-    const percentage = (marksObtained / 400) * 100;
+    const percentage = (marksObtained / 80) * 100;
 
     if (percentage >= 80) return "Gold";
-    else if (percentage >= 70) return "Silver";
-    // else if (percentage >= 60) return "Bronze";
-    return "Bronze"; // Optional case if percentage < 60
+    else if (percentage >= 65) return "Silver";
+    else if (percentage >= 50) return "Bronze";
+    return "Participation";
   };
 
   const getDefaultUser = (): User => ({
@@ -276,7 +357,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
               img.src = "./certificates/gold-certificate.png";
             else if (level == "Silver")
               img.src = "./certificates/Silver_Certificate.png";
-            else
+            else if (level == "Bronze")
               img.src = "./certificates/Bronze_Certificate.png";
 
             img.onload = function () {
@@ -395,23 +476,56 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
 
       <div className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-lg p-8 mb-8 text-center">
 
-        <div className="text-center text-xl text-white mt-4">
-          {stageMessages[stage] && (
-            <>
-              {stageMessages[stage][0].split(",").map((part, index) => (
-                <p key={index} className="text-3xl text-white mt-4">
-                  {part.trim()}
-                </p>
-              ))}
-              <p className="text-6xl font-bold text-blue-800 mt-6 mb-6 italic">{stageMessages[stage][1]}</p>
-              {stageMessages[stage][2].split(",").map((part, index) => (
-                <p key={index} className="text-3xl text-white mt-4">
-                  {part.trim()}
-                </p>
-              ))}
-            </>
-          )}
-        </div>
+        {!allSectionsCompleted && score > 0 && (
+          <div className="text-center text-xl text-white mt-4">
+            {currentStage && currentStage.message && (
+              <>
+                {currentStage.message[0].split(",").map((part, index) => (
+                  <p key={index} className="text-3xl text-white mt-4">
+                    {part.trim()}
+                  </p>
+                ))}
+                <p className="text-6xl font-bold text-blue-800 mt-6 mb-6 italic">{computedScore} {currentStage.message[1]}</p>
+                {currentStage.message[2].split(",").map((part, index) => (
+                  <p key={index} className="text-3xl text-white mt-4">
+                    {part.trim()}
+                  </p>
+                ))}
+              </>
+            )}
+          </div>
+        )}
+
+        {!allSectionsCompleted && score === 0 && (
+          <div className="text-center text-xl text-white mt-4">
+            <p className="text-3xl text-white mb-4">
+              You have attempted
+            </p>
+            <p className="text-4xl text-white mb-4">
+              <strong>{stage} Stage</strong>
+            </p>
+            <p className="text-3xl text-white mt-4">
+              but didn't score any points.
+            </p>
+            <p className="text-3xl text-blue-800 mt-8 italic">
+              Go to Spin Wheel and play other stages.
+            </p>
+          </div>
+        )}
+
+        {allSectionsCompleted && (
+          <div className="text-center text-xl text-white mt-4">
+            <p className="text-3xl text-white mb-4">
+              You have successfully completed all stages
+            </p>
+            <p className="text-4xl text-white mb-8 italic">
+              {(totalScore / 80) * 100 >= 80 ? "and achieved a Gold Certificate." : (totalScore / 80) * 100 >= 65 ? "and achieved a Silver Certificate." : (totalScore / 80) * 100 >= 50 ? "and achieved a Bronze Certificate." : "but didn't get any certificate."}
+            </p>
+            <p className="text-4xl text-yellow-700 mb-4 italic">
+              {(totalScore / 80) * 100 < 50 ? "Play another Set and win a Certificate." : "Download your Certificate."}
+            </p>
+          </div>
+        )}
 
         {/* <p className="text-3xl text-white mb-4">
           {allSectionsCompleted
@@ -452,7 +566,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
 
       </div>
 
-      {allSectionsCompleted && totalScore > 0 ? (
+      {allSectionsCompleted && (totalScore / 80) * 100 >= 50 ? (
         <div className="flex flex-col md:flex-row justify-between items-center w-full gap-4">
           <button
             className="px-6 py-2 w-full md:w-auto bg-green-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-green-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50"
@@ -467,14 +581,21 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
             ⬇️ Download Certificate
           </button>
         </div>
-      ) : (
+      ) : allSectionsCompleted && (totalScore / 80) * 100 < 50 ?
         <button
           className="px-6 py-2 bg-blue-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-blue-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
-          onClick={handleReturnToStages}
+          onClick={handleSelectAnotherSet}
         >
-          Go to Spin Wheel
+          Return to Set Selection
         </button>
-      )}
+        : (
+          <button
+            className="px-6 py-2 bg-blue-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-blue-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+            onClick={handleReturnToStages}
+          >
+            Go to Spin Wheel
+          </button>
+        )}
     </div>
   );
 };
