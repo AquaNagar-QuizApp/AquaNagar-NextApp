@@ -118,10 +118,16 @@
 
 
 "use client"
-import { motion } from "framer-motion";
-import { AnimatedBackground } from "@/components/AnimatedBackground";
+// import { motion } from "framer-motion";
+// import { AnimatedBackground } from "@/components/AnimatedBackground";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { Suspense, useEffect, useState } from "react";
+import { Droplets, Waves, Award, Trophy, Sparkles } from "lucide-react"
+import WaterDropAnimation from "@/components/Waterdropbackground"
+import PipeSystem from "@/components/pipe-system"
+// import ScoreBoard from "@/components/Score-board"
+import { Button } from "@/components/ui/button"
+
 
 const stages = [
   "Plan a Water Supply System",
@@ -148,9 +154,53 @@ const colors = [
 ];
 
 export default function GameMap() {
+  const [score, setScore] = useState(0)
+  const [level, setLevel] = useState(1)
+
   return (
-    <main className="min-h-screen relative overflow-hidden">
-      <AnimatedBackground />
+    <main className="relative w-full min-h-screen overflow-hidden bg-gradient-to-b from-blue-500 to-blue-700">
+      {/* <AnimatedBackground /> */}
+      <div className="absolute inset-0 pointer-events-none">
+        <WaterDropAnimation />
+      </div>
+      <div className="absolute inset-0 pointer-events-none">
+        <PipeSystem />
+      </div>
+      <div className="absolute top-10 left-10 animate-bounce text-blue-200 opacity-70">
+        <Droplets size={40} />
+      </div>
+      <div className="absolute top-20 right-20 animate-pulse text-blue-200 opacity-70">
+        <Droplets size={30} />
+      </div>
+      <div className="absolute bottom-40 left-40 animate-bounce text-blue-200 opacity-70">
+        <Droplets size={25} />
+      </div>
+      {/* <div className="absolute top-5 right-5 bg-blue-800/50 p-4 rounded-lg backdrop-blur-sm border border-blue-400/30">
+        <div className="flex items-center gap-2 text-white">
+          <Gauge className="text-blue-200" />
+          <span className="font-bold">Water Level: {level}</span>
+        </div>
+      </div> */}
+
+      {/* Score board */}
+      {/* <div className="absolute top-5 left-5">
+        <ScoreBoard score={score} level={level} />
+      </div> */}
+
+      <div className="absolute bottom-5 left-5 flex gap-3">
+        <div className="bg-yellow-500/80 p-2 rounded-full backdrop-blur-sm border-2 border-yellow-300 shadow-lg">
+          <Trophy size={24} className="text-white" />
+        </div>
+        <div className="bg-blue-600/80 p-2 rounded-full backdrop-blur-sm border-2 border-blue-300 shadow-lg">
+          <Award size={24} className="text-white" />
+        </div>
+        <div className="bg-green-600/80 p-2 rounded-full backdrop-blur-sm border-2 border-green-300 shadow-lg">
+          <Waves size={24} className="text-white" />
+        </div>
+      </div>
+
+
+
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-6">
         <Suspense fallback={<div>Loading...</div>}>
           <SpinWheel />
@@ -276,6 +326,8 @@ function SpinWheel() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const set = searchParams.get("set");
+  const [showCelebration, setShowCelebration] = useState(false)
+
 
   const spinWheel = () => {
     setSpinning(true);
@@ -310,6 +362,8 @@ function SpinWheel() {
     setRotation(newRotation);
 
     setTimeout(() => {
+      setShowCelebration(true)
+      setTimeout(() => setShowCelebration(false), 3000)
       setSpinning(false);
       setStageResult(selectedStage);
       setStageIndex(selectedIndex);
@@ -352,13 +406,90 @@ function SpinWheel() {
   return (
     // <motion.div className="relative bg-white bg-opacity-70 backdrop-blur-lg rounded-xl p-6 w-full h-full flex flex-col items-center">
     //   <motion.h2 className="text-4xl font-bold text-center text-gray-800 mb-4">Game Stages</motion.h2>
-    <motion.div className="relative rounded-xl p-6 mb-4 flex flex-col items-center">
-      {/* <motion.h2 className="text-4xl font-bold text-center text-gray-800 mb-4">Game Stages</motion.h2> */}
+    // <motion.div className="relative rounded-xl p-6 mb-4 flex flex-col items-center">
+    //   {/* <motion.h2 className="text-4xl font-bold text-center text-gray-800 mb-4">Game Stages</motion.h2> */}
 
-      {/* Wheel Container */}
-      <div className="relative flex items-center justify-center w-[575px] h-[575px] md:w-[675px] md:h-[675px]">
-        {/* <div className="relative flex items-center justify-center max-w-[90vw] max-h-[90vh] aspect-square"> */}
-        {/* SVG Spin Wheel */}
+    //   {/* Wheel Container */}
+    //   <div className="relative flex items-center justify-center w-[575px] h-[575px] md:w-[675px] md:h-[675px]">
+    //     {/* <div className="relative flex items-center justify-center max-w-[90vw] max-h-[90vh] aspect-square"> */}
+    //     {/* SVG Spin Wheel */}
+    //     <svg
+    //       className={`w-full h-full ${spinning ? "transition-transform duration-5000 ease-in-out" : ""}`}
+    //       viewBox="0 0 100 100"
+    //       style={{ transform: `rotate(${rotation}deg)` }}
+    //     >
+    //       {stages.map((stage, index) => {
+    //         const startAngle = index * 45
+    //         const endAngle = (index + 1) * 45
+    //         const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1"
+
+    //         const startX = 50 + 50 * Math.cos(((startAngle - 90) * Math.PI) / 180)
+    //         const startY = 50 + 50 * Math.sin(((startAngle - 90) * Math.PI) / 180)
+    //         const endX = 50 + 50 * Math.cos(((endAngle - 90) * Math.PI) / 180)
+    //         const endY = 50 + 50 * Math.sin(((endAngle - 90) * Math.PI) / 180)
+
+    //         const midAngle = (startAngle + endAngle) / 2
+    //         const textX = 50 + 35 * Math.cos(((midAngle - 90) * Math.PI) / 180)
+    //         const textY = 50 + 35 * Math.sin(((midAngle - 90) * Math.PI) / 180)
+
+    //         const wrappedText = wrapText(stage, 12)
+
+    //         return (
+    //           <g key={stage}>
+    //             <path
+    //               d={`M50,50 L${startX},${startY} A50,50 0 ${largeArcFlag},1 ${endX},${endY} Z`}
+    //               fill={colors[index]}
+    //             />
+    //             <text
+    //               x={textX}
+    //               y={textY}
+    //               fill="white"
+    //               fontSize="3"
+    //               fontWeight="bold"
+    //               textAnchor="middle"
+    //               dominantBaseline="middle"
+    //               transform={`rotate(${midAngle}, ${textX}, ${textY})`}
+    //             >
+    //               {wrappedText.map((line, i) => (
+    //                 <tspan x={textX} dy={i === 0 ? 0 : "1.2em"} key={i}>
+    //                   {line}
+    //                 </tspan>
+    //               ))}
+    //             </text>
+    //           </g>
+    //         )
+    //       })}
+    //     </svg>
+    //     <div className="absolute top-0 left-1/2 -ml-4 w-0 h-0 border-l-[16px] border-l-transparent border-r-[16px] border-r-transparent border-t-[32px] border-t-black"></div>
+    //     <button
+    //       onClick={spinWheel}
+    //       disabled={spinning}
+    //       className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 px-6 py-2 bg-blue-500 text-white font-semibold rounded-full shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 disabled:opacity-50 disabled:cursor-not-allowed"
+    //     // className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+    //     //    w-20 h-20 bg-blue-500 text-white font-semibold rounded-full shadow-md 
+    //     //    flex items-center justify-center text-lg
+    //     //    hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 
+    //     //    disabled:opacity-50 disabled:cursor-not-allowed"
+    //     >
+    //       {spinning ? "Spinning..." : "Spin"}
+    //     </button>
+    //   </div>
+    //   {/* {stageResult && <p className="mt-4 text-xl font-semibold text-center">Result: {stageResult}</p>} */}
+    // </motion.div>
+    <div className="relative">
+      {/* Glow effect behind the wheel */}
+      <div className="absolute -inset-4 bg-blue-400/30 rounded-full blur-xl" />
+
+      {/* This is where your existing spin wheel would go */}
+      <div
+        className={`relative w-[750px] h-[750px] rounded-full overflow-hidden transition-all duration-500 ${spinning ? "animate-spin" : ""}`}
+      >
+        {/* <img
+          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-dG5HKjriUxZIhdXqynYVl3d8RVOiAr.png"
+          alt="Spin Wheel"
+          className="w-full h-full object-cover"
+        /> */}
+
         <svg
           className={`w-full h-full ${spinning ? "transition-transform duration-5000 ease-in-out" : ""}`}
           viewBox="0 0 100 100"
@@ -406,21 +537,32 @@ function SpinWheel() {
             )
           })}
         </svg>
-        <div className="absolute top-0 left-1/2 -ml-4 w-0 h-0 border-l-[16px] border-l-transparent border-r-[16px] border-r-transparent border-t-[32px] border-t-black"></div>
-        <button
+        
+      </div>
+      <div className="absolute top-0 left-1/2 -ml-4 w-0 h-0 border-l-[16px] border-l-transparent border-r-[16px] border-r-transparent border-t-[32px] border-t-black"></div>
+
+      {/* Spin button overlay */}
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        <Button
           onClick={spinWheel}
           disabled={spinning}
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 px-6 py-2 bg-blue-500 text-white font-semibold rounded-full shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 disabled:opacity-50 disabled:cursor-not-allowed"
-        // className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
-        //    w-20 h-20 bg-blue-500 text-white font-semibold rounded-full shadow-md 
-        //    flex items-center justify-center text-lg
-        //    hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 
-        //    disabled:opacity-50 disabled:cursor-not-allowed"
+          className="rounded-full w-20 h-20 bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-lg border-4 border-blue-300"
         >
-          {spinning ? "Spinning..." : "Spin"}
-        </button>
+          Spin
+        </Button>
       </div>
-      {/* {stageResult && <p className="mt-4 text-xl font-semibold text-center">Result: {stageResult}</p>} */}
-    </motion.div>
+
+      {showCelebration && (
+        <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+          <div className="absolute inset-0 bg-blue-500/20 backdrop-blur-sm" />
+          <div className="relative">
+            <Sparkles size={100} className="text-yellow-300 animate-pulse" />
+            <p className="text-4xl font-bold text-white text-center mt-4">Great Spin!</p>
+          </div>
+        </div>
+      )}
+    </div>
+
+
   );
 }
