@@ -505,7 +505,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
               <strong>{stage} Stage</strong>
             </p>
             <p className="text-3xl text-white mt-4">
-              but didn't score any points.
+              but didn&apos;t score any points.
             </p>
             <p className="text-3xl text-blue-800 mt-8 italic">
               Go to Spin Wheel and play other stages.

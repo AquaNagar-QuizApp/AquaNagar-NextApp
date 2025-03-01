@@ -2,8 +2,8 @@
 
 import { useImpact } from '@/context/ImpactContext';
 import { useSearchParams } from 'next/navigation';
-import React, { ReactElement } from 'react';
-import { Droplet, Gauge, Building2, FlaskRoundIcon as Flask, Wifi, CreditCard, BarChart2, LineChart, CheckCircle2, Clock } from "lucide-react"
+import React from 'react';
+import { Droplet, Gauge, Building2, FlaskRoundIcon as Flask, Wifi, CreditCard, BarChart2, LineChart } from "lucide-react"
 
 interface Stage {
     name: string;
