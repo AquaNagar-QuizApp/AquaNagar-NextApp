@@ -154,8 +154,8 @@ const colors = [
 ];
 
 export default function GameMap() {
-  const [score, setScore] = useState(0)
-  const [level, setLevel] = useState(1)
+  // const [score, setScore] = useState(0)
+  // const [level, setLevel] = useState(1)
 
   return (
     <main className="relative w-full min-h-screen overflow-hidden bg-gradient-to-b from-blue-500 to-blue-700">
