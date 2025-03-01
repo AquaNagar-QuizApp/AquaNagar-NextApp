@@ -97,7 +97,7 @@ const stages: Stage[] = [
     {
         name: "Performance Assessment & Operational Excellence",
         startValue: 100,
-        unit: "Satisfied %",
+        unit: "% Satisfied",
         icon: <LineChart className="h-7 w-7" />,
         decrease: true,
         incOrDecValue: 2.5,

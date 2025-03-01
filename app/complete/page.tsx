@@ -522,7 +522,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
               {(totalScore / 80) * 100 >= 80 ? "and achieved a Gold Certificate." : (totalScore / 80) * 100 >= 65 ? "and achieved a Silver Certificate." : (totalScore / 80) * 100 >= 50 ? "and achieved a Bronze Certificate." : "but didn't get any certificate."}
             </p>
             <p className="text-4xl text-yellow-700 mb-4 italic">
-              {(totalScore / 80) * 100 < 50 ? "Play another Set and win a Certificate." : "Download your Certificate."}
+              {(totalScore / 80) * 100 < 50 ? "Play another Mission and win a Certificate." : "Download your Certificate."}
             </p>
           </div>
         )}
@@ -572,7 +572,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
             className="px-6 py-2 w-full md:w-auto bg-green-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-green-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50"
             onClick={handleSelectAnotherSet}
           >
-            Return to Set Selection
+            Go to Missions
           </button>
           <button
             className="px-6 py-2 w-full md:w-auto bg-yellow-600 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-yellow-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50"
@@ -586,7 +586,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
           className="px-6 py-2 bg-blue-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-blue-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
           onClick={handleSelectAnotherSet}
         >
-          Return to Set Selection
+          Go to Missions
         </button>
         : (
           <button
