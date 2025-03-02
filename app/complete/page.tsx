@@ -7,6 +7,7 @@ import { JSX } from "react/jsx-runtime"
 import { jsPDF } from "jspdf";
 import { useAudio } from "@/context/AudioContext"
 import { User } from "@/types"
+import ResultsScreen from "@/components/result-screen"
 
 
 interface StageScoreSectionProps {
@@ -518,12 +519,15 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
             <p className="text-3xl text-white mb-4">
               You have successfully completed all stages
             </p>
-            <p className="text-4xl text-white mb-8 italic">
+            {/* <p className="text-4xl text-white mb-8 italic">
               {(totalScore / 80) * 100 >= 80 ? "and achieved a Gold Certificate." : (totalScore / 80) * 100 >= 65 ? "and achieved a Silver Certificate." : (totalScore / 80) * 100 >= 50 ? "and achieved a Bronze Certificate." : "but didn't get any certificate."}
             </p>
             <p className="text-4xl text-yellow-700 mb-4 italic">
               {(totalScore / 80) * 100 < 50 ? "Play another Mission and win a Certificate." : "Download your Certificate."}
-            </p>
+            </p> */}
+            <ResultsScreen
+              score={(totalScore / 80) * 100}
+            />
           </div>
         )}
 
