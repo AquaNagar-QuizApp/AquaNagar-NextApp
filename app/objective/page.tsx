@@ -6,14 +6,6 @@ import { AnimatedBackground } from "@/components/AnimatedBackground";
 import { LogIn } from "lucide-react";
 
 export default function Objective() {
-
-    const certificateInfo = [
-        { level: "Gold", threshold: 80, className: "text-yellow-400" },
-        { level: "Silver", threshold: 65, className: "text-gray-600" },
-        { level: "Bronze", threshold: 50, className: "text-amber-600" },
-        // { level: "Participation", threshold: 50, className: "text-black-600" }
-    ];
-
     return (
         <main className="min-h-screen relative overflow-hidden">
             <AnimatedBackground />
