@@ -10,11 +10,11 @@ import { useAudio } from "@/context/AudioContext";
 const caseStudies = [
   "In the first phase of the game, you’ll work with urban planners to focus on integrated planning that combines technical, environmental, and social dimensions to create a sustainable, efficient, and inclusive Water Supply System.",
   "You are expected to design a Water Supply System (WSS) that minimizes cost, water loss, and energy loss while ensuring resilience, safety, and reliability.",
-  "Construction is a crucial step in the development of Aqua Nagar ‘s water supply system. You must stay within budget, meet deadlines, and ensure the infrastructure is of the highest quality. You’ll oversee the building of pipelines, reservoirs, and the treatment plant.",
+  "Construction is a crucial step in the development of Maruthu Nagar ‘s water supply system. You must stay within budget, meet deadlines, and ensure the infrastructure is of the highest quality. You’ll oversee the building of pipelines, reservoirs, and the treatment plant.",
   "The city’s water source must be protected and treated properly. You’ll oversee the construction of a new treatment plant and implement processes to maintain high water quality at every stage of the system.",
   "In this phase, you’ll integrate advanced technology into your water supply system, including smart water meters and remote monitoring systems.",
   "To ensure the financial sustainability of the system, you’ll need to ensure that meters are accurate, billing systems are efficient, and customers pay on time.",
-  "Water loss through leaks and theft is a major problem in Aqua Nagar. In this phase, you will address Non-Revenue Water (NRW) by implementing a four-pronged approach: leak detection, better metering, tackling unauthorized water use, and improving billing and collection systems.",
+  "Water loss through leaks and theft is a major problem in Maruthu Nagar. In this phase, you will address Non-Revenue Water (NRW) by implementing a four-pronged approach: leak detection, better metering, tackling unauthorized water use, and improving billing and collection systems.",
   "Once the system is operational, you’ll monitor its performance. Use data from smart meters and sensors to assess water production, energy consumption, and system efficiency."
 ];
 
