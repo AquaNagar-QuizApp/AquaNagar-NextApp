@@ -7,6 +7,8 @@ import { JSX } from "react/jsx-runtime"
 import { jsPDF } from "jspdf";
 import { useAudio } from "@/context/AudioContext"
 import { User } from "@/types"
+import { ArrowRight, Download, RefreshCw } from "lucide-react"
+import { AnimatedBackground } from "@/components/AnimatedBackground"
 
 
 interface StageScoreSectionProps {
@@ -27,27 +29,12 @@ interface Stage {
   unit: string;
   decrease: boolean;
   incOrDecValue: number;
-  message: [string, string, string]; // Tuple for stage messages
+  message: [string, string, string];
 }
 
 export default function Complete(): JSX.Element {
-  // const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
   const router = useRouter()
-
   const { isMuted, backgroundAudioSrc, playBackgroundMusic, setBackgroundAudioSrc } = useAudio();
-
-
-
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     setWindowSize({ width: window.innerWidth, height: window.innerHeight })
-  //   }
-
-  //   handleResize()
-  //   window.addEventListener("resize", handleResize)
-
-  //   return () => window.removeEventListener("resize", handleResize)
-  // }, [])
 
   return (
     <main className="min-h-screen relative overflow-hidden">
@@ -55,13 +42,10 @@ export default function Complete(): JSX.Element {
         {/* Suspense is used to prevent hydration errors */}
         <Suspense fallback={<div className="text-white text-xl">Loading...</div>}>
           <StageScoreSection
-            // windowSize={windowSize}
             router={router}
-            // winningSoundRef={winningSoundRef} // Pass the ref for the winning sound
             isMuted={isMuted}
             backgroundAudioSrc={backgroundAudioSrc}
-            // pauseBackgroundMusic={pauseBackgroundMusic} // Pass pauseBackgroundMusic
-            playBackgroundMusic={playBackgroundMusic} // Pass playBackgroundMusic 
+            playBackgroundMusic={playBackgroundMusic}
             setBackgroundAudioSrc={setBackgroundAudioSrc}
           />
         </Suspense>
@@ -210,8 +194,6 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const completedSections: Record<string, number> = JSON.parse(sessionStorage.getItem('completedSections') || '{}');
-
-
       const totalScore = Object.values(completedSections).reduce((sum, score) => sum + score, 0);
       // setTotalScore(totalScore);
       // Persist final score
@@ -245,14 +227,8 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
         setAllSectionsCompleted(storedAllStagesCompleted === "true");
       }
 
-
-      // setAllSectionsCompleted(allCompleted);
-
-      // console.log("All sections Completed: " + allSectionsCompleted, "Total Score: " + totalScore);
-
       if (score > 0) {
         setBackgroundAudioSrc("./soundeffects/winningsound.mp3");
-        // playBackgroundMusic();
       }
 
       if (allSectionsCompleted) {
@@ -461,12 +437,13 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       {/* <audio ref={winningSoundRef} src="./soundeffects/winningsound.mp3" /> */}
-      {showConfetti
-        // score > 0 
-        && <Confetti width={windowSize.width} height={windowSize.height} />}
+      {showConfetti ?
+        (<Confetti width={windowSize.width} height={windowSize.height} />) :
+        (<AnimatedBackground />)
+      }
 
       <h1
-        className={`text-4xl sm:text-6xl font-bold mb-8 text-center 
+        className={`text-4xl sm:text-6xl font-bold mb-8 text-center z-50
         ${(showConfetti)
             // score > 0 
             ? "text-white animate-bounce" : "text-yellow-300"}`}
@@ -573,12 +550,14 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
             onClick={handleSelectAnotherSet}
           >
             Go to Missions
+            <ArrowRight className="ml-2 h-4 w-4" />
           </button>
           <button
             className="px-6 py-2 w-full md:w-auto bg-yellow-600 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-yellow-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50"
             onClick={handleDownloadCertificate}
           >
-            ⬇️ Download Certificate
+            Download Certificate
+            <Download className="ml-2 h-5 w-5" />
           </button>
         </div>
       ) : allSectionsCompleted && (totalScore / 80) * 100 < 50 ?
@@ -587,13 +566,15 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
           onClick={handleSelectAnotherSet}
         >
           Go to Missions
+          <ArrowRight className="ml-2 h-5 w-5" />
         </button>
         : (
           <button
-            className="px-6 py-2 bg-blue-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-blue-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+            className="px-6 py-2 bg-teal-500 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-teal-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50 flex justify-between items-center"
             onClick={handleReturnToStages}
           >
             Go to Spin Wheel
+            <RefreshCw className="ml-2 h-5 w-5" />
           </button>
         )}
     </div>

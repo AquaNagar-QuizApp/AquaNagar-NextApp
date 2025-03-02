@@ -5,6 +5,7 @@ import { Droplets, Waves, Award, Trophy } from "lucide-react"
 import WaterDropAnimation from "@/components/Waterdropbackground"
 import PipeSystem from "@/components/pipe-system"
 import { Button } from "@/components/ui/button"
+import { useAudio } from "@/context/AudioContext";
 
 const stages = [
   "Plan a Water Supply System",
@@ -74,114 +75,6 @@ export default function GameMap() {
   );
 }
 
-// function SpinWheel() {
-//   const [spinning, setSpinning] = useState(false);
-//   const [result, setResult] = useState<string | null>(null);
-//   const [rotation, setRotation] = useState(0);
-//   const router = useRouter();
-//   const searchParams = useSearchParams();
-//   const set = searchParams.get("set");
-
-//   const spinWheel = () => {
-//     setSpinning(true);
-//     const newRotation = rotation + 1440 + Math.floor(Math.random() * 360);
-//     setRotation(newRotation);
-
-//     const selectedIndex = Math.floor((newRotation % 360) / (360 / stages.length));
-//     const selectedStage = stages[selectedIndex];
-
-//     setTimeout(() => {
-//       setSpinning(false);
-//       setResult(selectedStage);
-//     }, 5000);
-//   };
-
-//   useEffect(() => {
-//     if (result && set) {
-//       setTimeout(() => {
-//         router.push(`/stages?set=${encodeURIComponent(set)}&stage=${encodeURIComponent(result)}`);
-//       }, 2000);
-//     }
-//   }, [result, router, set]);
-
-//   return (
-//     <motion.div className="relative bg-white bg-opacity-70 backdrop-blur-lg rounded-xl p-6 mb-4 flex flex-col items-center">
-//       <motion.h2 className="text-4xl font-bold text-center text-gray-800 mb-4">Game Stages</motion.h2>
-//       <div className="relative flex items-center justify-center max-w-[90vw] max-h-[90vh] aspect-square">
-//         <svg
-//           className={`w-[90vw] h-[90vw] max-w-[500px] max-h-[500px] aspect-square ${spinning ? "transition-transform duration-[5s] ease-in-out" : ""}`}
-//           viewBox="0 0 100 100"
-//           style={{ transform: `rotate(${rotation}deg)` }}
-//         >
-//           {stages.map((stage, index) => {
-//             const startAngle = (index * 360) / stages.length;
-//             const endAngle = ((index + 1) * 360) / stages.length;
-//             const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
-
-//             const startX = 50 + 50 * Math.cos(((startAngle - 90) * Math.PI) / 180);
-//             const startY = 50 + 50 * Math.sin(((startAngle - 90) * Math.PI) / 180);
-//             const endX = 50 + 50 * Math.cos(((endAngle - 90) * Math.PI) / 180);
-//             const endY = 50 + 50 * Math.sin(((endAngle - 90) * Math.PI) / 180);
-
-//             const textRadius = 30; // Reduce radius to fit text inside the segment
-//             const midAngle = (startAngle + endAngle) / 2;
-//             const textX = 50 + textRadius * Math.cos(((midAngle - 90) * Math.PI) / 180);
-//             const textY = 50 + textRadius * Math.sin(((midAngle - 90) * Math.PI) / 180);
-
-//             const splitText = stage.split(" "); // Split by spaces
-//             const firstLine = splitText.slice(0, Math.ceil(splitText.length / 2)).join(" ");
-//             const secondLine = splitText.slice(Math.ceil(splitText.length / 2)).join(" ");
-
-//             return (
-//               <g key={stage}>
-//                 <path
-//                   d={`M50,50 L${startX},${startY} A50,50 0 ${largeArcFlag},1 ${endX},${endY} Z`}
-//                   fill={colors[index]}
-//                 />
-//                 <text
-//                   x={textX}
-//                   y={textY - 3} // Move the first line slightly up
-//                   fill="white"
-//                   fontSize="4" // Reduce font size slightly
-//                   fontWeight="bold"
-//                   textAnchor="middle"
-//                   dominantBaseline="middle"
-//                   transform={`rotate(${midAngle + 90}, ${textX}, ${textY - 3})`} // Adjust rotation
-//                 >
-//                   {firstLine}
-//                 </text>
-//                 <text
-//                   x={textX}
-//                   y={textY + 3} // Move the second line slightly down
-//                   fill="white"
-//                   fontSize="4"
-//                   fontWeight="bold"
-//                   textAnchor="middle"
-//                   dominantBaseline="middle"
-//                   transform={`rotate(${midAngle + 90}, ${textX}, ${textY + 3})`}
-//                 >
-//                   {secondLine}
-//                 </text>
-
-
-//               </g>
-//             );
-//           })}
-//         </svg>
-//         <div className="absolute top-0 left-1/2 -ml-4 w-0 h-0 border-l-[16px] border-l-transparent border-r-[16px] border-r-transparent border-t-[32px] border-t-black"></div>
-//       </div>
-//       <button
-//         onClick={spinWheel}
-//         disabled={spinning}
-//         className="mt-8 px-6 py-2 bg-blue-500 text-white font-semibold rounded-full shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 disabled:opacity-50 disabled:cursor-not-allowed"
-//       >
-//         {spinning ? "Spinning..." : "Spin"}
-//       </button>
-//       {result && <p className="mt-4 text-xl font-semibold">Selected Stage: {result}</p>}
-//     </motion.div>
-//   );
-// }
-
 function SpinWheel() {
   const [spinning, setSpinning] = useState(false);
   const [stageResult, setStageResult] = useState<string | null>(null);
@@ -190,6 +83,9 @@ function SpinWheel() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const set = searchParams.get("set");
+  const { backgroundAudioSrc, setBackgroundAudioSrc } = useAudio();
+
+  setBackgroundAudioSrc("./songs/spinwheelaudio.mp3");
 
   const spinWheel = () => {
     setSpinning(true);
@@ -233,6 +129,10 @@ function SpinWheel() {
 
   useEffect(() => {
     if (stageResult && set) {
+      setBackgroundAudioSrc("./songs/bgm.mp3");
+      // if (!isMuted) {
+      //   playBackgroundMusic(); // Resume background music
+      // }
       setTimeout(() => {
         // if (typeof window !== 'undefined') {
         //   const completedSections = JSON.parse(sessionStorage.getItem("completedSections") || "{}");
@@ -242,7 +142,7 @@ function SpinWheel() {
         router.push(`/stages?set=${encodeURIComponent(set)}&stageIndex=${encodeURIComponent(stageIndex)}&stage=${encodeURIComponent(stageResult)}`);
       }, 1000);
     }
-  }, [stageResult, router, set]);
+  }, [stageResult, router, set, backgroundAudioSrc]);
 
   const wrapText = (text: string, maxLength: number) => {
     const words = text.split(" ")
@@ -324,7 +224,7 @@ function SpinWheel() {
             )
           })}
         </svg>
-        
+
       </div>
       <div className="absolute top-0 left-1/2 -ml-4 w-0 h-0 border-l-[16px] border-l-transparent border-r-[16px] border-r-transparent border-t-[32px] border-t-black"></div>
 

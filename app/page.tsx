@@ -13,7 +13,7 @@ export default function Home() {
   }, [])
 
   const handleButtonClick = () => {
-    router.push("/login")
+    router.push("/objective")
   }
 
   if (!hasMounted) return null
@@ -29,29 +29,21 @@ export default function Home() {
           transition={{ duration: 0.5 }}
         >
           <motion.h1
-            className="title text-4xl md:text-5xl text-blue-800 mb-8 text-center w-full"
+            className="title text-5xl md:text-7xl text-blue-800 mb-12 text-center w-full"
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.5 }}
           >
-            Aqua Nagar - The Urban Water Challenge
+            Maruthu Nagar - The Urban Water Challenge
           </motion.h1>
-          <div className="flex space-x-4 p-8 justify-center">
+          <div className="flex space-x-16 p-8 mb-4 justify-center items-center">
             <motion.img
               src="./logos/TNGov_Logo.png"
               alt="TN Govt Logo"
               initial={{ y: 100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="w-16 h-16"
-            />
-            <motion.img
-              src="./logos/KFW_Logo.png"
-              alt="KFW Logo"
-              initial={{ y: 100, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="w-20 h-16"
+              className="w-28 h-28"
             />
             <motion.img
               src="./logos/TNUIFSL_Logo.png"
@@ -59,7 +51,15 @@ export default function Home() {
               initial={{ y: 100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.5 }}
-              className="w-28 h-16"
+              className="w-64 h-16"
+            />
+            <motion.img
+              src="./logos/KFW_Logo.png"
+              alt="KFW Logo"
+              initial={{ y: 100, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="w-32 h-12"
             />
             <motion.img
               src="./logos/CED_Logo.png"
@@ -67,11 +67,11 @@ export default function Home() {
               initial={{ y: 100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.5 }}
-              className="w-16 h-16"
+              className="w-28 h-28"
             />
           </div>
           <motion.div
-            className="flex justify-center text-sm text-white cursor-pointer"
+            className="flex justify-center text-sm mt-8 text-white cursor-pointer"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.8 }}
