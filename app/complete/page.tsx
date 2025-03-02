@@ -388,7 +388,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
       sessionStorage.removeItem("allStagesCompleted");
     }
 
-    router.push(`/game-map?set=${encodeURIComponent(set)}`);
+    router.push(`/spinwheel?set=${encodeURIComponent(set)}`);
   };
 
   const handleSelectAnotherSet = () => {
