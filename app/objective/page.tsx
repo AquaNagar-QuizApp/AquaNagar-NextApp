@@ -67,7 +67,7 @@ export default function Objective() {
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >
-                                Let's Get Started
+                                Let&apos;s Get Started
                             </motion.button>
                         </Link>
                     </div>

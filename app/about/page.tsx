@@ -2,11 +2,9 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useState } from "react";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
 
 export default function About() {
-  const [isMounted, setIsMounted] = useState(false);
 
   const certificateInfo = [
     { level: "Gold", threshold: 80, className: "text-yellow-400" },
