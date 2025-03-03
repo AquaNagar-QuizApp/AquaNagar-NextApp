@@ -115,8 +115,9 @@ export default function ResultsScreen({
   }, [score])
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-teal-500 to-blue-600">
-      <div className="max-w-md w-full bg-white/90 backdrop-blur-sm rounded-xl shadow-2xl p-6 relative overflow-hidden">
+    // <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-teal-500 to-blue-600">
+      // <div className="max-w-md w-full bg-white/90 backdrop-blur-sm rounded-xl shadow-2xl p-6 relative overflow-hidden">
+      <>
         <div className="absolute inset-0 opacity-10 pointer-events-none">
           {[...Array(20)].map((_, i) => (
             <Droplet
@@ -145,16 +146,16 @@ export default function ResultsScreen({
           <div className="text-lg font-medium text-blue-800">{rating.level}</div>
 
           <div className="mt-4 mb-2">
-            <div className="flex justify-between text-sm mb-1">
+            <div className="flex justify-between text-sm mb-1 text-blue-700">
               <span>Your Score</span>
-              <span className="font-bold">{score}%</span>
+              <span className="font-bold text-blue-700">{Math.round(score)}%</span>
             </div>
             {/* <Progress value={animateProgress} className="w-full h-4 transition-all duration-500" /> */}
 
             <div className="mt-4">
                 <div className="w-full bg-gray-300 rounded-full h-2.5">
                     <div
-                        className="h-2.5 rounded-full transition-all duration-500 ease-in-out bg-red-600"
+                        className="h-2.5 rounded-full transition-all duration-500 ease-in-out bg-orange-400"
                         style={{
                             width: `${score}%`
                         }}
@@ -190,7 +191,7 @@ export default function ResultsScreen({
           </div>
         </div>
 
-      </div>
+      {/* </div> */}
 
       <style jsx global>{`
         @keyframes fadeIn {
@@ -198,7 +199,7 @@ export default function ResultsScreen({
           to { opacity: 1; transform: translateY(0); }
         }
       `}</style>
-    </div>
+    </>
   )
 }
 

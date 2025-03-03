@@ -179,10 +179,10 @@ export default function ImpactCard() {
                 </p>
 
                 {/* Wrong Answer Warning */}
-                <p className="text-red-500 text-sm mb-2">
+                <p className="text-orange-500 text-sm mb-2">
                     <strong>Warning:</strong>
                 </p>
-                <p className="text-red-500 text-sm mb-4">
+                <p className="text-orange-500 text-sm mb-4">
                     {currentStage?.wrongAnswerComment}
                 </p>
 

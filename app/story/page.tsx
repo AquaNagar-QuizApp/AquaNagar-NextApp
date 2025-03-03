@@ -11,7 +11,7 @@ const storyParts = [
   "The city of Maruthu Nagar in Tamil Nadu State is growing rapidly. More residents and businesses are popping up every day, and with this growth comes the increased demand for clean, reliable water.",
   "The city's current water supply infrastructure is outdated, and leaks, poor management, and inefficiencies are beginning to take their toll.",
   "The Government has tasked you to design, implement, and sustain a modern Water Supply System that can support Maruthu Nagar for years to come.",
-  "As you take on the role of the WSS Engineer, you'll begin by designing a water supply system that considers the entire life cycle of the infrastructure.",
+  "As you take on the role of the WSS Official, you'll begin by designing a water supply system that considers the entire life cycle of the infrastructure.",
   "You need to make key decisions on the system's design, including choosing the right materials, selecting energy-efficient treatment methods, and ensuring that water is treated and delivered in a safe, reliable, and sustainable way.",
   "Your decisions will impact both the financial and environmental sustainability of the system."
 ];

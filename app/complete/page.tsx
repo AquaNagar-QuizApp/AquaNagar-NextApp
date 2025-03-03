@@ -7,7 +7,7 @@ import { JSX } from "react/jsx-runtime"
 import { jsPDF } from "jspdf";
 import { useAudio } from "@/context/AudioContext"
 import { User } from "@/types"
-import { ArrowRight, Download, RefreshCw } from "lucide-react"
+import { Activity, ArrowRight, Clock, Download, Droplet, Heart, IndianRupee, PieChart, RefreshCw, Wifi, Zap } from "lucide-react"
 import { AnimatedBackground } from "@/components/AnimatedBackground"
 import ResultsScreen from "@/components/result-screen"
 
@@ -25,12 +25,15 @@ interface StageScoreSectionProps {
 
 interface Stage {
   name: string;
+  title: string;
   score: number;
   maxScore: number;
   unit: string;
   decrease: boolean;
   incOrDecValue: number;
-  message: [string, string, string];
+  icon: React.ReactNode;
+  wrongAnswerMessage: [string, string];
+  allCorrectAnswermessage: [string, string];
 }
 
 export default function Complete(): JSX.Element {
@@ -65,106 +68,146 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
   const stages: Stage[] = [
     {
       name: "Plan a Water Supply System",
+      title: "Dam Capacity",
       score: 0,
       maxScore: 6100,
       unit: "Million Cubic Feet",
       decrease: true,
       incOrDecValue: 307,
-      message: [
-        "You have successfully secured",
-        "Million Cubic Feet",
-        "of water storage capacity, ensuring a sustainable and resilient supply."
+      icon: <Droplet className="w-16 h-16 text-blue-500" />,
+      wrongAnswerMessage: [
+        "Dam capacity has been compromised.",
+        "of  Maruthu Nagar Dam's water has been reduced due to planning errors."
+      ],
+      allCorrectAnswermessage: [
+        "Dam capacity is at optimal level.",
+        "Maruthu Nagar Dam is operating at full capacity, ensuring reliable water supply."
       ]
     },
     {
       name: "Design the Water Supply System",
+      title: "Project Budget",
       score: 0,
       maxScore: 150,
       unit: "Crores",
       decrease: false,
       incOrDecValue: 5,
-      message: [
-        "You have successfully completed the water supply system, optimizing costs to",
-        "Crores",
-        "over its lifecycle, while maintaining efficiency and sustainability."
+      icon: <IndianRupee className="w-16 h-16 text-green-500" />,
+      wrongAnswerMessage: [
+        "Budget overruns are affecting the project.",
+        "of project budget cost has increased due to design inefficiencies."
+      ],
+      allCorrectAnswermessage: [
+        "Project budget is on target.",
+        "The project has maintained its budget, demonstrating excellent financial management."
       ]
     },
     {
       name: "Building the Infrastructure",
+      title: "Construction Timeline",
       score: 0,
       maxScore: 24,
       unit: "Months",
       decrease: false,
       incOrDecValue: 1,
-      message: [
-        "You have successfully constructed, the water supply infrastructure in just",
-        "Months",
-        "ensuring timely access to clean water for the community."
+      icon: <Clock className="w-16 h-16 text-purple-500" />,
+      wrongAnswerMessage: [
+        "Project timeline has been extended.",
+        "of timeline has been extended due to implementation challenges."
+      ],
+      allCorrectAnswermessage: [
+        "Project timeline is on schedule.",
+        "Construction completed on schedule, allowing timely water service to the community."
       ]
     },
     {
       name: "Water Treatment",
+      title: "Public Health",
       score: 0,
       maxScore: 0,
       unit: "Cases",
       decrease: false,
       incOrDecValue: 100,
-      message: [
-        "You have successfully safeguarded public health by preventing",
-        "Cases",
-        "of waterborne diseases, through an optimized treatment system."
+      icon: <Activity className="w-16 h-16 text-red-500" />,
+      wrongAnswerMessage: [
+        "Public health is at risk due to the lack of prevention.",
+        "of waterborne diseases are increasing, due to an inefficient water treatment system."
+      ],
+      allCorrectAnswermessage: [
+        "Public health is protected with clean water.",
+        "of waterborne diseases reported, thanks to an effective water treatment system."
       ]
     },
     {
       name: "Smart Water Networks",
+      title: "Smart Distribution",
       score: 0,
       maxScore: 0,
-      unit: "Cubic Feet",
+      unit: "Cubic Feet Per Day",
       decrease: false,
       incOrDecValue: 13700,
-      message: [
-        "You have successfully reduced water losses by",
-        "Cubic Feet per Day",
-        "through the integration of SCADA technology, enhancing network efficiency."
+      icon: <Wifi className="w-16 h-16 text-cyan-500" />,
+      wrongAnswerMessage: [
+        "Water losses are mounting in the distribution system.",
+        "of water is being lost due to inefficiencies in the SCADA system."
+      ],
+      allCorrectAnswermessage: [
+        "Water distribution system is operating efficiently.",
+        "of water loss in the SCADA system, achieving maximum distribution efficiency."
       ]
     },
     {
       name: "Metering, Billing, and Collection",
+      title: "Energy Efficiency",
       score: 0,
       maxScore: 0,
-      unit: "kWh",
+      unit: "kWh per Month",
       decrease: false,
       incOrDecValue: 500,
-      message: [
-        "You have successfully improved, operational efficiency, by saved",
-        "kWh",
-        "of energy and promoting, sustainable resource management."
+      icon: <Zap className="w-16 h-16 text-yellow-500" />,
+      wrongAnswerMessage: [
+        "Energy efficiency is compromised.",
+        "of excess energy is being consumed due to operational inefficiencies."
+      ],
+      allCorrectAnswermessage: [
+        "Energy efficiency is maximized.",
+        "of excess energy consumption, demonstrating optimal operational efficiency."
       ]
     },
     {
       name: "Non-Revenue Water Management",
+      title: "Water Conservation",
       score: 0,
       maxScore: 0,
-      unit: "Cubic Feet",
+      unit: "Cubic Feet per Day",
       decrease: false,
       incOrDecValue: 13000,
-      message: [
-        "You have successfully minimized leaks, and optimized distribution, conserving",
-        "Cubic Feet per Day",
-        "for effective utilization."
+      icon: <PieChart className="w-16 h-16 text-indigo-500" />,
+      wrongAnswerMessage: [
+        "Water leakage is affecting system performance.",
+        "of water is being lost through leaks in the distribution system."
+      ],
+      allCorrectAnswermessage: [
+        "Water conservation is at optimal levels.",
+        "of water leakage, ensuring maximum conservation of this precious resource."
       ]
     },
     {
       name: "Performance Assessment & Operational Excellence",
+      title: "Customer Satisfaction",
       score: 0,
       maxScore: 100,
-      unit: "% Satisfied",
-      decrease: true,
+      unit: "% Customers",
+      decrease: false,
       incOrDecValue: 2.5,
-      message: [
-        "You have successfully achieved",
-        "% Customer Satisfaction",
-        "ensuring reliable service and enhanced trust, in the water supply infrastructure."
+      icon: <Heart className="w-16 h-16 text-pink-500" />,
+      wrongAnswerMessage: [
+        "Customer satisfaction is declining.",
+        "are unhappy with the water supply service quality."
+      ],
+      allCorrectAnswermessage: [
+        "Customer satisfaction is excellent.",
+        "are happy and reflecting excellent service quality and reliability."
       ]
     }
   ];
@@ -443,40 +486,52 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
         (<AnimatedBackground />)
       }
 
-      <h1
-        className={`text-4xl sm:text-6xl font-bold mb-8 text-center z-50
-        ${(showConfetti)
-            // score > 0 
-            ? "text-white animate-bounce" : "text-yellow-300"}`}
-      >
-        {allSectionsCompleted ? "All Stages Completed!" : score > 0 ? "Congratulations!" : "Don't Give Up!"}
-      </h1>
+      {allSectionsCompleted && (
+        <h1
+          className={`text-4xl sm:text-6xl font-bold mb-8 text-center z-50
+          ${(showConfetti) ? "text-white animate-bounce" : "text-yellow-300"}`}
+        >
+          All Stages Completed!
+          {/* {allSectionsCompleted ? "All Stages Completed!" : score > 0 ? "Congratulations!" : "Don't Give Up!"} */}
+        </h1>
+      )}
 
-      <div className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-lg p-8 mb-8 text-center">
+      <div className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-lg shadow-md p-8 mb-8 text-center ring-4 ring-blue-600">
 
-        {!allSectionsCompleted && score > 0 && (
-          <div className="text-center text-xl text-white mt-4">
-            {currentStage && currentStage.message && (
-              <>
-                {currentStage.message[0].split(",").map((part, index) => (
-                  <p key={index} className="text-3xl text-white mt-4">
-                    {part.trim()}
-                  </p>
-                ))}
-                <p className="text-6xl font-bold text-blue-800 mt-6 mb-6 italic">{computedScore} {currentStage.message[1]}</p>
-                {currentStage.message[2].split(",").map((part, index) => (
-                  <p key={index} className="text-3xl text-white mt-4">
-                    {part.trim()}
-                  </p>
-                ))}
-              </>
+        {!allSectionsCompleted && score >= 0 && score < 10 && (
+          <div className="text-center text-xl text-white mt-4 max-w-3xl mx-auto">
+            {currentStage && currentStage.wrongAnswerMessage && (
+              // <>
+              //   <p className="text-4xl font-bold text-white mb-16">
+              //     {currentStage.wrongAnswerMessage[0]}
+              //   </p>
+              //   {/* {currentStage.message[0].split(",").map((part, index) => (
+              //     <p key={index} className="text-3xl text-white mt-4">
+              //       {part.trim()}
+              //     </p>
+              //   ))} */}
+              //   <p className="text-6xl font-bold text-blue-800 mt-6 mb-6">{computedScore} {currentStage.unit}</p>
+              //   {currentStage.wrongAnswerMessage[1].split(",").map((part, index) => (
+              //     <p key={index} className="text-3xl text-white mt-4">
+              //       {part.trim()}
+              //     </p>
+              //   ))}
+              // </>
+              <div className="p-6 rounded-lg transition-all duration-300 transform scale-105">
+                <div className="flex items-center mb-16">
+                  {currentStage.icon}
+                  <h2 className="text-7xl font-bold ml-3 text-gray-700">{currentStage.title}</h2>
+                </div>
+                <p className="text-6xl font-bold text-blue-800 mb-4">{computedScore} {currentStage.unit}</p>
+                <p className="text-2xl text-white">{currentStage.wrongAnswerMessage[1]}</p>
+              </div>
             )}
           </div>
         )}
 
-        {!allSectionsCompleted && score === 0 && (
-          <div className="text-center text-xl text-white mt-4">
-            <p className="text-3xl text-white mb-4">
+        {!allSectionsCompleted && score === 10 && (
+          <div className="text-center text-xl text-white mt-4 max-w-3xl mx-auto">
+            {/* <p className="text-3xl text-white mb-4">
               You have attempted
             </p>
             <p className="text-4xl text-white mb-4">
@@ -487,15 +542,34 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
             </p>
             <p className="text-3xl text-blue-800 mt-8 italic">
               Go to Spin Wheel and play other stages.
-            </p>
+            </p> */}
+            {currentStage && currentStage.allCorrectAnswermessage && (
+              // <>
+              //   <p className="text-4xl font-bold text-white mb-16">
+              //     {currentStage.allCorrectAnswermessage[0]}
+              //   </p>
+              //   <p className="text-6xl font-bold text-blue-800 mt-6 mb-6">{currentStage.maxScore} {currentStage.unit}</p>
+              //   <p className="text-3xl text-white mt-4">
+              //     {currentStage.allCorrectAnswermessage[1]}
+              //   </p>
+              // </>
+              <div className="p-6 rounded-lg transition-all duration-300 transform scale-105">
+                <div className="flex items-center mb-16">
+                  {currentStage.icon}
+                  <h2 className="text-7xl font-bold ml-3 text-gray-700">{currentStage.title}</h2>
+                </div>
+                <p className="text-6xl font-bold text-blue-800 mb-4">{currentStage.maxScore} {currentStage.unit}</p>
+                <p className="text-2xl text-white">{currentStage.allCorrectAnswermessage[1]}</p>
+              </div>
+            )}
           </div>
         )}
 
         {allSectionsCompleted && (
           <div className="text-center text-xl text-white mt-4">
-            <p className="text-3xl text-white mb-4">
+            {/* <p className="text-3xl text-white mb-4">
               You have successfully completed all stages
-            </p>
+            </p> */}
             {/* <p className="text-4xl text-white mb-8 italic">
               {(totalScore / 80) * 100 >= 80 ? "and achieved a Gold Certificate." : (totalScore / 80) * 100 >= 65 ? "and achieved a Silver Certificate." : (totalScore / 80) * 100 >= 50 ? "and achieved a Bronze Certificate." : "but didn't get any certificate."}
             </p>
@@ -550,14 +624,14 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
       {allSectionsCompleted && (totalScore / 80) * 100 >= 50 ? (
         <div className="flex flex-col md:flex-row justify-between items-center w-full gap-4">
           <button
-            className="px-6 py-2 w-full md:w-auto bg-green-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-green-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50"
+            className="px-6 py-2 w-full md:w-auto bg-green-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-green-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 flex justify-between items-center"
             onClick={handleSelectAnotherSet}
           >
-            Go to Missions
+            Go to Next Game
             <ArrowRight className="ml-2 h-4 w-4" />
           </button>
           <button
-            className="px-6 py-2 w-full md:w-auto bg-yellow-600 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-yellow-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50"
+            className="px-6 py-2 w-full md:w-auto bg-yellow-600 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-yellow-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50 flex justify-between items-center"
             onClick={handleDownloadCertificate}
           >
             Download Certificate
@@ -566,10 +640,10 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
         </div>
       ) : allSectionsCompleted && (totalScore / 80) * 100 < 50 ?
         <button
-          className="px-6 py-2 bg-blue-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-blue-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+          className="px-6 py-2 bg-blue-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-blue-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 flex justify-between items-center"
           onClick={handleSelectAnotherSet}
         >
-          Go to Missions
+          Go to Next Game
           <ArrowRight className="ml-2 h-5 w-5" />
         </button>
         : (

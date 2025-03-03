@@ -54,7 +54,7 @@ export default function Challenge() {
           <p className="text-lg text-blue-100 mb-8">
             Are you prepared to take on the role of WSS Engineer and tackle the water management challenges of Maruthu Nagar?
           </p>
-          <Link href="/set">
+          <Link href="/role">
             <motion.button
               className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold"
               whileHover={{ scale: 1.05 }}

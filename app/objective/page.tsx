@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
-import { LogIn } from "lucide-react";
 
 export default function Objective() {
     return (
@@ -62,14 +61,13 @@ export default function Objective() {
                         </div>
                     </motion.div>
                     <div className="flex justify-center">
-                        <Link href="/login">
+                        <Link href="/about">
                             <motion.button
                                 className="mt-6 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold flex items-center"
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >
-                                Continue to Login
-                                <LogIn className="h-5 w-5 ml-2" />
+                                Let's Get Started
                             </motion.button>
                         </Link>
                     </div>

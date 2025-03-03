@@ -13,7 +13,7 @@ export default function Home() {
   }, [])
 
   const handleButtonClick = () => {
-    router.push("/objective")
+    router.push("/login")
   }
 
   if (!hasMounted) return null
