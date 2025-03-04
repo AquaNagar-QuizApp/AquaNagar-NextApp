@@ -113,7 +113,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
       icon: <Clock className="w-16 h-16 text-purple-500" />,
       wrongAnswerMessage: [
         "Project timeline has been extended.",
-        "of timeline has been extended due to implementation challenges."
+        "of timeline has been required to complete the project due to implementation challenges."
       ],
       allCorrectAnswermessage: [
         "Project timeline is on schedule.",
@@ -198,7 +198,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
       score: 0,
       maxScore: 100,
       unit: "% Customers",
-      decrease: false,
+      decrease: true,
       incOrDecValue: 2.5,
       icon: <Heart className="w-16 h-16 text-pink-500" />,
       wrongAnswerMessage: [
@@ -217,7 +217,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
   const computedScore = currentStage
     ? currentStage.decrease
       ? currentStage.maxScore - (10 - (score ?? 0)) * currentStage.incOrDecValue
-      : currentStage.maxScore + (10 - (score ?? 0)) * currentStage.incOrDecValue
+      : (10 - (score ?? 0)) * currentStage.incOrDecValue
     : 0;
 
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
