@@ -6,9 +6,10 @@ const getQuestionsForStage1 = (): Question[] => [
         type: "image",
         question: "What is a likely benefit of the system depicted in the image in terms of urban infrastructure?",
         options: [
-            "Reduces the demand on municipal water supply",
+            
             "Increases water pumping requirements",
             "Prevents groundwater recharge",
+            "Reduces the demand on municipal water supply",
             "Lowers energy consumption during rainfall",
         ],
         correctAnswer: "Reduces the demand on municipal water supply",
@@ -19,9 +20,10 @@ const getQuestionsForStage1 = (): Question[] => [
         question: "What is the primary goal of pressure management in a water supply system (WSS)?",
         options: [
             "To reduce water treatment costs",
-            "To minimize pipe bursts and water loss",
+            
             "To increase system complexity",
             "To avoid metering and billing",
+            "To minimize pipe bursts and water loss",
         ],
         correctAnswer: "To minimize pipe bursts and water loss",
     },
@@ -47,8 +49,9 @@ const getQuestionsForStage1 = (): Question[] => [
         question: "How do smart water meters contribute to sustainable WSS operation?",
         options: [
             "By eliminating the need for renewable energy",
-            "By providing detailed consumption data for better demand management",
+            
             "By increasing non-revenue water (NRW)",
+            "By providing detailed consumption data for better demand management",
             "By simplifying water treatment processes",
         ],
         correctAnswer: "By providing detailed consumption data for better demand management",
@@ -69,9 +72,10 @@ const getQuestionsForStage1 = (): Question[] => [
         question: "Which of the following is NOT a benefit of integrating renewable energy into a WSS?",
         options: [
             "Reducing the system’s carbon footprint",
-            "Increasing reliance on fossil fuels",
+            
             "Lowering operational energy costs",
             "Ensuring sustainability in energy-intensive processes",
+            "Increasing reliance on fossil fuels",
         ],
         correctAnswer: "Increasing reliance on fossil fuels",
     },
@@ -90,8 +94,9 @@ const getQuestionsForStage1 = (): Question[] => [
         type: "text",
         question: "Why are sensors and IoT devices critical in a sustainable WSS?",
         options: [
-            "They replace the need for human operators",
             "They provide real-time data for monitoring water quality, flow rates, and energy use",
+            "They replace the need for human operators",
+            
             "They increase system downtime for upgrades",
             "They simplify system design",
         ],
@@ -102,8 +107,8 @@ const getQuestionsForStage1 = (): Question[] => [
         question: "Which modular design principle allows for future upgrades without major disruptions?",
         options: [
             "Use of non-standardized components",
-            "Reserving space for additional units and future technologies",
             "Designing a fixed, inflexible layout",
+            "Reserving space for additional units and future technologies",
             "Avoiding scalability considerations",
         ],
         correctAnswer: "Reserving space for additional units and future technologies",
@@ -139,10 +144,11 @@ const getQuestionsForStage2 = (): Question[] => [
         type: "text",
         question: "How does lifecycle cost analysis benefit decision-makers in WSS design?",
         options: [
-            "Highlights only the initial investment",
+            
             "Helps to evaluate long-term financial implications, including maintenance & operational costs",
             "Focuses only on capital expenditures",
             "Eliminates the need for contingency planning",
+            "Highlights only the initial investment",
         ],
         correctAnswer: "Helps to evaluate long-term financial implications, including maintenance & operational costs",
     },
@@ -161,8 +167,8 @@ const getQuestionsForStage2 = (): Question[] => [
         type: "text",
         question: "In terms of minimizing water loss in a WSS, which of the following is most effective?",
         options: [
-            "Increasing pipe diameters",
             "Regular maintenance and monitoring of leaks",
+            "Increasing pipe diameters",
             "Reducing the amount of water transported",
             "Using cheaper materials",
         ],
@@ -173,9 +179,9 @@ const getQuestionsForStage2 = (): Question[] => [
         question: "Which of the following is a cost-benefit consideration when choosing materials for a WSS?",
         options: [
             "Only the aesthetic appeal of materials",
-            "Durability and maintenance costs over time",
             "The number of different materials used",
             "The quantity of materials on hand",
+            "Durability and maintenance costs over time"
         ],
         correctAnswer: "Durability and maintenance costs over time",
     },
@@ -194,9 +200,10 @@ const getQuestionsForStage2 = (): Question[] => [
         type: "text",
         question: "How can resilience in a WSS be achieved during the design phase?",
         options: [
-            "By using the cheapest available materials",
+            
             "By integrating flexibility to adapt to future demands and unforeseen events",
             "By focusing only on the immediate needs",
+            "By using the cheapest available materials",
             "By reducing the system's capacity",
         ],
         correctAnswer: "By integrating flexibility to adapt to future demands and unforeseen events",
@@ -206,8 +213,8 @@ const getQuestionsForStage2 = (): Question[] => [
         question: "What is the role of safety in WSS design?",
         options: [
             "To prioritize speed over quality",
-            "To ensure protection of public health and system integrity",
             "To increase construction costs",
+            "To ensure protection of public health and system integrity",
             "To minimize energy consumption",
         ],
         correctAnswer: "To ensure protection of public health and system integrity",
@@ -216,8 +223,8 @@ const getQuestionsForStage2 = (): Question[] => [
         type: "text",
         question: "What strategy can help optimize resource allocation in a WSS design project?",
         options: [
-            "Delaying project timelines to reduce costs",
             "Detailed planning and scheduling of tasks",
+            "Delaying project timelines to reduce costs",
             "Ignoring potential risks in the project",
             "Relying solely on the lowest-cost suppliers",
         ],
@@ -291,8 +298,8 @@ const getQuestionsForStage4 = (): Question[] => [
         question: "What is the main function of the disinfection process in water treatment?",
         options: [
             "To remove suspended solids",
-            "To kill or inactivate pathogens",
             "To balance water temperature",
+            "To kill or inactivate pathogens",
             "To adjust the pH of the water",
         ],
         correctAnswer: "To kill or inactivate pathogens",
@@ -302,9 +309,9 @@ const getQuestionsForStage4 = (): Question[] => [
         question: "Why is pH adjustment important in the water treatment process?",
         options: [
             "To control the taste and odor of the water",
-            "To optimize coagulation, flocculation, and disinfection",
             "To reduce the need for filtration",
             "To increase the chemical dosing requirement",
+            "To optimize coagulation, flocculation, and disinfection"
         ],
         correctAnswer: "To optimize coagulation, flocculation, and disinfection",
     },
@@ -344,15 +351,15 @@ const getQuestionsForStage4 = (): Question[] => [
     {
         type: "text",
         question: "Which parameter is most commonly used to indicate effective disinfection in a water distribution system?",
-        options: ["pH", "Residual chlorine", "Turbidity", "Total coliforms"],
+        options: ["Turbidity", "pH", "Residual chlorine","Total coliforms"],
         correctAnswer: "Residual chlorine",
     },
     {
         type: "text",
         question: "What is the primary concern with prolonged water stagnation in a distribution system?",
         options: [
-            "Increased turbidity",
             "Formation of biofilms",
+            "Increased turbidity",
             "Lower pH levels",
             "Decrease in pipe durability",
         ],
@@ -379,8 +386,9 @@ const getQuestionsForStage7 = (): Question[] => [
         question: "Which of the following is an example of an apparent water loss?",
         options: [
             "Leakage on transmission mains",
-            "Data handling errors",
+            
             "Overflow at storage tanks",
+            "Data handling errors",
             "Leakage on service connections",
         ],
         correctAnswer: "Data handling errors",
@@ -389,8 +397,9 @@ const getQuestionsForStage7 = (): Question[] => [
         type: "text",
         question: "What is a District Metered Area (DMA)?",
         options: [
-            "A storage facility for treated water",
+            
             "A discrete section of a water distribution network with monitored inflows and outflows",
+            "A storage facility for treated water",
             "A control room for water distribution",
             "A bypass route for excess water",
         ],
@@ -407,9 +416,10 @@ const getQuestionsForStage7 = (): Question[] => [
         question: "Which component of the water balance summarizes real losses?",
         options: [
             "Billed authorized consumption",
+            "Unauthorized consumption",
             "Leakage on transmission and distribution mains",
             "Customer metering inaccuracy",
-            "Unauthorized consumption",
+            
         ],
         correctAnswer: "Leakage on transmission and distribution mains",
     },
@@ -424,9 +434,10 @@ const getQuestionsForStage7 = (): Question[] => [
         question: "What parameter should be minimized to reduce DMA establishment costs?",
         options: [
             "Length of pipeline network",
-            "Number of flow meters required",
+            
             "Ground-level variations",
             "Pressure fluctuations",
+            "Number of flow meters required",
         ],
         correctAnswer: "Number of flow meters required",
     },
@@ -434,9 +445,10 @@ const getQuestionsForStage7 = (): Question[] => [
         type: "text",
         question: "What is the main disadvantage of forming DMAs in a water supply system?",
         options: [
+            "Difficulty in data analysis",
             "Increased water losses",
             "Pressure fluctuations",
-            "Difficulty in data analysis",
+            
             "Reduced customer satisfaction",
         ],
         correctAnswer: "Pressure fluctuations",
@@ -485,9 +497,10 @@ const getQuestionsForStage3 = (): Question[] => [
         question: "What is the primary purpose of Building Information Modeling (BIM)?",
         options: [
             "To reduce project costs",
-            "To enhance planning and coordination through 3D models",
+            
             "To minimize stakeholder involvement",
             "To accelerate project timelines",
+            "To enhance planning and coordination through 3D models",
         ],
         correctAnswer: "To enhance planning and coordination through 3D models",
     },
@@ -502,9 +515,10 @@ const getQuestionsForStage3 = (): Question[] => [
         question: "What is the main goal of Integrated Project Delivery (IPD)?",
         options: [
             "To reduce project quality",
-            "To foster collaboration among stakeholders",
+            
             "To increase project costs",
             "To minimize communication",
+            "To foster collaboration among stakeholders",
         ],
         correctAnswer: "To foster collaboration among stakeholders",
     },
@@ -514,8 +528,9 @@ const getQuestionsForStage3 = (): Question[] => [
         options: [
             "Maximizing waste",
             "Minimizing value",
-            "Minimizing waste and maximizing value",
+            
             "Increasing project complexity",
+            "Minimizing waste and maximizing value",
         ],
         correctAnswer: "Minimizing waste and maximizing value",
     },
@@ -523,8 +538,9 @@ const getQuestionsForStage3 = (): Question[] => [
         type: "text",
         question: "What is the primary focus of risk management in construction projects?",
         options: [
-            "Ignoring potential risks",
             "Identifying, analyzing, and responding to risks",
+            "Ignoring potential risks",
+            
             "Increasing project costs",
             "Reducing stakeholder communication",
         ],
@@ -541,9 +557,10 @@ const getQuestionsForStage3 = (): Question[] => [
         question: "What is the primary benefit of using Gantt Charts in project management?",
         options: [
             "Reducing project costs",
-            "Visualizing project timelines and tracking progress",
+            
             "Minimizing stakeholder involvement",
             "Increasing project complexity",
+            "Visualizing project timelines and tracking progress",
         ],
         correctAnswer: "Visualizing project timelines and tracking progress",
     },
@@ -586,8 +603,9 @@ const getQuestionsForStage8 = (): Question[] => [
         question: 'What does the term "cavitation" refer to in pump operation?',
         options: [
             "Corrosion of pump components",
-            "Formation and collapse of vapor bubbles causing damage",
             "Increase in water viscosity",
+            "Formation and collapse of vapor bubbles causing damage",
+            
             "Decrease in suction pressure",
         ],
         correctAnswer: "Formation and collapse of vapor bubbles causing damage",
@@ -596,8 +614,9 @@ const getQuestionsForStage8 = (): Question[] => [
         type: "text",
         question: "How can hydraulic modeling improve operational performance?",
         options: [
-            "By reducing the need for customer communication",
             "By optimizing network management and leak detection",
+            "By reducing the need for customer communication",
+            
             "By delaying infrastructure upgrades",
             "By adding redundant equipment",
         ],
@@ -607,8 +626,9 @@ const getQuestionsForStage8 = (): Question[] => [
         type: "text",
         question: "What factor is critical for ensuring pump longevity?",
         options: [
-            "Ignoring minor issues",
             "Regular maintenance and monitoring",
+            "Ignoring minor issues",
+            
             "Operating pumps at maximum capacity",
             "Increasing pump speed frequently",
         ],
@@ -620,8 +640,9 @@ const getQuestionsForStage8 = (): Question[] => [
         options: [
             "Avoiding unplanned expenses",
             "Increasing repair time",
-            "Encouraging emergency repairs",
+            
             "Reducing pump lifespan",
+            "Encouraging emergency repairs",
         ],
         correctAnswer: "Avoiding unplanned expenses",
     },
@@ -629,8 +650,9 @@ const getQuestionsForStage8 = (): Question[] => [
         type: "text",
         question: "What role does power factor play in energy cost optimization?",
         options: [
-            "It increases copper losses",
             "It reduces energy consumption and costs",
+            "It increases copper losses",
+            
             "It accelerates pump aging",
             "It has no impact on costs",
         ],
@@ -652,9 +674,10 @@ const getQuestionsForStage8 = (): Question[] => [
         question: "What is the impact of addressing current imbalance in pumps?",
         options: [
             "Reduced efficiency",
-            "Improved operational stability",
+            
             "Increased energy costs",
             "Increased equipment wear",
+            "Improved operational stability",
         ],
         correctAnswer: "Improved operational stability",
     },
@@ -674,8 +697,9 @@ const getQuestionsForStage8 = (): Question[] => [
         question: "What is the long-term goal of performance assessments in water supply systems?",
         options: [
             "To reduce the number of employees",
-            "To support decision-making for infrastructure upgrades",
+            
             "To minimize short-term costs",
+            "To support decision-making for infrastructure upgrades",
             "To eliminate maintenance practices",
         ],
         correctAnswer: "To support decision-making for infrastructure upgrades",
@@ -713,8 +737,9 @@ const getQuestionsForStage5 = (): Question[] => [
         type: "text",
         question: "What is the primary purpose of establishing District Metered Areas (DMAs) in a Smart Water Network (SWAN)?",
         options: [
-            "To improve customer satisfaction",
             "To monitor and manage leakage in the water distribution system",
+            "To improve customer satisfaction",
+            
             "To control water tariffs",
             "To reduce the number of water meters",
         ],
@@ -726,8 +751,9 @@ const getQuestionsForStage5 = (): Question[] => [
         options: [
             "GIS",
             "SCADA system",
-            "Hydraulic network model",
+            
             "AMR system",
+            "Hydraulic network model",
         ],
         correctAnswer: "Hydraulic network model",
     },
@@ -791,8 +817,9 @@ const getQuestionsForStage5 = (): Question[] => [
         question: "What type of DMA is created when multiple inlets are connected to a district meter?",
         options: [
             "Single inlet DMA",
-            "Multiple inlet DMA",
             "Cascading DMA",
+            "Multiple inlet DMA",
+            
             "None of the above",
         ],
         correctAnswer: "Multiple inlet DMA",
@@ -801,10 +828,11 @@ const getQuestionsForStage5 = (): Question[] => [
         type: "text",
         question: "What is the main advantage of integrating SCADA with GIS in a Smart Water Network?",
         options: [
+            "To increase energy consumption",
             "To detect water pressure drops",
             "To track water quality and leakage location",
             "To reduce water usage",
-            "To increase energy consumption",
+            
         ],
         correctAnswer: "To track water quality and leakage location",
     },
@@ -851,9 +879,10 @@ const getQuestionsForStage6 = (): Question[] => [
         question: "Which type of water meter is characterized by the absence of moving parts in the flow path?",
         options: [
             "Mechanical meters",
-            "Electromagnetic meters",
+            
             "Ultrasonic meters",
             "Multi-Jet meters",
+            "Electromagnetic meters",
         ],
         correctAnswer: "Electromagnetic meters",
     },
@@ -872,9 +901,10 @@ const getQuestionsForStage6 = (): Question[] => [
         type: "text",
         question: "Which water meter type is most likely to have higher accuracy and lower flow measurement errors over time?",
         options: [
+            "Electromagnetic meter",
             "Single-Jet meter",
             "Multi-Jet meter",
-            "Electromagnetic meter",
+            
             "Mechanical dial meter",
         ],
         correctAnswer: "Electromagnetic meter",
@@ -884,9 +914,10 @@ const getQuestionsForStage6 = (): Question[] => [
         question: "What is the function of the 'pulse output' in AMR-compatible water meters?",
         options: [
             "To calculate the total water usage over time",
-            "To communicate readings using a remote sensor",
+            
             "To provide real-time water pressure data",
             "To detect leaks automatically",
+            "To communicate readings using a remote sensor",
         ],
         correctAnswer: "To communicate readings using a remote sensor",
     },
@@ -928,9 +959,10 @@ const getQuestionsForStage6 = (): Question[] => [
         question: "In which scenario would water consumption need to be estimated due to metering problems?",
         options: [
             "Meters reading accurately but consuming excess power",
-            "Meters malfunctioning or providing no readings",
+            
             "All meters being located in hard-to-reach areas",
             "Water usage being exceptionally low",
+            "Meters malfunctioning or providing no readings",
         ],
         correctAnswer: "Meters malfunctioning or providing no readings",
     },
