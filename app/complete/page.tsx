@@ -4,21 +4,16 @@ import { useState, useEffect, Suspense } from "react"
 import Confetti from "react-confetti"
 import { useRouter, useSearchParams } from "next/navigation"
 import { JSX } from "react/jsx-runtime"
-import { jsPDF } from "jspdf";
 import { useAudio } from "@/context/AudioContext"
-import { User } from "@/types"
 import { Activity, ArrowRight, Clock, Download, Droplet, Heart, IndianRupee, PieChart, RefreshCw, Wifi, Zap } from "lucide-react"
 import { AnimatedBackground } from "@/components/AnimatedBackground"
 import ResultsScreen from "@/components/result-screen"
-
+import { generateCertificate } from "@/components/Certificate";
 
 interface StageScoreSectionProps {
-  // windowSize: { width: number; height: number };
   router: ReturnType<typeof useRouter>; // Router type
-  // winningSoundRef: RefObject<HTMLAudioElement | null>; // Ref for the winning sound
   isMuted: boolean;
   backgroundAudioSrc: string;
-  // pauseBackgroundMusic: () => void; // Function to pause background music
   playBackgroundMusic: () => void; // Function to play background music
   setBackgroundAudioSrc: (src: string) => void; // Function to update the audio source
 }
@@ -74,10 +69,10 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
       unit: "Million Cubic Feet",
       decrease: true,
       incOrDecValue: 307,
-      icon: <Droplet className="w-16 h-16 text-blue-500" />,
+      icon: <Droplet className="w-16 h-16 text-blue-500 flex-shrink-0" />,
       wrongAnswerMessage: [
         "Dam capacity has been compromised.",
-        "of  Maruthu Nagar Dam's water has been reduced due to planning errors."
+        "Maruthu Nagar Dam's storage capacity has been reduced due to planning errors."
       ],
       allCorrectAnswermessage: [
         "Dam capacity is at optimal level.",
@@ -92,7 +87,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
       unit: "Crores",
       decrease: false,
       incOrDecValue: 5,
-      icon: <IndianRupee className="w-16 h-16 text-green-500" />,
+      icon: <IndianRupee className="w-16 h-16 text-green-500 flex-shrink-0" />,
       wrongAnswerMessage: [
         "Budget overruns are affecting the project.",
         "of project budget cost has increased due to design inefficiencies."
@@ -110,10 +105,10 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
       unit: "Months",
       decrease: false,
       incOrDecValue: 1,
-      icon: <Clock className="w-16 h-16 text-purple-500" />,
+      icon: <Clock className="w-16 h-16 text-purple-500 flex-shrink-0" />,
       wrongAnswerMessage: [
         "Project timeline has been extended.",
-        "of timeline has been required to complete the project due to implementation challenges."
+        "of timeline has been extended due to implementation challenges."
       ],
       allCorrectAnswermessage: [
         "Project timeline is on schedule.",
@@ -128,7 +123,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
       unit: "Cases",
       decrease: false,
       incOrDecValue: 100,
-      icon: <Activity className="w-16 h-16 text-red-500" />,
+      icon: <Activity className="w-16 h-16 text-red-500 flex-shrink-0" />,
       wrongAnswerMessage: [
         "Public health is at risk due to the lack of prevention.",
         "of waterborne diseases are increasing, due to an inefficient water treatment system."
@@ -146,7 +141,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
       unit: "Cubic Feet Per Day",
       decrease: false,
       incOrDecValue: 13700,
-      icon: <Wifi className="w-16 h-16 text-cyan-500" />,
+      icon: <Wifi className="w-16 h-16 text-purple-500 flex-shrink-0" />,
       wrongAnswerMessage: [
         "Water losses are mounting in the distribution system.",
         "of water is being lost due to inefficiencies in the SCADA system."
@@ -164,7 +159,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
       unit: "kWh per Month",
       decrease: false,
       incOrDecValue: 500,
-      icon: <Zap className="w-16 h-16 text-yellow-500" />,
+      icon: <Zap className="w-16 h-16 text-yellow-500 flex-shrink-0" />,
       wrongAnswerMessage: [
         "Energy efficiency is compromised.",
         "of excess energy is being consumed due to operational inefficiencies."
@@ -182,7 +177,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
       unit: "Cubic Feet per Day",
       decrease: false,
       incOrDecValue: 13000,
-      icon: <PieChart className="w-16 h-16 text-indigo-500" />,
+      icon: <PieChart className="w-16 h-16 text-indigo-500 flex-shrink-0" />,
       wrongAnswerMessage: [
         "Water leakage is affecting system performance.",
         "of water is being lost through leaks in the distribution system."
@@ -200,7 +195,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
       unit: "% Customers",
       decrease: true,
       incOrDecValue: 2.5,
-      icon: <Heart className="w-16 h-16 text-pink-500" />,
+      icon: <Heart className="w-16 h-16 text-pink-500 flex-shrink-0" />,
       wrongAnswerMessage: [
         "Customer satisfaction is declining.",
         "are unhappy with the water supply service quality."
@@ -263,10 +258,10 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
         sessionStorage.setItem("allStagesCompleted", "true");
         setTotalScore(totalScore);
         sessionStorage.setItem("finalTotalScore", totalScore.toString());
-      } else if (storedAllStagesCompleted) {
-        // setAllSectionsCompleted(false);
-        sessionStorage.removeItem("allStagesCompleted");
-        sessionStorage.removeItem("finalTotalScore");
+        // } else if (storedAllStagesCompleted) {
+        //   // setAllSectionsCompleted(false);
+        //   sessionStorage.removeItem("allStagesCompleted");
+        //   sessionStorage.removeItem("finalTotalScore");
       } else {
         setAllSectionsCompleted(storedAllStagesCompleted === "true");
       }
@@ -294,134 +289,6 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
     }
   }, [backgroundAudioSrc]);
 
-  const getCertificateLevel = (marksObtained: number): string => {
-    const percentage = (marksObtained / 80) * 100;
-
-    if (percentage >= 80) return "Gold";
-    else if (percentage >= 65) return "Silver";
-    else if (percentage >= 50) return "Bronze";
-    return "Participation";
-  };
-
-  const getDefaultUser = (): User => ({
-    name: "",
-    department: "",
-    designation: "",
-    email: "",
-    mobile: "",
-    title: "",
-  });
-
-  const generateCertificate = (score: number): void => {
-
-    const level = getCertificateLevel(score);
-    // URLs of the font files to fetch
-    const fontUrl1 = "/fonts/open-sans.ttf"; // First font file
-    const fontUrl2 = "/fonts/noto-sans.ttf";
-
-    const getUserData = (): User => {
-      if (typeof window !== "undefined") {
-        const storedData = sessionStorage.getItem("currentUser");
-        return storedData ? JSON.parse(storedData) : getDefaultUser();
-      }
-      return getDefaultUser(); // Default values for SSR or undefined sessionStorage
-    };
-
-    // const isClient = typeof window !== 'undefined';
-    const userData: User = getUserData();
-
-    // Fetch both font files and convert them to Base64
-    Promise.all([
-      fetch(fontUrl1).then((response) => response.blob()),
-      fetch(fontUrl2).then((response) => response.blob()),
-    ])
-      .then(([fontBlob1, fontBlob2]) => {
-        // Convert the first font blob to Base64
-        const fontReader1 = new FileReader();
-        fontReader1.onloadend = () => {
-
-          if (!fontReader1.result) {
-            console.error("Failed to read the first font file.");
-            return;
-          }
-          //const base64Font1 = fontReader1.result.toString().split(",")[1]; // Extract the Base64 part
-
-          // Convert the second font blob to Base64
-          const fontReader2 = new FileReader();
-          fontReader2.onloadend = () => {
-
-            if (!fontReader2.result) {
-              console.error("Failed to read the second font file.");
-              return;
-            }
-            //const base64Font2 = fontReader2.result.toString().split(",")[1]; // Extract the Base64 part
-
-            // Initialize jsPDF
-            const doc = new jsPDF({
-              orientation: "landscape",
-              unit: "px",
-              format: [800, 600],
-            });
-
-            // // Add the first custom font to jsPDF
-            // doc.addFileToVFS("open-sans.ttf", base64Font1);
-            // doc.addFont("open-sans.ttf", "open-sans", "normal", 'Identity-H');
-
-            // // Add the second custom font to jsPDF
-            // doc.addFileToVFS("noto-sans.ttf", base64Font2);
-            // doc.addFont("noto-sans.ttf", "noto-sans", "normal", 'Identity-H');
-
-            const img = new Image();
-
-            if (level == "Gold")
-              img.src = "./certificates/gold-certificate.png";
-            else if (level == "Silver")
-              img.src = "./certificates/Silver_Certificate.png";
-            else if (level == "Bronze")
-              img.src = "./certificates/Bronze_Certificate.png";
-
-            img.onload = function () {
-              doc.addImage(img, "JPEG", 0, 0, 800, 600);
-
-              // Set the first font and add text
-              // doc.setFont("open-sans");
-              doc.setFont('helvetica', 'bold');
-              doc.setFontSize(30);
-              doc.text(`${userData.title}` + "." + `${userData.name}`, 400, 240, { align: "center" });
-
-              // Set the second font and add text
-              // doc.setFont("noto-sans");
-              doc.setFont('times', 'normal');
-              doc.setFontSize(17);
-              doc.text(`(${userData.designation} - ${userData.department})`, 400, 272, { align: "center" });
-
-              // Add the date
-              const today = new Date();
-              const day = String(today.getDate()).padStart(2, "0");
-              const month = String(today.getMonth() + 1).padStart(2, "0");
-              const year = today.getFullYear();
-              const formattedDate = `${day}/${month}/${year}`;
-
-              // doc.setFont("noto-sans");
-              doc.setFont('times', 'normal');
-              doc.setFontSize(19);
-              doc.text(`${formattedDate}`, 672, 448, { align: "center" });
-
-              // Save the PDF
-              doc.save(`Certificate_${level}.pdf`);
-            }
-
-          };
-          fontReader2.readAsDataURL(fontBlob2); // Convert the second font blob to a data URL
-        };
-        fontReader1.readAsDataURL(fontBlob1); // Convert the first font blob to a data URL
-      })
-      .catch((error) => {
-        console.error("Error loading font files:", error);
-      });
-  };
-
-
   const handleReturnToStages = () => {
     setBackgroundAudioSrc("./songs/bgm.mp3");
     if (!isMuted) {
@@ -436,6 +303,8 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
   };
 
   const handleSelectAnotherSet = () => {
+    sessionStorage.removeItem("allStagesCompleted");
+    sessionStorage.removeItem("finalTotalScore");
     setBackgroundAudioSrc("./songs/bgm.mp3");
     playBackgroundMusic(); // Resume background music
     router.push("/set");

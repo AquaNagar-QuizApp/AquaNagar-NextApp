@@ -617,8 +617,8 @@ const getQuestionsForStage8 = (): Question[] => [
         type: "image",
         question: "Which of the following processes contributes the most to the carbon footprint in urban water management systems?",
         options: [
-            "Water distribution",
             "Wastewater treatment",
+            "Water distribution",
             "Rainwater harvesting",
             "Manual water meter readings"
         ],
@@ -652,8 +652,8 @@ const getQuestionsForStage8 = (): Question[] => [
         question: "What is the importance of continuous monitoring in water supply systems?",
         options: [
             "To reduce regulatory compliance",
-            "To identify and address inefficiencies",
             "To delay upgrades",
+            "To identify and address inefficiencies",
             "To increase water tariffs",
         ],
         correctAnswer: "To identify and address inefficiencies",
@@ -663,9 +663,9 @@ const getQuestionsForStage8 = (): Question[] => [
         question: "Which major component of a water supply system ensures storage and distribution to consumers?",
         options: [
             "Treatment plant",
-            "Service reservoirs",
             "Conveying pipes",
             "Consumer supply services",
+            "Service reservoirs",
         ],
         correctAnswer: "Service reservoirs",
     },
@@ -673,8 +673,8 @@ const getQuestionsForStage8 = (): Question[] => [
         type: "text",
         question: "Why is pressure management critical in a water supply system?",
         options: [
-            "To prevent pipeline discoloration",
             "To maintain adequate pressure for consumer needs",
+            "To prevent pipeline discoloration",
             "To avoid pipe material corrosion",
             "To reduce water taste complaints",
         ],
@@ -696,8 +696,8 @@ const getQuestionsForStage8 = (): Question[] => [
         question: "Which operational efficiency metric focuses on optimizing energy consumption?",
         options: [
             "Hydraulic modeling",
-            "Energy use in pumping and treatment",
             "Gantt chart analysis",
+            "Energy use in pumping and treatment",
             "Stakeholder satisfaction",
         ],
         correctAnswer: "Energy use in pumping and treatment",
@@ -707,9 +707,9 @@ const getQuestionsForStage8 = (): Question[] => [
         question: "What aspect of customer service reflects the responsiveness of water utilities?",
         options: [
             "Frequency of billing",
-            "Response time to complaints",
             "Water reservoir size",
             "Pipe installation speed",
+            "Response time to complaints",
         ],
         correctAnswer: "Response time to complaints",
     },
@@ -717,8 +717,8 @@ const getQuestionsForStage8 = (): Question[] => [
         type: "text",
         question: "How can efficient maintenance practices improve infrastructure efficiency?",
         options: [
-            "By increasing pipeline bursts",
             "By reducing leaks and deterioration",
+            "By increasing pipeline bursts",
             "By delaying upgrades",
             "By adding unnecessary valves",
         ],

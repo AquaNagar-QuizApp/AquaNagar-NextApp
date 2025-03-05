@@ -85,7 +85,7 @@ export default function SetSelection(): JSX.Element {
                   <motion.div
                   // bg-blue-600 hover:bg-blue-700 transition-all duration-300 p-6 rounded-lg shadow-lg cursor-pointer transform hover:scale-105 text-white h-full
                     className={`px-6 py-2 rounded-lg font-semibold backdrop-blur-lg ${isCompleted
-                      ? "bg-gray-400 text-gray-700 cursor-not-allowed" // Disabled state
+                      ? "bg-gray-400 text-gray-900 cursor-not-allowed" // Disabled state
                       : "bg-[rgb(2_132_199)] hover:bg-[rgb(3_105_161)] transition-all duration-300 transform hover:scale-105 text-white"
                       }`}
                     whileHover={isCompleted ? {} : { scale: 1.05, transition: { duration: 0.2 } }}
@@ -95,7 +95,7 @@ export default function SetSelection(): JSX.Element {
                     className="w-full h-full py-8 text-lg font-semibold" 
                     disabled={isCompleted}>
                       {/* {set} */}
-                      {isCompleted ? `✅ ${missionName} (Completed)` : missionName}
+                      {isCompleted ? `${missionName} (Completed) ✅` : missionName}
                     </Button>
                   </motion.div>
                 </motion.div>

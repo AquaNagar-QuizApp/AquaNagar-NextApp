@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 
 const LogoutButton = () => {
     const router = useRouter();
-    const { toggleMute, stopBackgroundMusic } = useAudio();
+    const { toggleMute, stopBackgroundMusic, setBackgroundAudioSrc } = useAudio();
 
     const [username, setUsername] = useState<string | null>(null);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -23,6 +23,7 @@ const LogoutButton = () => {
             // sessionStorage.removeItem("currentUser"); // Clear user data if stored
             toggleMute();
             stopBackgroundMusic();
+            setBackgroundAudioSrc("./songs/bgm.mp3");
             router.push("/");
         }
     };
@@ -90,6 +91,9 @@ const LogoutButton = () => {
 
     if (!isLoggedIn || !username) return null;
 
+    const capitalizeName = (name: string) =>
+        name.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+
     return (
         <div className="relative">
             {/* Clickable Avatar */}
@@ -107,7 +111,7 @@ const LogoutButton = () => {
                 <div ref={popupRef}
                     className="absolute top-12 right-4 bg-white bg-opacity-70 backdrop-blur-lg shadow-lg rounded-lg p-4 min-w-fit max-w-xs z-50">
                     <p className="text-gray-500 text-sm">Hi,</p>
-                    <p className="text-gray-800 font-medium">{username}</p>
+                    <p className="text-gray-800 font-medium">{capitalizeName(username)}</p>
                     <hr className="my-2 border-gray-400" />
                     <button
                         onClick={handleLogout}
