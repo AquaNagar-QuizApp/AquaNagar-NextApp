@@ -486,12 +486,12 @@ const getQuestionsForStage7 = (): Question[] => [
         type: "text",
         question: "What does the acronym CPHEEO stand for in the context of water management?",
         options: [
-            "Central Public Health and Engineering Organization",
-            "Central Planning and Engineering Environmental Office",
+            "Central Public Health and Environmental Engineering Organization",
+            "Central Planning Health and Engineering Environmental Office",
             "Collaborative Planning for Hydraulic Engineering Optimization",
             "Community Planning for Health Engineering and Outreach",
         ],
-        correctAnswer: "Central Public Health and Engineering Organization",
+        correctAnswer: "Central Public Health and Environmental Engineering Organization",
     },
 ];
 

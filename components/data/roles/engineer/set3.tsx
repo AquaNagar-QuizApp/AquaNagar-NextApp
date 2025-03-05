@@ -106,9 +106,10 @@ const getQuestionsForStage1 = (): Question[] => [
         type: "text",
         question: "What is a benefit of sourcing materials locally for WSS construction?",
         options: [
+            "Avoids compliance with local regulations",
             "Reduces transportation costs and emissions",
             "Increases the overall environmental impact",
-            "Avoids compliance with local regulations",
+            
             "Reduces the need for community engagement",
         ],
         correctAnswer: "Reduces transportation costs and emissions",

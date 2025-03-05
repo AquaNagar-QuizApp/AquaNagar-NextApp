@@ -259,8 +259,9 @@ const getQuestionsForStage3 = (): Question[] => [
         type: "text",
         question: "What is a key step before laying a new water pipeline?",
         options: [
-            "Conducting a site survey and soil testing",
+            
             "Digging immediately without planning",
+            "Conducting a site survey and soil testing",
             "Waiting for monsoon season",
             "Checking the price of water",
         ],
@@ -270,10 +271,11 @@ const getQuestionsForStage3 = (): Question[] => [
         type: "text",
         question: "How can water utilities reduce Non-Revenue Water (NRW)?",
         options: [
-            "By reducing leakages and unauthorized connections",
+            
             "By increasing water tariffs",
             "By cutting off supply during peak hours",
             "By increasing the number of water meters",
+            "By reducing leakages and unauthorized connections",
         ],
         correctAnswer: "By reducing leakages and unauthorized connections",
     },
@@ -292,10 +294,11 @@ const getQuestionsForStage3 = (): Question[] => [
         type: "text",
         question: "Why should urban water supply systems have emergency backup reservoirs?",
         options: [
+            "To keep water stagnant for a long time",
             "To provide water in case of pipeline failures or drought",
             "To store water for decoration purposes",
             "To sell water at higher rates in emergencies",
-            "To keep water stagnant for a long time",
+            
         ],
         correctAnswer: "To provide water in case of pipeline failures or drought",
     },
@@ -314,10 +317,11 @@ const getQuestionsForStage3 = (): Question[] => [
         type: "text",
         question: "Why is pressure management important in a water distribution system?",
         options: [
-            "To prevent pipe bursts and leakage",
+            
             "To increase water flow at all times",
             "To block water for certain areas",
             "To stop maintenance work",
+            "To prevent pipe bursts and leakage",
         ],
         correctAnswer: "To prevent pipe bursts and leakage",
     },
@@ -336,8 +340,9 @@ const getQuestionsForStage3 = (): Question[] => [
         type: "text",
         question: "What happens if water pipes are not regularly maintained?",
         options: [
-            "Water quality may deteriorate, and leakage may increase",
+            
             "Water supply becomes cheaper",
+            "Water quality may deteriorate, and leakage may increase",
             "Pipes become stronger over time",
             "Water taste improves",
         ],
