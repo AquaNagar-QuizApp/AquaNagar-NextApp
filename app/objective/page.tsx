@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useAudio } from "@/context/AudioContext";
 
 export default function Objective() {
