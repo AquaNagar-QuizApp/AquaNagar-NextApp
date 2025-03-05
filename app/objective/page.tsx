@@ -3,8 +3,40 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
+import { useEffect, useRef, useState } from "react";
+import { useAudio } from "@/context/AudioContext";
 
 export default function Objective() {
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+    const { isMuted } = useAudio();
+
+    useEffect(() => {
+        const audio = audioRef.current;
+
+        // Play audio if not muted
+        if (audio) {
+            if (!isMuted && audio.paused) {
+                audio.play();
+            }
+            audio.muted = isMuted; // Just mute/unmute without stopping
+        }
+    }, [isMuted]);
+
+    // Ensure client-side rendering for dynamic content
+    useEffect(() => {
+        // Play audio if not greeted
+        if (!isMuted && audioRef.current) {
+            audioRef.current.play();
+        }
+
+        return () => {
+            if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current.currentTime = 0; // Reset audio on unmount
+            }
+        };
+    }, []);
+
     return (
         <main className="min-h-screen relative overflow-hidden">
             <AnimatedBackground />
@@ -73,6 +105,9 @@ export default function Objective() {
                     </div>
                 </motion.div>
             </div>
+
+            {/* Hidden Audio Element */}
+            <audio ref={audioRef} src="./voiceover/objective.mp3" preload="auto" />
         </main>
     );
 }

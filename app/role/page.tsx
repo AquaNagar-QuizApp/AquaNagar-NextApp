@@ -1,18 +1,49 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 import { AnimatedBackground } from "@/components/AnimatedBackground"
+import { useAudio } from "@/context/AudioContext"
 
 export default function RoleSelection() {
-  const router = useRouter()
-  const [selectedRole, setSelectedRole] = useState<string | null>(null)
+  const router = useRouter();
+  const [selectedRole, setSelectedRole] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { isMuted } = useAudio();
 
   if (typeof window !== "undefined" && selectedRole) {
     sessionStorage.setItem("selectedRole", JSON.stringify(selectedRole));
   }
+
+  useEffect(() => {
+    const audio = audioRef.current;
+
+    // Play audio if not muted
+    if (audio) {
+      if (!isMuted && audio.paused) {
+        audio.play();
+      }
+      audio.muted = isMuted; // Just mute/unmute without stopping
+    }
+  }, [isMuted]);
+
+  // Ensure client-side rendering for dynamic content
+  useEffect(() => {
+    // Play audio if not greeted
+    if (!isMuted && audioRef.current) {
+      audioRef.current.play();
+    }
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0; // Reset audio on unmount
+      }
+    };
+  }, []);
+
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -60,7 +91,7 @@ export default function RoleSelection() {
           animate="visible"
           variants={containerVariants}
         >
-          <motion.h2 className="text-4xl font-bold text-center text-gray-800 mb-8" variants={itemVariants}>What&apos;s Your Role?</motion.h2>
+          <motion.h2 className="text-4xl font-bold text-center text-gray-800 mb-8" variants={itemVariants}>Select Your Role</motion.h2>
           <motion.p className="text-center text-gray-600 mb-8" variants={itemVariants}>
             Choose the option that best describes you.
           </motion.p>
@@ -89,6 +120,9 @@ export default function RoleSelection() {
           </motion.div>
         </motion.div>
       </div>
+
+      {/* Hidden Audio Element */}
+      <audio ref={audioRef} src="./voiceover/role.mp3" preload="auto" />
     </main>
   )
 }

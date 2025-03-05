@@ -8,7 +8,7 @@ import { useAudio } from "@/context/AudioContext";
 
 export default function Challenge() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const { isMuted } = useAudio();
+  const { isMuted, isPlaying } = useAudio();
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -24,18 +24,23 @@ export default function Challenge() {
 
   useEffect(() => {
     const audio = audioRef.current;
-
     const stopAudio = () => {
       if (audio) {
-        audio.pause();
-        audio.currentTime = 0; // Reset audio to start
+        if (!isMuted && !document.hidden && !isPlaying && audio.paused) {
+          audio.play();
+        } else {
+          audio.pause();
+          audio.currentTime = 0; // Reset audio to start
+        }
       }
     };
 
     // Stop audio on beforeunload (page refresh/close)
+    window.addEventListener("visibilitychange", stopAudio);
     window.addEventListener("beforeunload", stopAudio);
 
     return () => {
+      window.removeEventListener("visibilitychange", stopAudio);
       window.removeEventListener("beforeunload", stopAudio);
     };
   }, []);
@@ -52,7 +57,7 @@ export default function Challenge() {
         >
           <h2 className="text-3xl font-semibold text-white mb-8">Ready for the Challenge?</h2>
           <p className="text-lg text-blue-100 mb-8">
-            Are you prepared to take on the role of WSS Engineer and tackle the water management challenges of Maruthu Nagar?
+            Are you prepared to take on the role of WSS Official and tackle the water management challenges of Maruthu Nagar?
           </p>
           <Link href="/role">
             <motion.button

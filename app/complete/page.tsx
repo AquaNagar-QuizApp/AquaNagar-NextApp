@@ -198,7 +198,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
       icon: <Heart className="w-16 h-16 text-pink-500 flex-shrink-0" />,
       wrongAnswerMessage: [
         "Customer satisfaction is declining.",
-        "are unhappy with the water supply service quality."
+        "are happy with the water supply service quality."
       ],
       allCorrectAnswermessage: [
         "Customer satisfaction is excellent.",

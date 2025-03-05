@@ -3,8 +3,57 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
+import { useEffect, useRef } from "react";
+import { useAudio } from "@/context/AudioContext";
 
 export default function About() {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { isMuted } = useAudio();
+
+  useEffect(() => {
+    const audio = audioRef.current;
+
+    // Play audio if not muted
+    if (audio) {
+      if (!isMuted && audio.paused) {
+        audio.play();
+      }
+      audio.muted = isMuted; // Just mute/unmute without stopping
+    }
+  }, [isMuted]);
+
+  // Ensure client-side rendering for dynamic content
+  useEffect(() => {
+    // Play audio if not greeted
+    if (!isMuted && audioRef.current) {
+      audioRef.current.play();
+    }
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0; // Reset audio on unmount
+      }
+    };
+  }, []);
+
+    useEffect(() => {
+    const audio = audioRef.current;
+
+    const stopAudio = () => {
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0; // Reset audio to start
+      }
+    };
+
+    // Stop audio on beforeunload (page refresh/close)
+    window.addEventListener("beforeunload", stopAudio);
+
+    return () => {
+      window.removeEventListener("beforeunload", stopAudio);
+    };
+  }, []);
 
   const certificateInfo = [
     { level: "Gold", threshold: 80, className: "text-yellow-400" },
@@ -92,7 +141,7 @@ export default function About() {
           </motion.div>
           <Link href="/story">
             <motion.button
-              className="mt-6 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold"
+              className="mt-6 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -101,6 +150,9 @@ export default function About() {
           </Link>
         </motion.div>
       </div>
+
+      {/* Hidden Audio Element */}
+      <audio ref={audioRef} src="./voiceover/instructions.mp3" preload="auto" />
     </main>
   );
 }

@@ -3,9 +3,10 @@
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import type { QuizSetName } from "@/types"
-import { JSX, useEffect, useState } from "react"
+import { JSX, useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import { AnimatedBackground } from "@/components/AnimatedBackground"
+import { useAudio } from "@/context/AudioContext"
 
 export default function SetSelection(): JSX.Element {
   const router = useRouter();
@@ -17,6 +18,36 @@ export default function SetSelection(): JSX.Element {
     "Set 3": "🌪️ Tidal Trials",
     "Set 4": "🏆 Aqua Conqueror"
   };
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { isMuted } = useAudio();
+
+  useEffect(() => {
+    const audio = audioRef.current;
+
+    // Play audio if not muted
+    if (audio) {
+      if (!isMuted && audio.paused) {
+        audio.play();
+      }
+      audio.muted = isMuted; // Just mute/unmute without stopping
+    }
+  }, [isMuted]);
+
+  // Ensure client-side rendering for dynamic content
+  useEffect(() => {
+    // Play audio if not greeted
+    if (!isMuted && audioRef.current) {
+      audioRef.current.play();
+    }
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0; // Reset audio on unmount
+      }
+    };
+  }, []);
 
   const quizSets: QuizSetName[] = Object.keys(missionNames) as QuizSetName[];
 
@@ -83,7 +114,7 @@ export default function SetSelection(): JSX.Element {
               return (
                 <motion.div key={set} variants={itemVariants}>
                   <motion.div
-                  // bg-blue-600 hover:bg-blue-700 transition-all duration-300 p-6 rounded-lg shadow-lg cursor-pointer transform hover:scale-105 text-white h-full
+                    // bg-blue-600 hover:bg-blue-700 transition-all duration-300 p-6 rounded-lg shadow-lg cursor-pointer transform hover:scale-105 text-white h-full
                     className={`px-6 py-2 rounded-lg font-semibold backdrop-blur-lg ${isCompleted
                       ? "bg-gray-400 text-gray-900 cursor-not-allowed" // Disabled state
                       : "bg-[rgb(2_132_199)] hover:bg-[rgb(3_105_161)] transition-all duration-300 transform hover:scale-105 text-white"
@@ -91,9 +122,9 @@ export default function SetSelection(): JSX.Element {
                     whileHover={isCompleted ? {} : { scale: 1.05, transition: { duration: 0.2 } }}
                     whileTap={isCompleted ? {} : { scale: 0.95 }}
                   >
-                    <Button onClick={() => onSelect(set)} 
-                    className="w-full h-full py-8 text-lg font-semibold" 
-                    disabled={isCompleted}>
+                    <Button onClick={() => onSelect(set)}
+                      className="w-full h-full py-8 text-lg font-semibold"
+                      disabled={isCompleted}>
                       {/* {set} */}
                       {isCompleted ? `${missionName} (Completed) ✅` : missionName}
                     </Button>
@@ -105,6 +136,9 @@ export default function SetSelection(): JSX.Element {
           </motion.div>
         </motion.div>
       </div>
+
+      {/* Hidden Audio Element */}
+      <audio ref={audioRef} src="./voiceover/watermissions.mp3" preload="auto" />
     </main>
   )
 }

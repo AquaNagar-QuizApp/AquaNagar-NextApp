@@ -85,9 +85,9 @@ function SpinWheel() {
   const set = searchParams.get("set");
   const { backgroundAudioSrc, setBackgroundAudioSrc } = useAudio();
 
-  setBackgroundAudioSrc("./songs/spinwheelaudio.mp3");
-
   const spinWheel = () => {
+    setBackgroundAudioSrc("./songs/spinwheelaudio.mp3");
+    
     setSpinning(true);
 
     let completedSections: Record<string, number> = {};
