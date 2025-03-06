@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link"
 import { motion } from "framer-motion"
 import { AnimatedBackground } from "@/components/AnimatedBackground"
 import { useEffect, useRef } from "react";
@@ -11,7 +10,7 @@ export default function Challenge() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { isMuted, isPlaying } = useAudio();
   const router = useRouter();
-  
+
   useEffect(() => {
     const audio = audioRef.current;
 
