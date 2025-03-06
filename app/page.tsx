@@ -12,8 +12,8 @@ export default function Home() {
     setHasMounted(true)
   }, [])
 
-  const handleButtonClick = () => {
-    router.push("/login")
+  const handleStartButtonClick = () => {
+    router.replace("/login")
   }
 
   if (!hasMounted) return null
@@ -77,13 +77,10 @@ export default function Home() {
             transition={{ duration: 0.5, delay: 0.8 }}
           >
             <motion.button
-              className="px-6 py-3 bg-blue-700 text-white font-semibold rounded-lg"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
+              className="px-6 py-3 bg-blue-700 hover:bg-blue-800 text-white font-semibold rounded-lg"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={handleButtonClick}
+              onClick={handleStartButtonClick}
             >
               Start Journey
             </motion.button>

@@ -32,7 +32,7 @@ interface Stage {
 }
 
 export default function Complete(): JSX.Element {
-  const router = useRouter()
+  const router = useRouter();
   const { isMuted, backgroundAudioSrc, playBackgroundMusic, setBackgroundAudioSrc } = useAudio();
 
   return (
@@ -299,7 +299,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
       sessionStorage.removeItem("allStagesCompleted");
     }
 
-    router.push(`/spinwheel?set=${encodeURIComponent(set)}`);
+    router.replace(`/spinwheel?set=${encodeURIComponent(set)}`);
   };
 
   const handleSelectAnotherSet = () => {
@@ -307,7 +307,7 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
     sessionStorage.removeItem("finalTotalScore");
     setBackgroundAudioSrc("./songs/bgm.mp3");
     playBackgroundMusic(); // Resume background music
-    router.push("/set");
+    router.replace("/set");
   }
 
   const handleDownloadCertificate = () => {

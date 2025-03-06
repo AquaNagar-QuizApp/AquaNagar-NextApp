@@ -5,10 +5,12 @@ import { motion } from "framer-motion";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
 import { useEffect, useRef } from "react";
 import { useAudio } from "@/context/AudioContext";
+import { useRouter } from "next/navigation"
 
 export default function Objective() {
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const { isMuted } = useAudio();
+    const router = useRouter();
 
     useEffect(() => {
         const audio = audioRef.current;
@@ -36,6 +38,10 @@ export default function Objective() {
             }
         };
     }, []);
+
+    const handleGetStarted = () => {
+        router.replace("/about");
+    }
 
     return (
         <main className="min-h-screen relative overflow-hidden">
@@ -92,7 +98,7 @@ export default function Objective() {
                             </section>
                         </div>
                     </motion.div>
-                    <div className="flex justify-center">
+                    {/* <div className="flex justify-center">
                         <Link href="/about">
                             <motion.button
                                 className="mt-6 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold flex items-center"
@@ -102,7 +108,15 @@ export default function Objective() {
                                 Let&apos;s Get Started
                             </motion.button>
                         </Link>
-                    </div>
+                    </div> */}
+                    <motion.button
+                        className="mt-10 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold"
+                        onClick={handleGetStarted}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        Let&apos;s Get Started
+                    </motion.button>
                 </motion.div>
             </div>
 

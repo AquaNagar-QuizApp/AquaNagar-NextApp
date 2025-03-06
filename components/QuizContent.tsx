@@ -44,7 +44,7 @@ export function QuizContent(): JSX.Element {
   }
 
   const handleQuizCompletion = (score: number): void => {
-    router.push(`/complete?set=${encodeURIComponent(quizSetName ?? "")}&stage=${encodeURIComponent(stageName ?? "")}&score=${score}`);
+    router.replace(`/complete?set=${encodeURIComponent(quizSetName ?? "")}&stage=${encodeURIComponent(stageName ?? "")}&score=${score}`);
   }
 
   if (!stageName || !selectedQuizSet || !selectedStage) {

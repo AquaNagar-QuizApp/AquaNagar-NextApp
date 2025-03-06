@@ -5,10 +5,12 @@ import { motion } from "framer-motion";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
 import { useEffect, useRef } from "react";
 import { useAudio } from "@/context/AudioContext";
+import { useRouter } from "next/navigation"
 
 export default function About() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { isMuted } = useAudio();
+  const router = useRouter();
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -37,7 +39,7 @@ export default function About() {
     };
   }, []);
 
-    useEffect(() => {
+  useEffect(() => {
     const audio = audioRef.current;
 
     const stopAudio = () => {
@@ -54,6 +56,10 @@ export default function About() {
       window.removeEventListener("beforeunload", stopAudio);
     };
   }, []);
+
+  const handleStoryClick = () => {
+    router.replace("/story");
+  }
 
   const certificateInfo = [
     { level: "Gold", threshold: 80, className: "text-yellow-400" },
@@ -139,7 +145,7 @@ export default function About() {
               </section>
             </div>
           </motion.div>
-          <Link href="/story">
+          {/* <Link href="/story">
             <motion.button
               className="mt-6 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold"
               whileHover={{ scale: 1.05 }}
@@ -147,7 +153,15 @@ export default function About() {
             >
               Continue to Story 🚀
             </motion.button>
-          </Link>
+          </Link> */}
+          <motion.button
+            className="mt-10 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold"
+            onClick={handleStoryClick}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Continue to Story 🚀
+          </motion.button>
         </motion.div>
       </div>
 

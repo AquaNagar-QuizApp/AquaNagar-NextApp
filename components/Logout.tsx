@@ -24,7 +24,7 @@ const LogoutButton = () => {
             toggleMute();
             stopBackgroundMusic();
             setBackgroundAudioSrc("./songs/bgm.mp3");
-            router.push("/");
+            router.replace("/");
         }
     };
 

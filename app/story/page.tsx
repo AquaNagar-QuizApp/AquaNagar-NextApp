@@ -49,7 +49,7 @@ export default function Story() {
         setCurrentPart((prev) => prev + 1);
         setFirstLetterVisible(false);
       } else {
-        router.push("/challenge");
+        router.replace("/challenge");
       }
     };
 
@@ -97,7 +97,7 @@ export default function Story() {
     if (audioRef.current) {
       audioRef.current.pause();
     }
-    router.push("/challenge")
+    router.replace("/challenge")
   };
 
   return (

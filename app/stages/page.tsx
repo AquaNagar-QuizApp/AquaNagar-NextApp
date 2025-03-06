@@ -125,7 +125,7 @@ function StagesResult() {
   function navigateToQuiz() {
     const set = searchParams.get("set");
     if (stageParam && set) {
-      router.push(`/quiz?stage=${encodeURIComponent(stageParam)}&set=${encodeURIComponent(set)}`);
+      router.replace(`/quiz?stage=${encodeURIComponent(stageParam)}&set=${encodeURIComponent(set)}`);
     } else {
       console.error("Stage is missing");
     }

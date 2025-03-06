@@ -81,11 +81,11 @@ export const generateCertificate = (score: number): void => {
           const img = new Image();
 
           if (level == "Gold")
-            img.src = "./certificates/gold-certificate.png";
+            img.src = "./certificates/GoldCertificate.png";
           else if (level == "Silver")
-            img.src = "./certificates/Silver_Certificate.png";
+            img.src = "./certificates/SilverCertificate.png";
           else if (level == "Bronze")
-            img.src = "./certificates/Bronze_Certificate.png";
+            img.src = "./certificates/BronzeCertificate.png";
 
           img.onload = function () {
             doc.addImage(img, "JPEG", 0, 0, 800, 600);

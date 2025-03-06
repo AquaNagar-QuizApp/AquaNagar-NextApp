@@ -57,7 +57,7 @@ export default function SetSelection(): JSX.Element {
   const onSelect = (set: QuizSetName) => {
     // setSelectedSet(set)
     setTimeout(() => {
-      router.push(`/spinwheel?set=${encodeURIComponent(set)}`)
+      router.replace(`/spinwheel?set=${encodeURIComponent(set)}`)
     }, 100)
   };
 

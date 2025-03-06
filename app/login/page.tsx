@@ -31,7 +31,7 @@ export default function LoginPage() {
       if (count === 5) {
         clearInterval(interval)
         setTimeout(() => {
-          router.push("/intro")
+          router.replace("/intro")
         }, 1500) // Reduced wait time to 1.5 seconds before navigating
       }
     }, 600) // Increased wave count every 600ms (faster than before)

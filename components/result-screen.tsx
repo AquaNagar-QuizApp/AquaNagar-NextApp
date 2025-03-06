@@ -21,10 +21,10 @@ export default function ResultsScreen({
     if (score >= 80) return { stars: 4, level: "Advanced Water Expert 🌊", color: "bg-blue-500" }
     if (score >= 60) return { stars: 3, level: "Intermediate Water Expert ⚖️", color: "bg-blue-400" }
     if (score >= 40) return { stars: 2, level: "Basic Water Expert ⚠️", color: "bg-blue-300" }
-    return { stars: 1, level: "Emerging Water Expert 🌱", color: "bg-blue-200" }
+    return { stars: 1, level: "Emerging Water Expert 💠", color: "bg-blue-200" }
   }
 
-  const rating = getRating(score)
+  const rating = getRating(score);
 
   // Get traits based on rating
   const getTraits = (stars: number) => {
@@ -72,7 +72,7 @@ export default function ResultsScreen({
     }
   }
 
-  const traits = getTraits(rating.stars)
+  const traits = getTraits(rating.stars);
 
   // Launch confetti effect on component mount
   useEffect(() => {
@@ -80,16 +80,16 @@ export default function ResultsScreen({
     // if (typeof window !== 'undefined'){
     //     return
     // }
-    const duration = 3 * 1000
-    const animationEnd = Date.now() + duration
-    const colors = ["#0284c7", "#0ea5e9", "#7dd3fc", "#38bdf8"]
+    const duration = 3 * 1000;
+    const animationEnd = Date.now() + duration;
+    const colors = ["#0284c7", "#0ea5e9", "#7dd3fc", "#38bdf8"];
 
     const runConfetti = () => {
-      const timeLeft = animationEnd - Date.now()
+      const timeLeft = animationEnd - Date.now();
 
-      if (timeLeft <= 0) return
+      if (timeLeft <= 0) return;
 
-      const particleCount = 50 * (timeLeft / duration)
+      const particleCount = 50 * (timeLeft / duration);
 
       confetti({
         particleCount,
@@ -97,9 +97,9 @@ export default function ResultsScreen({
         origin: { y: 0.6 },
         colors: colors,
         disableForReducedMotion: true,
-      })
+      });
 
-      requestAnimationFrame(runConfetti)
+      requestAnimationFrame(runConfetti);
     }
 
     runConfetti()

@@ -5,11 +5,13 @@ import { motion } from "framer-motion"
 import { AnimatedBackground } from "@/components/AnimatedBackground"
 import { useEffect, useRef } from "react";
 import { useAudio } from "@/context/AudioContext";
+import { useRouter } from "next/navigation"
 
 export default function Challenge() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { isMuted, isPlaying } = useAudio();
-
+  const router = useRouter();
+  
   useEffect(() => {
     const audio = audioRef.current;
 
@@ -45,6 +47,10 @@ export default function Challenge() {
     };
   }, []);
 
+  const handleChallengeClick = () => {
+    router.replace("/role");
+}
+
   return (
     <main className="min-h-screen relative overflow-hidden">
       <AnimatedBackground />
@@ -59,15 +65,16 @@ export default function Challenge() {
           <p className="text-lg text-blue-100 mb-8">
             Are you prepared to take on the role of WSS Official and tackle the water management challenges of Maruthu Nagar?
           </p>
-          <Link href="/role">
-            <motion.button
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Start the Challenge
-            </motion.button>
-          </Link>
+          {/* <Link href="/role"> */}
+          <motion.button
+            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold"
+            onClick={handleChallengeClick}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Start the Challenge
+          </motion.button>
+          {/* </Link> */}
         </motion.div>
       </div>
 

@@ -1,6 +1,5 @@
 import { JSX, useState, type ChangeEvent, type FormEvent } from "react"
 import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -221,7 +220,7 @@ export function Login({ onLogin }: LoginProps): JSX.Element {
             value={formData.title}
             required={false} // Remove native required
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full px-2 py-2">
               <SelectValue placeholder="Select a title" />
             </SelectTrigger>
             <SelectContent className="bg-white shadow-lg rounded-lg">
@@ -309,12 +308,14 @@ export function Login({ onLogin }: LoginProps): JSX.Element {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.5 }}
       >
-        <Button
+        <motion.button
           type="submit"
-          className="w-full bg-blue-700 text-white py-2 rounded-lg hover:bg-blue-600 mt-4"
+          className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 mt-4"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
           Submit
-        </Button>
+        </motion.button>
       </motion.div>
     </motion.form>
   )

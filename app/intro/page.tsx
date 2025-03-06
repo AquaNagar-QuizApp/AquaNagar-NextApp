@@ -5,11 +5,13 @@ import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
 import { useAudio } from "@/context/AudioContext";
+import { useRouter } from "next/navigation"
 
 export default function Intro() {
     const [isMounted, setIsMounted] = useState(false);
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const { isMuted } = useAudio();
+    const router = useRouter();
 
     useEffect(() => {
         const audio = audioRef.current;
@@ -40,6 +42,10 @@ export default function Intro() {
         };
     }, []);
 
+    const handleHiClick = () => {
+        router.replace("/objective");
+    }
+
     return (
         <main className="min-h-screen relative overflow-y-auto">
             <AnimatedBackground />
@@ -64,15 +70,23 @@ export default function Intro() {
                         Hi, I am Bob! I will help you through this game.
                     </motion.p>
 
-                    <Link href="/objective">
+                    {/* <Link href="/objective">
                         <motion.button
-                            className="mt-12 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold"
+                            className="mt-12 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >
                             Say Hi 👋
                         </motion.button>
-                    </Link>
+                    </Link> */}
+                    <motion.button
+                        className="mt-12 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold"
+                        onClick={handleHiClick}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        Say Hi 👋
+                    </motion.button>
                 </motion.div>
             </div>
 

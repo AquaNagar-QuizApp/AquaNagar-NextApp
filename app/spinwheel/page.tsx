@@ -139,7 +139,7 @@ function SpinWheel() {
         //   completedSections[stageResult] = 5;
         //   sessionStorage.setItem("completedSections", JSON.stringify(completedSections));
         // }
-        router.push(`/stages?set=${encodeURIComponent(set)}&stageIndex=${encodeURIComponent(stageIndex)}&stage=${encodeURIComponent(stageResult)}`);
+        router.replace(`/stages?set=${encodeURIComponent(set)}&stageIndex=${encodeURIComponent(stageIndex)}&stage=${encodeURIComponent(stageResult)}`);
       }, 1000);
     }
   }, [stageResult, router, set, backgroundAudioSrc]);

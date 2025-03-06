@@ -77,7 +77,7 @@ export default function RoleSelection() {
   const handleRoleSelect = (role: string) => {
     setSelectedRole(role)
     setTimeout(() => {
-      router.push("/set")
+      router.replace("/set")
     }, 100)
   }
 
