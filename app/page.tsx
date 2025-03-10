@@ -34,7 +34,7 @@ export default function Home() {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.5 }}
           >
-            Maruthu Nagar - The Urban Water Challenge
+            The Urban Water Challenge
           </motion.h1>
           <div className="flex space-x-16 p-8 mb-4 justify-center items-center">
             <motion.img

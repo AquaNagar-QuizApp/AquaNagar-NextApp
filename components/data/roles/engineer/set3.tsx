@@ -73,10 +73,10 @@ const getQuestionsForStage1 = (): Question[] => [
         type: "text",
         question: "Which practice is an example of energy-efficient construction?",
         options: [
-            "Use of hybrid or electric machinery",
             "Operating machinery at maximum speed regardless of load",
             "Continuous use of diesel-powered equipment",
             "Limiting construction to manual methods",
+            "Use of hybrid or electric machinery",
         ],
         correctAnswer: "Use of hybrid or electric machinery",
     },
@@ -107,9 +107,8 @@ const getQuestionsForStage1 = (): Question[] => [
         question: "What is a benefit of sourcing materials locally for WSS construction?",
         options: [
             "Avoids compliance with local regulations",
-            "Reduces transportation costs and emissions",
             "Increases the overall environmental impact",
-            
+            "Reduces transportation costs and emissions",      
             "Reduces the need for community engagement",
         ],
         correctAnswer: "Reduces transportation costs and emissions",
@@ -190,9 +189,9 @@ const getQuestionsForStage2 = (): Question[] => [
         question: "What is the primary benefit of implementing Advanced Metering Infrastructure (AMI) in a WSS?",
         options: [
             "To reduce the system's pressure",
-            "To enable real-time monitoring of water consumption and detect leaks or unauthorized usage",
             "To increase water loss",
             "To limit water usage",
+            "To enable real-time monitoring of water consumption and detect leaks or unauthorized usage",
         ],
         correctAnswer: "To enable real-time monitoring of water consumption and detect leaks or unauthorized usage",
     },
@@ -223,8 +222,8 @@ const getQuestionsForStage2 = (): Question[] => [
         question: "What is the objective of preventive maintenance programs in a Water Supply System?",
         options: [
             "To reduce customer bills",
-            "To identify and address potential sources of water loss before they cause significant issues",
             "To increase water demand",
+            "To identify and address potential sources of water loss before they cause significant issues",
             "To reduce the need for water filtration",
         ],
         correctAnswer: "To identify and address potential sources of water loss before they cause significant issues",
@@ -289,7 +288,7 @@ const getQuestionsForStage4 = (): Question[] => [
     {
         type: "text",
         question: "What is the ideal pH range for drinking water in a distribution system?",
-        options: ["4.0–5.0", "6.5–8.5", "8.0–10.0", "7.5–9.5"],
+        options: ["4.0–5.0", "8.0–10.0", "7.5–9.5", "6.5–8.5"],
         correctAnswer: "6.5–8.5",
     },
     // {
@@ -318,8 +317,8 @@ const getQuestionsForStage4 = (): Question[] => [
         type: "text",
         question: "Why are total coliforms tested in water distribution systems?",
         options: [
-            "To measure water hardness",
             "To check for microbial contamination",
+            "To measure water hardness",
             "To assess turbidity levels",
             "To determine chemical contaminants",
         ],
@@ -347,8 +346,8 @@ const getQuestionsForStage4 = (): Question[] => [
         question: "Which of the following is a primary indicator of organic pollution in water sources?",
         options: [
             "Chloride concentration",
-            "Dissolved oxygen levels",
             "Nitrate concentration",
+            "Dissolved oxygen levels",
             "pH value",
         ],
         correctAnswer: "Dissolved oxygen levels",
@@ -358,9 +357,9 @@ const getQuestionsForStage4 = (): Question[] => [
         question: "What is the main goal of pre-chlorination in water treatment plants?",
         options: [
             "To adjust pH levels",
-            "To eliminate algae and control microbial growth",
             "To remove heavy metals",
             "To improve the taste of water",
+            "To eliminate algae and control microbial growth",
         ],
         correctAnswer: "To eliminate algae and control microbial growth",
     },
@@ -395,8 +394,8 @@ const getQuestionsForStage7 = (): Question[] => [
         type: "text",
         question: "What is the role of boundary valves during the PZT?",
         options: [
-            "To increase flow into the DMA",
             "To ensure hydraulic isolation of the DMA",
+            "To increase flow into the DMA",
             "To measure water quality in the DMA",
             "To prevent pressure loss in the surrounding network",
         ],
@@ -418,9 +417,9 @@ const getQuestionsForStage7 = (): Question[] => [
         question: "Why is it necessary to install temporary flow points during the PZT?",
         options: [
             "To calibrate permanent meters",
-            "To monitor inflow during the test and confirm hydraulic isolation",
             "To reduce installation costs of permanent meters",
-            "To increase water supply during the test",
+            "To increase water supply during the test",            
+            "To monitor inflow during the test and confirm hydraulic isolation",
         ],
         correctAnswer: "To monitor inflow during the test and confirm hydraulic isolation",
     },
@@ -428,8 +427,8 @@ const getQuestionsForStage7 = (): Question[] => [
         type: "text",
         question: "What must occur if the pressure inside the DMA does not drop to zero during the PZT?",
         options: [
-            "The test is successful",
             "There is another inflow pipe that needs to be addressed",
+            "The test is successful",
             "The DMA boundary valves should be opened immediately",
             "The pipeline diameter is too large for testing",
         ],
@@ -440,9 +439,9 @@ const getQuestionsForStage7 = (): Question[] => [
         question: "What is the primary requirement for finalizing a DMA boundary after a PZT?",
         options: [
             "Installation of additional storage tanks",
-            "Permanent meters at all inflow locations",
             "Boundary valves that remain open for increased flow",
             "Relocation of pipelines to higher elevations",
+            "Permanent meters at all inflow locations",
         ],
         correctAnswer: "Permanent meters at all inflow locations",
     },
@@ -462,8 +461,8 @@ const getQuestionsForStage7 = (): Question[] => [
         question: "Which of the following factors should be prioritized when demarcating a DMA boundary?",
         options: [
             "Proximity to water treatment plants",
-            "ELSR/OHT located at a reasonably higher elevation within the DMA",
             "Number of customers in the DMA",
+            "ELSR/OHT located at a reasonably higher elevation within the DMA",
             "Availability of customer complaints",
         ],
         correctAnswer: "ELSR/OHT located at a reasonably higher elevation within the DMA",
@@ -473,9 +472,9 @@ const getQuestionsForStage7 = (): Question[] => [
         question: "What is the formula for calculating Non-Revenue Water (NRW) in a DMA?",
         options: [
             "Total DMA Inflow + Total DMA Consumption",
-            "Total DMA Inflow - Total DMA Consumption",
             "Total DMA Consumption ÷ Total DMA Inflow",
             "Total DMA Consumption × Total DMA Inflow",
+            "Total DMA Inflow - Total DMA Consumption",
         ],
         correctAnswer: "Total DMA Inflow - Total DMA Consumption",
     },
@@ -505,8 +504,8 @@ const getQuestionsForStage3 = (): Question[] => [
         type: "text",
         question: "Which factor contributes most to cost overruns in construction projects?",
         options: [
-            "Effective planning",
             "Poor resource allocation",
+            "Effective planning",
             "Collaboration among teams",
             "Efficient risk management",
         ],
@@ -517,8 +516,8 @@ const getQuestionsForStage3 = (): Question[] => [
         question: 'What does the term “float” mean in project scheduling?',
         options: [
             "The time taken to complete critical tasks",
-            "The additional time available without delaying the project",
             "The cost buffer for emergencies",
+            "The additional time available without delaying the project",
             "The idle time between tasks",
         ],
         correctAnswer: "The additional time available without delaying the project",
@@ -539,8 +538,8 @@ const getQuestionsForStage3 = (): Question[] => [
         type: "text",
         question: "What is the main purpose of a feasibility study in construction projects?",
         options: [
-            "To finalize the project scope",
             "To assess technical and economic viability",
+            "To finalize the project scope",
             "To initiate stakeholder meetings",
             "To plan post-construction activities",
         ],
@@ -551,9 +550,9 @@ const getQuestionsForStage3 = (): Question[] => [
         question: 'What is “slack” in project management?',
         options: [
             "Extra resources for emergencies",
-            "Time delay allowed without impacting the project schedule",
             "Overlapping tasks in a project timeline",
             "Waste in a project process",
+            "Time delay allowed without impacting the project schedule",
         ],
         correctAnswer: "Time delay allowed without impacting the project schedule",
     },
@@ -567,8 +566,8 @@ const getQuestionsForStage3 = (): Question[] => [
         type: "text",
         question: "What is the significance of Key Performance Indicators (KPIs) in construction?",
         options: [
-            "To evaluate project performance and success",
             "To increase project costs",
+            "To evaluate project performance and success",
             "To reduce stakeholder collaboration",
             "To eliminate project risks",
         ],
@@ -583,8 +582,8 @@ const getQuestionsForStage8 = (): Question[] => [
         type: "image",
         question: "Which of the following technologies can help reduce the carbon footprint of water treatment plants?",
         options: [
-            "Fossil-fuel-powered generators",
             "Membrane bioreactors with renewable energy integration",
+            "Fossil-fuel-powered generators",
             "Traditional chlorination systems without automation",
             "Coal-based heating systems for sludge drying"
         ],
@@ -607,9 +606,9 @@ const getQuestionsForStage8 = (): Question[] => [
         question: "How can technology upgradation improve operational performance?",
         options: [
             "By increasing regulatory requirements",
-            "By enabling smart monitoring and automation",
             "By reducing energy efficiency",
             "By delaying infrastructure improvements",
+            "By enabling smart monitoring and automation",
         ],
         correctAnswer: "By enabling smart monitoring and automation",
     },
@@ -618,8 +617,8 @@ const getQuestionsForStage8 = (): Question[] => [
         question: "What is the significance of service reliability and continuity?",
         options: [
             "To ensure intermittent water supply",
-            "To guarantee consistent availability of water without interruptions",
             "To reduce operational monitoring",
+            "To guarantee consistent availability of water without interruptions",
             "To minimize consumer feedback",
         ],
         correctAnswer: "To guarantee consistent availability of water without interruptions",
@@ -645,8 +644,8 @@ const getQuestionsForStage8 = (): Question[] => [
         type: "text",
         question: "Which of the following best describes Non-Revenue Water (NRW)?",
         options: [
-            "Water that is stored for emergencies",
             "Water that is lost through leaks, theft, or metering errors",
+            "Water that is stored for emergencies",
             "Water provided to industries free of cost",
             "Water used for irrigation purposes",
         ],
@@ -657,9 +656,9 @@ const getQuestionsForStage8 = (): Question[] => [
         question: "What is the primary goal of performance benchmarking in water utilities?",
         options: [
             "Increasing operational costs",
-            "Comparing and improving system efficiency against standards",
             "Eliminating customer complaints",
             "Increasing the size of reservoirs",
+            "Comparing and improving system efficiency against standards",
         ],
         correctAnswer: "Comparing and improving system efficiency against standards",
     },
@@ -689,8 +688,8 @@ const getQuestionsForStage8 = (): Question[] => [
         type: "text",
         question: "Why is pressure zoning used in urban water supply systems?",
         options: [
-            "To increase pipe diameters",
             "To balance and regulate pressure in different areas",
+            "To increase pipe diameters",
             "To reduce the number of treatment plants",
             "To lower energy usage in all zones",
         ],
@@ -717,8 +716,8 @@ const getQuestionsForStage5 = (): Question[] => [
         type: "image",
         question: "In urban water management, the role of natural water bodies as shown is to:",
         options: [
-            "Act solely as decorative elements",
             "Serve as natural reservoirs aiding in groundwater recharge",
+            "Act solely as decorative elements",
             "Replace water treatment plants",
             "Generate electricity directly",
         ],
@@ -731,9 +730,9 @@ const getQuestionsForStage5 = (): Question[] => [
             "What is the primary cause of contamination in the water distribution system after it leaves the Water Treatment Plant (WTP)?",
         options: [
             "High chlorine levels",
-            "Backflow from industrial, commercial, and residential customers",
             "Reduced water temperature",
             "Over-chlorination during treatment",
+            "Backflow from industrial, commercial, and residential customers",
         ],
         correctAnswer:
             "Backflow from industrial, commercial, and residential customers",
@@ -779,8 +778,8 @@ const getQuestionsForStage5 = (): Question[] => [
         question:
             "Which type of water quality monitoring method is considered most effective for continuous monitoring in the distribution network?",
         options: [
-            "Manual grab sampling",
             "Fixed-location sensors for real-time data collection",
+            "Manual grab sampling",
             "Periodic laboratory testing",
             "Visual inspection of water clarity",
         ],
@@ -802,8 +801,8 @@ const getQuestionsForStage5 = (): Question[] => [
         question: "What is the role of acoustic monitoring in water leakage management?",
         options: [
             "To measure water quality parameters",
-            "To detect leaks by listening for acoustic signals from leaks",
             "To reduce chemical usage in water treatment",
+            "To detect leaks by listening for acoustic signals from leaks",
             "To monitor customer water usage",
         ],
         correctAnswer: "To detect leaks by listening for acoustic signals from leaks",
@@ -814,9 +813,9 @@ const getQuestionsForStage5 = (): Question[] => [
             "What is a significant advantage of using a hydraulic model in water leakage management?",
         options: [
             "It increases water pressure",
-            "It simulates water flow and pressure to predict and prevent leaks",
             "It allows for the immediate repair of leaks",
             "It provides real-time water quality data",
+            "It simulates water flow and pressure to predict and prevent leaks",
         ],
         correctAnswer: "It simulates water flow and pressure to predict and prevent leaks",
     },
@@ -825,8 +824,8 @@ const getQuestionsForStage5 = (): Question[] => [
         question: "What does the Minimum Night Consumption (MNC) test help to determine?",
         options: [
             "Water quality issues during peak demand",
-            "Non-Revenue Water (NRW) and potential leakage areas",
             "Customer satisfaction with water pressure",
+            "Non-Revenue Water (NRW) and potential leakage areas",
             "Bacterial contamination levels",
         ],
         correctAnswer: "Non-Revenue Water (NRW) and potential leakage areas",

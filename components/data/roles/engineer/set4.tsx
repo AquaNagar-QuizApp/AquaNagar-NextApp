@@ -58,8 +58,8 @@ const getQuestionsForStage1 = (): Question[] => [
             "Why is it important to regularly calibrate water meters in a WSS?",
         options: [
             "To reduce customer complaints about water quality",
-            "To maintain accuracy in measuring water consumption",
             "To simplify maintenance planning",
+            "To maintain accuracy in measuring water consumption",
             "To eliminate the need for billing systems",
         ],
         correctAnswer: "To maintain accuracy in measuring water consumption",
@@ -94,8 +94,8 @@ const getQuestionsForStage1 = (): Question[] => [
         question:
             "How does real-time monitoring contribute to efficient WSS operation?",
         options: [
-            "By replacing preventive maintenance entirely",
             "By collecting and transmitting real-time data for informed decision-making",
+            "By replacing preventive maintenance entirely",
             "By reducing the need for customer engagement",
             "By increasing manual intervention in system operations",
         ],
@@ -108,9 +108,9 @@ const getQuestionsForStage1 = (): Question[] => [
             "What is the purpose of decision support systems in WSS management?",
         options: [
             "To reduce system transparency",
-            "To provide actionable insights and recommendations based on data analysis",
             "To eliminate the need for maintenance personnel training",
             "To increase water loss rates",
+            "To provide actionable insights and recommendations based on data analysis",
         ],
         correctAnswer:
             "To provide actionable insights and recommendations based on data analysis",
@@ -134,8 +134,8 @@ const getQuestionsForStage1 = (): Question[] => [
             "Why is customer engagement important in non-revenue water management?",
         options: [
             "To reduce the need for accurate metering systems",
-            "To educate users about leak reporting and water conservation practices",
             "To eliminate water audits entirely",
+            "To educate users about leak reporting and water conservation practices",
             "To limit public awareness of water-saving programs",
         ],
         correctAnswer:
@@ -174,8 +174,8 @@ const getQuestionsForStage2 = (): Question[] => [
         question: "How do leak repair programs help reduce water loss?",
         options: [
             "By increasing water pressure",
-            "By ensuring timely detection and repair of leaks",
             "By reducing system capacity",
+            "By ensuring timely detection and repair of leaks",
             "By increasing water consumption",
         ],
         correctAnswer: "By ensuring timely detection and repair of leaks",
@@ -184,8 +184,8 @@ const getQuestionsForStage2 = (): Question[] => [
         type: "text",
         question: "Which of the following is a key benefit of smart meters in water supply systems?",
         options: [
-            "Reduced accuracy of water billing",
             "Improved monitoring and detection of leaks and unauthorized connections",
+            "Reduced accuracy of water billing",
             "Reduced customer engagement",
             "Increased pressure in the system",
         ],
@@ -196,9 +196,9 @@ const getQuestionsForStage2 = (): Question[] => [
         question: "What is one of the risks of high water pressure in a distribution network?",
         options: [
             "Increased efficiency of the system",
-            "Higher likelihood of pipe bursts and leaks",
             "Reduced water flow",
             "Decreased water consumption",
+            "Higher likelihood of pipe bursts and leaks",
         ],
         correctAnswer: "Higher likelihood of pipe bursts and leaks",
     },
@@ -251,9 +251,9 @@ const getQuestionsForStage2 = (): Question[] => [
         question: "What is one way to optimize the performance of a Water Supply System’s distribution network?",
         options: [
             "By reducing water supply",
-            "By optimizing pressure levels and detecting leaks early",
             "By increasing pipe sizes without analysis",
             "By limiting the use of advanced technologies",
+            "By optimizing pressure levels and detecting leaks early",
         ],
         correctAnswer: "By optimizing pressure levels and detecting leaks early",
     },
@@ -337,8 +337,8 @@ const getQuestionsForStage4 = (): Question[] => [
         question: "Which chemical is commonly used for pH adjustment in water treatment?",
         options: [
             "Sodium hypochlorite",
-            "Lime (calcium hydroxide)",
             "Ferric chloride",
+            "Lime (calcium hydroxide)",
             "Potassium permanganate",
         ],
         correctAnswer: "Lime (calcium hydroxide)",
@@ -347,8 +347,8 @@ const getQuestionsForStage4 = (): Question[] => [
         type: "text",
         question: "Which of the following is an effective method to control corrosion in distribution systems?",
         options: [
-            "Adding chlorine",
             "Adjusting pH and adding corrosion inhibitors",
+            "Adding chlorine",
             "Reducing water velocity",
             "Replacing pipes regularly",
         ],
@@ -359,9 +359,9 @@ const getQuestionsForStage4 = (): Question[] => [
         question: "What does the presence of nitrates in drinking water indicate?",
         options: [
             "Industrial contamination",
-            "Agricultural runoff or sewage contamination",
             "Naturally occurring minerals",
             "Microbial growth",
+            "Agricultural runoff or sewage contamination",
         ],
         correctAnswer: "Agricultural runoff or sewage contamination",
     },
@@ -375,8 +375,8 @@ const getQuestionsForStage4 = (): Question[] => [
         type: "text",
         question: "What is the primary role of activated carbon in water treatment?",
         options: [
-            "Removal of suspended solids",
             "Adsorption of organic contaminants and odor-causing substances",
+            "Removal of suspended solids",
             "Disinfection of water",
             "Adjusting pH levels",
         ],
@@ -425,9 +425,9 @@ const getQuestionsForStage7 = (): Question[] => [
         question: "What is the relationship between network pressure and leakage?",
         options: [
             "Higher pressure results in reduced leakage",
-            "Higher pressure increases leakage",
             "Pressure has no effect on leakage",
             "Leakage only occurs in low-pressure zones",
+            "Higher pressure increases leakage",
         ],
         correctAnswer: "Higher pressure increases leakage",
     },
@@ -480,9 +480,9 @@ const getQuestionsForStage7 = (): Question[] => [
         question: "What is the key benefit of using pressure-reducing valves in a network?",
         options: [
             "They increase the flow rate in pipes",
-            "They reduce the occurrence of leaks by managing pressure",
             "They eliminate the need for regular pipeline maintenance",
             "They help detect illegal connections",
+            "They reduce the occurrence of leaks by managing pressure",
         ],
         correctAnswer: "They reduce the occurrence of leaks by managing pressure",
     },
@@ -490,8 +490,8 @@ const getQuestionsForStage7 = (): Question[] => [
         type: "text",
         question: "What should be done after identifying high MNF levels in a DMA?",
         options: [
-            "Increase network pressure",
             "Perform a Step Test to locate leaks",
+            "Increase network pressure",
             "Replace all customer meters in the DMA",
             "Install additional boundary valves",
         ],
@@ -529,9 +529,9 @@ const getQuestionsForStage3 = (): Question[] => [
         question: "Which concept focuses on designing buildings with minimal environmental impact?",
         options: [
             "Lean Construction",
-            "Green Building",
             "Total Quality Management (TQM)",
             "Building Information Modeling (BIM)",
+            "Green Building",
         ],
         correctAnswer: "Green Building",
     },
@@ -539,8 +539,8 @@ const getQuestionsForStage3 = (): Question[] => [
         type: "text",
         question: "Which process evaluates construction progress against planned performance?",
         options: [
-            "Scheduling",
             "Monitoring and Control",
+            "Scheduling",
             "Initiation",
             "Closing",
         ],
@@ -584,8 +584,8 @@ const getQuestionsForStage3 = (): Question[] => [
         question: "What is a primary benefit of construction automation technologies like SCADA?",
         options: [
             "Enhanced project visualization",
-            "Improved efficiency and monitoring",
             "Reduced regulatory requirements",
+            "Improved efficiency and monitoring",
             "Elimination of stakeholder communication",
         ],
         correctAnswer: "Improved efficiency and monitoring",
@@ -605,8 +605,8 @@ const getQuestionsForStage3 = (): Question[] => [
         type: "text",
         question: "What does 'Earned Value' in EVM represent?",
         options: [
-            "The budget allocated for a project",
             "The completed work’s monetary value",
+            "The budget allocated for a project",
             "The cost of future tasks",
             "The project timeline",
         ],
@@ -645,8 +645,8 @@ const getQuestionsForStage8 = (): Question[] => [
         question: "Which key metric indicates the level of customer satisfaction in water utilities?",
         options: [
             "Leakage rate",
-            "Complaint resolution time",
             "Length of pipelines",
+            "Complaint resolution time",
             "Service reservoir capacity",
         ],
         correctAnswer: "Complaint resolution time",
@@ -655,8 +655,8 @@ const getQuestionsForStage8 = (): Question[] => [
         type: "text",
         question: "What is the purpose of real-time monitoring in water supply systems?",
         options: [
-            "To increase operational delays",
             "To detect faults and inefficiencies immediately",
+            "To increase operational delays",
             "To eliminate the need for maintenance",
             "To increase energy usage",
         ],
@@ -666,9 +666,9 @@ const getQuestionsForStage8 = (): Question[] => [
         type: "text",
         question: "Which technology helps in tracking water losses in real time?",
         options: [
-            "Advanced Metering Infrastructure (AMI)",
             "Conventional meters",
             "Manual inspections",
+            "Advanced Metering Infrastructure (AMI)",
             "Pipeline reinforcements",
         ],
         correctAnswer: "Advanced Metering Infrastructure (AMI)",
@@ -688,8 +688,8 @@ const getQuestionsForStage8 = (): Question[] => [
         type: "text",
         question: "What does a high rate of pipe bursts in a water system indicate?",
         options: [
-            "Proper pressure management",
             "Lack of maintenance and aging infrastructure",
+            "Proper pressure management",
             "Optimized operational performance",
             "Effective asset management",
         ],
@@ -699,9 +699,9 @@ const getQuestionsForStage8 = (): Question[] => [
         type: "text",
         question: "What role do SCADA systems play in operational performance?",
         options: [
-            "They automate and control water supply operations remotely",
             "They slow down system responses",
             "They focus on manual inspections",
+            "They automate and control water supply operations remotely",
             "They increase operational risks",
         ],
         correctAnswer: "They automate and control water supply operations remotely",
@@ -722,9 +722,9 @@ const getQuestionsForStage8 = (): Question[] => [
         question: "What does pump head refer to in water systems?",
         options: [
             "Height of the pump motor",
-            "Pressure or height to which water is lifted by the pump",
             "Length of the pump shaft",
             "Weight of the pump components",
+            "Pressure or height to which water is lifted by the pump",
         ],
         correctAnswer: "Pressure or height to which water is lifted by the pump",
     },
@@ -816,8 +816,8 @@ const getQuestionsForStage5 = (): Question[] => [
         type: "text",
         question: "What does SCADA stand for in the context of Smart Water Networks?",
         options: [
-            "System for Control and Data Analysis",
             "Supervisory Control and Data Acquisition",
+            "System for Control and Data Analysis",
             "Smart Communication and Data Automation",
             "Standardized Control and Data Analysis",
         ],
@@ -839,9 +839,9 @@ const getQuestionsForStage5 = (): Question[] => [
         question: "What is the primary advantage of using Geographic Information System (GIS) in Smart Water Networks?",
         options: [
             "To store water usage data",
-            "To track real-time water flow and network performance geographically",
             "To monitor customer satisfaction",
             "To improve customer billing accuracy",
+            "To track real-time water flow and network performance geographically",
         ],
         correctAnswer: "To track real-time water flow and network performance geographically",
     },
@@ -871,8 +871,8 @@ const getQuestionsForStage5 = (): Question[] => [
         type: "text",
         question: 'What is the purpose of creating a "Smart Pressure Zone" within a Smart Water Network?',
         options: [
-            "To reduce the water pressure throughout the entire network",
             "To optimize pressure distribution for efficient water delivery and reduced leakage",
+            "To reduce the water pressure throughout the entire network",
             "To install more pressure-reducing valves",
             "To monitor and control water consumption",
         ],
@@ -888,8 +888,8 @@ const getQuestionsForStage6 = (): Question[] => [
         question: "What is the primary purpose of issuing water bills according to the prevailing Water Tariff Notification?",
         options: [
             "To monitor the installation of water meters",
-            "To ensure consumers are charged based on their water consumption",
             "To control water wastage in households",
+            "To ensure consumers are charged based on their water consumption",
             "To encourage consumers to reduce their water usage",
         ],
         correctAnswer: "To ensure consumers are charged based on their water consumption",
@@ -920,8 +920,8 @@ const getQuestionsForStage6 = (): Question[] => [
         type: "text",
         question: "What is the role of the operator in collecting one-time connection charges for new connections?",
         options: [
-            "The operator raises the connection charges but does not collect them",
             "The operator collects the one-time connection charges and deposits them along with the consumer payments",
+            "The operator raises the connection charges but does not collect them",
             "The operator helps the consumers pay the charges over multiple installments",
             "The operator assists in the setup of the new connections, but not in collecting charges",
         ],
@@ -943,9 +943,9 @@ const getQuestionsForStage6 = (): Question[] => [
         question: "Why is the willingness to pay important in consumer awareness programs?",
         options: [
             "It helps in determining the cost of water production",
-            "It affects the water utility’s ability to cover production and distribution costs",
             "It helps in deciding the water tariff",
             "It reduces water wastage among consumers",
+            "It affects the water utility’s ability to cover production and distribution costs",
         ],
         correctAnswer: "It affects the water utility’s ability to cover production and distribution costs",
     },
@@ -953,8 +953,8 @@ const getQuestionsForStage6 = (): Question[] => [
         type: "text",
         question: "How will the effectiveness of the consumer awareness program be measured?",
         options: [
-            "By analyzing water consumption data",
             "By using tailored questionnaires to measure consumer perceptions and willingness to pay",
+            "By analyzing water consumption data",
             "By monitoring water quality improvements",
             "By evaluating the number of new connections established",
         ],
@@ -976,8 +976,8 @@ const getQuestionsForStage6 = (): Question[] => [
         question: "What is a limitation of Meter Data Management Systems (MDMS)?",
         options: [
             "It requires minimal initial investment",
-            "Meters can lose accuracy over time and require routine maintenance",
             "It guarantees 100% accuracy in water billing",
+            "Meters can lose accuracy over time and require routine maintenance",
             "It does not require any infrastructure changes",
         ],
         correctAnswer: "Meters can lose accuracy over time and require routine maintenance",
@@ -986,8 +986,8 @@ const getQuestionsForStage6 = (): Question[] => [
         type: "text",
         question: "What can the consumer awareness program provide information about to help consumers appreciate water costs?",
         options: [
-            "The cost of maintaining water pipelines",
             "The cost of pumping, treatment, and supply of water and its relation to water tariffs",
+            "The cost of maintaining water pipelines",
             "The cost of land acquisition for water sources",
             "The cost of replacing old meters",
         ],
