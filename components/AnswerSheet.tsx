@@ -1,5 +1,5 @@
 import jsPDF from 'jspdf';
-import type { QuizSetName, Role, Set, Stage } from "@/types"
+import type { Role, Set } from "@/types"
 import { quizDataByRole } from './data/quizData';
 
 export const generateAnswerSheet = (quizSetName: string) => {
