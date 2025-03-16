@@ -6,7 +6,6 @@ import { Login } from "@/components/Login"
 import { User } from "@/types"
 import { useState } from "react"
 import { useAudio } from "@/context/AudioContext"
-// import AudioPlayer from "@/components/AudioPlayer"
 
 export default function LoginPage() {
   const [showInitialContent, setShowInitialContent] = useState(true)
@@ -16,22 +15,22 @@ export default function LoginPage() {
   const { isMuted, playBackgroundMusic } = useAudio();
 
   const handleLogin = (userData: User) => {
-    setShowInitialContent(false)
-    setShowWaves(true)
-    let count = 0
+    setShowInitialContent(false);
+    setShowWaves(true);
+    let count = 0;
 
     if (!isMuted) {
       playBackgroundMusic();
     }
 
     const interval = setInterval(() => {
-      setWaveCount((prev) => prev + 1)
-      count++
+      setWaveCount((prev) => prev + 1);
+      count++;
 
       if (count === 5) {
-        clearInterval(interval)
+        clearInterval(interval);
         setTimeout(() => {
-          router.push("/role")
+          router.replace("/intro")
         }, 1500) // Reduced wait time to 1.5 seconds before navigating
       }
     }, 600) // Increased wave count every 600ms (faster than before)
@@ -40,7 +39,6 @@ export default function LoginPage() {
       sessionStorage.setItem("isLoggedIn", "true")
       sessionStorage.setItem("currentUser", JSON.stringify(userData))
     }
-    // console.log("User logged in:", userData)
   }
 
   return (

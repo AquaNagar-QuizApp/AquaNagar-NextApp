@@ -1,10 +1,55 @@
 "use client";
 
-import Link from "next/link"
 import { motion } from "framer-motion"
 import { AnimatedBackground } from "@/components/AnimatedBackground"
+import { useEffect, useRef } from "react";
+import { useAudio } from "@/context/AudioContext";
+import { useRouter } from "next/navigation"
 
 export default function Challenge() {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { isMuted, isPlaying } = useAudio();
+  const router = useRouter();
+
+  useEffect(() => {
+    const audio = audioRef.current;
+
+    // Play audio if not muted
+    if (audio) {
+      if (!isMuted && audio.paused) {
+        audio.play();
+      }
+      audio.muted = isMuted; // Just mute/unmute without stopping
+    }
+  }, [isMuted]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    const stopAudio = () => {
+      if (audio) {
+        if (!isMuted && !document.hidden && !isPlaying && audio.paused) {
+          audio.play();
+        } else {
+          audio.pause();
+          audio.currentTime = 0; // Reset audio to start
+        }
+      }
+    };
+
+    // Stop audio on beforeunload (page refresh/close)
+    window.addEventListener("visibilitychange", stopAudio);
+    window.addEventListener("beforeunload", stopAudio);
+
+    return () => {
+      window.removeEventListener("visibilitychange", stopAudio);
+      window.removeEventListener("beforeunload", stopAudio);
+    };
+  }, []);
+
+  const handleChallengeClick = () => {
+    router.replace("/role");
+  }
+
   return (
     <main className="min-h-screen relative overflow-hidden">
       <AnimatedBackground />
@@ -17,21 +62,21 @@ export default function Challenge() {
         >
           <h2 className="text-3xl font-semibold text-white mb-4">Ready for the Challenge?</h2>
           <p className="text-lg text-blue-100 mb-8">
-            Are you prepared to take on the role of WSS Engineer and tackle the water management challenges of Aqua
-            Nagar?
+            Are you prepared to take on the role of WSS Official and tackle the water management challenges of Salem City?
           </p>
-          <Link href="/set">
-            <motion.button
-              className="px-6 py-3 bg-blue-500 text-white rounded-lg font-semibold"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Start the Challenge
-            </motion.button>
-          </Link>
+          <motion.button
+            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold"
+            onClick={handleChallengeClick}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Start the Challenge
+          </motion.button>
         </motion.div>
       </div>
+
+      {/* Hidden Audio Element */}
+      <audio ref={audioRef} src="./voiceover/challenge.mp3" preload="auto" />
     </main>
   )
 }
-

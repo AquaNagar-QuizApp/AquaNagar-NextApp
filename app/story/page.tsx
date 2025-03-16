@@ -8,10 +8,10 @@ import { useAudio } from "@/context/AudioContext";
 
 // Array of story parts
 const storyParts = [
-  "The city of Aqua Nagar in Tamil Nadu State is growing rapidly. More residents and businesses are popping up every day, and with this growth comes the increased demand for clean, reliable water.",
+  "The city of Salem in Tamil Nadu State is growing rapidly. More residents and businesses are popping up every day, and with this growth comes the increased demand for clean, reliable water.",
   "The city's current water supply infrastructure is outdated, and leaks, poor management, and inefficiencies are beginning to take their toll.",
-  "The Government has tasked you to design, implement, and sustain a modern Water Supply System that can support Aqua Nagar for years to come.",
-  "As you take on the role of the WSS Engineer, you'll begin by designing a water supply system that considers the entire life cycle of the infrastructure.",
+  "The Government has tasked you to design, implement, and sustain a modern Water Supply System that can support Salem City for years to come.",
+  "As you take on the role of the WSS Official, you'll begin by designing a water supply system that considers the entire life cycle of the infrastructure.",
   "You need to make key decisions on the system's design, including choosing the right materials, selecting energy-efficient treatment methods, and ensuring that water is treated and delivered in a safe, reliable, and sustainable way.",
   "Your decisions will impact both the financial and environmental sustainability of the system."
 ];
@@ -49,7 +49,7 @@ export default function Story() {
         setCurrentPart((prev) => prev + 1);
         setFirstLetterVisible(false);
       } else {
-        router.push("/challenge");
+        router.replace("/challenge");
       }
     };
 
@@ -63,17 +63,11 @@ export default function Story() {
     };
 
     // Handle page unload or visibility change
-    // const handleVisibilityChange = () => {
-    //   if (document.hidden) stopAudio();
-    // };
-
     window.addEventListener("beforeunload", stopAudio);
-    // document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
       stopAudio();
       window.removeEventListener("beforeunload", stopAudio);
-      // document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [firstLetterVisible, currentPart, router]);
 
@@ -84,26 +78,11 @@ export default function Story() {
     }
   }, [isMuted]);
 
-
-  // const handlePrevious = () => {
-  //   if (currentPart > 0) {
-  //     setCurrentPart(currentPart - 1);
-  //   }
-  // };
-
-  // const handleNext = () => {
-  //   if (currentPart < storyParts.length - 1) {
-  //     setCurrentPart(currentPart + 1);
-  //   } else {
-  //     router.push("/challenge");
-  //   }
-  // };
-
   const handleSkip = () => {
     if (audioRef.current) {
       audioRef.current.pause();
     }
-    router.push("/challenge")
+    router.replace("/challenge")
   };
 
   return (
@@ -151,26 +130,6 @@ export default function Story() {
             </motion.div>
           </AnimatePresence>
           <div className="flex justify-end items-center">
-            {/* <div className="flex space-x-2">
-              <motion.button
-                className="px-4 py-2 bg-blue-700 text-white rounded-lg font-semibold"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handlePrevious}
-                disabled={currentPart === 0}
-              >
-                &lt;
-                Prev
-              </motion.button>
-              <motion.button
-                className="px-4 py-2 bg-blue-700 text-white rounded-lg font-semibold"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleNext}
-              > Next
-                &gt;
-              </motion.button>
-            </div> */}
             <motion.button
               className="px-6 py-2 bg-gray-600/30 text-white rounded-lg font-semibold backdrop-blur-lg"
               whileHover={{ scale: 1.05 }}

@@ -23,7 +23,7 @@ const LogoutButton = () => {
             // sessionStorage.removeItem("currentUser"); // Clear user data if stored
             toggleMute();
             stopBackgroundMusic();
-            router.push("/");
+            router.replace("/");
         }
     };
 

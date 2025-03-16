@@ -12,8 +12,7 @@ export function QuizContent(): JSX.Element {
   const stageName = searchParams.get("stage")
   const stageNameText = searchParams.get("stageNameText")
   const quizSetName = searchParams.get("set") as QuizSetName | null
-  let selectedQuizSet: Set | undefined;
-  //let selectedStage: Stage | undefined;
+
   const [selectedStage, setSelectedStage] = useState<Stage | undefined>(undefined)
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -32,9 +31,6 @@ export function QuizContent(): JSX.Element {
       {
         setSelectedStage(transformDataToStage(stageNameText, data));
       }
-      
-
-      //return data;
     } catch (error) {
       console.error("Failed to fetch questions:", error);
       return null;
@@ -103,7 +99,7 @@ export function QuizContent(): JSX.Element {
     //   `/certificate?stage=${encodeURIComponent(stage ?? "")}&set=${encodeURIComponent(quizSetName ?? "")}&score=${score}`,
     // )
 
-    router.push(`/complete?set=${encodeURIComponent(quizSetName ?? "")}&stage=${encodeURIComponent(stageNameText ?? "")}&score=${score}`);
+    router.replace(`/complete?set=${encodeURIComponent(quizSetName ?? "")}&stage=${encodeURIComponent(stageNameText ?? "")}&score=${score}`);
   }
 
   // if (!stage || !quizSetName || !(quizSetName in quizData)) {

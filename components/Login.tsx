@@ -182,7 +182,7 @@ export function Login({ onLogin }: LoginProps): JSX.Element {
             value={String(formData.title)}
             required={false} // Remove native required
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full px-2 py-2">
               <SelectValue placeholder="Select a title" />
             </SelectTrigger>
             <SelectContent className="bg-white shadow-lg rounded-lg">

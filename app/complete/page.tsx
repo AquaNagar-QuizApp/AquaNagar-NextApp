@@ -4,10 +4,12 @@ import { useState, useEffect, Suspense } from "react"
 import Confetti from "react-confetti"
 import { useRouter, useSearchParams } from "next/navigation"
 import { JSX } from "react/jsx-runtime"
-import { jsPDF } from "jspdf";
 import { useAudio } from "@/context/AudioContext"
-import { Title, User } from "@/types"
-
+import { Activity, ArrowRight, Clock, Download, Droplet, Heart, IndianRupee, PieChart, RefreshCw, Wifi, Zap } from "lucide-react"
+import { AnimatedBackground } from "@/components/AnimatedBackground"
+import ResultsScreen from "@/components/result-screen"
+import { generateCertificate } from "@/components/Certificate";
+import { generateAnswerSheet } from "@/components/AnswerSheet"
 
 interface StageScoreSectionProps {
   // windowSize: { width: number; height: number };
@@ -20,25 +22,22 @@ interface StageScoreSectionProps {
   setBackgroundAudioSrc: (src: string) => void; // Function to update the audio source
 }
 
+interface Stage {
+  name: string;
+  title: string;
+  score: number;
+  maxScore: number;
+  unit: string;
+  decrease: boolean;
+  incOrDecValue: number;
+  icon: React.ReactNode;
+  wrongAnswerMessage: [string, string];
+  allCorrectAnswermessage: [string, string];
+}
 
 export default function Complete(): JSX.Element {
-  // const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
   const router = useRouter()
-
   const { isMuted, backgroundAudioSrc, playBackgroundMusic, setBackgroundAudioSrc } = useAudio();
-
-
-
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     setWindowSize({ width: window.innerWidth, height: window.innerHeight })
-  //   }
-
-  //   handleResize()
-  //   window.addEventListener("resize", handleResize)
-
-  //   return () => window.removeEventListener("resize", handleResize)
-  // }, [])
 
   return (
     <main className="min-h-screen relative overflow-hidden">
@@ -69,6 +68,161 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
   const stage = searchParams.get("stage") || "Unknown";
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
+  const stages: Stage[] = [
+    {
+      name: "Plan a Water Supply System",
+      title: "Dam Capacity",
+      score: 0,
+      maxScore: 6100,
+      unit: "Million Cubic Feet",
+      decrease: true,
+      incOrDecValue: 307,
+      icon: <Droplet className="w-16 h-16 text-blue-500 flex-shrink-0" />,
+      wrongAnswerMessage: [
+        "Dam capacity has been compromised.",
+        "Salem City Dam's storage capacity has been reduced due to planning errors."
+      ],
+      allCorrectAnswermessage: [
+        "Dam capacity is at optimal level.",
+        "Salem City Dam is operating at full capacity, ensuring reliable water supply."
+      ]
+    },
+    {
+      name: "Design the Water Supply System",
+      title: "Project Budget",
+      score: 0,
+      maxScore: 150,
+      unit: "Crores",
+      decrease: false,
+      incOrDecValue: 5,
+      icon: <IndianRupee className="w-16 h-16 text-green-500 flex-shrink-0" />,
+      wrongAnswerMessage: [
+        "Budget overruns are affecting the project.",
+        "of project budget cost has increased due to design inefficiencies."
+      ],
+      allCorrectAnswermessage: [
+        "Project budget is on target.",
+        "The project has maintained its budget, demonstrating excellent financial management."
+      ]
+    },
+    {
+      name: "Building the Infrastructure",
+      title: "Construction Timeline",
+      score: 0,
+      maxScore: 24,
+      unit: "Months",
+      decrease: false,
+      incOrDecValue: 1,
+      icon: <Clock className="w-16 h-16 text-purple-500 flex-shrink-0" />,
+      wrongAnswerMessage: [
+        "Project timeline has been extended.",
+        "of timeline has been extended due to implementation challenges."
+      ],
+      allCorrectAnswermessage: [
+        "Project timeline is on schedule.",
+        "Construction completed on schedule, allowing timely water service to the community."
+      ]
+    },
+    {
+      name: "Water Treatment",
+      title: "Public Health",
+      score: 0,
+      maxScore: 0,
+      unit: "Cases",
+      decrease: false,
+      incOrDecValue: 100,
+      icon: <Activity className="w-16 h-16 text-red-500 flex-shrink-0" />,
+      wrongAnswerMessage: [
+        "Public health is at risk due to the lack of prevention.",
+        "of waterborne diseases are increasing, due to an inefficient water treatment system."
+      ],
+      allCorrectAnswermessage: [
+        "Public health is protected with clean water.",
+        "of waterborne diseases reported, thanks to an effective water treatment system."
+      ]
+    },
+    {
+      name: "Smart Water Networks",
+      title: "Smart Distribution",
+      score: 0,
+      maxScore: 0,
+      unit: "Cubic Feet Per Day",
+      decrease: false,
+      incOrDecValue: 13700,
+      icon: <Wifi className="w-16 h-16 text-purple-500 flex-shrink-0" />,
+      wrongAnswerMessage: [
+        "Water losses are mounting in the distribution system.",
+        "of water is being lost due to inefficiencies in the SCADA system."
+      ],
+      allCorrectAnswermessage: [
+        "Water distribution system is operating efficiently.",
+        "of water loss in the SCADA system, achieving maximum distribution efficiency."
+      ]
+    },
+    {
+      name: "Metering, Billing, and Collection",
+      title: "Energy Efficiency",
+      score: 0,
+      maxScore: 0,
+      unit: "kWh per Month",
+      decrease: false,
+      incOrDecValue: 500,
+      icon: <Zap className="w-16 h-16 text-yellow-500 flex-shrink-0" />,
+      wrongAnswerMessage: [
+        "Energy efficiency is compromised.",
+        "of excess energy is being consumed due to operational inefficiencies."
+      ],
+      allCorrectAnswermessage: [
+        "Energy efficiency is maximized.",
+        "of excess energy consumption, demonstrating optimal operational efficiency."
+      ]
+    },
+    {
+      name: "Non-Revenue Water Management",
+      title: "Water Conservation",
+      score: 0,
+      maxScore: 0,
+      unit: "Cubic Feet per Day",
+      decrease: false,
+      incOrDecValue: 13000,
+      icon: <PieChart className="w-16 h-16 text-indigo-500 flex-shrink-0" />,
+      wrongAnswerMessage: [
+        "Water leakage is affecting system performance.",
+        "of water is being lost through leaks in the distribution system."
+      ],
+      allCorrectAnswermessage: [
+        "Water conservation is at optimal levels.",
+        "of water leakage, ensuring maximum conservation of this precious resource."
+      ]
+    },
+    {
+      name: "Performance Assessment & Operational Excellence",
+      title: "Customer Satisfaction",
+      score: 0,
+      maxScore: 100,
+      unit: "% Customers",
+      decrease: true,
+      incOrDecValue: 2.5,
+      icon: <Heart className="w-16 h-16 text-pink-500 flex-shrink-0" />,
+      wrongAnswerMessage: [
+        "Customer satisfaction is declining.",
+        "are happy with the water supply service quality."
+      ],
+      allCorrectAnswermessage: [
+        "Customer satisfaction is excellent.",
+        "are happy and reflecting excellent service quality and reliability."
+      ]
+    }
+  ];
+
+  const currentStage = stages.find(s => s.name === stage);
+
+  const computedScore = currentStage
+    ? currentStage.decrease
+      ? currentStage.maxScore - (10 - (score ?? 0)) * currentStage.incOrDecValue
+      : (10 - (score ?? 0)) * currentStage.incOrDecValue
+    : 0;
+
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const [totalScore, setTotalScore] = useState(0);
   const [allSectionsCompleted, setAllSectionsCompleted] = useState(false);
@@ -98,17 +252,16 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
         }
 
         const responseUri = `${apiBaseUrl}/api/Sections/set/${setId}/user/${userId}/role/${roleId}/summary`;
-      const response = await fetch(responseUri);
-      const stagesSummary: { isAllSectionsCompleted: boolean; totalScore: number } = await response.json();
+        const response = await fetch(responseUri);
+        const stagesSummary: { isAllSectionsCompleted: boolean; totalScore: number } = await response.json();
 
-      if (stagesSummary.isAllSectionsCompleted){
-        sessionStorage.removeItem("currentSet");
-      }
+        if (stagesSummary.isAllSectionsCompleted) {
+          sessionStorage.removeItem("currentSet");
+        }
 
-      setAllSectionsCompleted(stagesSummary.isAllSectionsCompleted);
-      setTotalScore(stagesSummary.totalScore);
+        setAllSectionsCompleted(stagesSummary.isAllSectionsCompleted);
+        setTotalScore(stagesSummary.totalScore);
       }
-      
 
       // setStagesSummary(stagesSummary);
     } catch (error) {
@@ -117,189 +270,19 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
   };
 
   useEffect(() => {
-      fetchSectionsSummary();
+    fetchSectionsSummary();
 
-      if (score > 0) {
-        setBackgroundAudioSrc("./soundeffects/winningsound.mp3");
-        // playBackgroundMusic();
-      }
+    if (score > 0) {
+      setBackgroundAudioSrc("./soundeffects/winningsound.mp3");
+      // playBackgroundMusic();
+    }
   }, [score, isMuted]);
-
-  // useEffect(() => {
-  //   if (typeof window !== 'undefined') {
-  //     const completedSections: Record<string, number> = JSON.parse(sessionStorage.getItem('completedSections') || '[]');
-
-
-  //     const totalScore = Object.values(completedSections).reduce((sum, score) => sum + score, 0);   
-
-  //     // Check if all 8 sections are completed
-  //     const storedAllStagesCompleted = sessionStorage.getItem("allStagesCompleted");
-  //     const allSectionsCompleted = Object.keys(completedSections).length === 8 && totalScore > 0;
-
-  //     if (allSectionsCompleted && !storedAllStagesCompleted) {
-  //       setAllSectionsCompleted(true);
-  //       sessionStorage.setItem("allStagesCompleted", "true");
-  //       setTotalScore(totalScore);
-  //       sessionStorage.setItem("finalTotalScore", totalScore.toString());
-  //     } else if (storedAllStagesCompleted) {
-  //       // setAllSectionsCompleted(false);
-  //       sessionStorage.removeItem("allStagesCompleted");
-  //       sessionStorage.removeItem("finalTotalScore");
-  //     } else {
-  //       setAllSectionsCompleted(storedAllStagesCompleted === "true");
-  //     }
-
-  //     if (score > 0) {
-  //       setBackgroundAudioSrc("./soundeffects/winningsound.mp3");
-  //       // playBackgroundMusic();
-  //     }
-
-  //     if (allSectionsCompleted) {
-  //       const completedSets: string[] = JSON.parse(sessionStorage.getItem("completedSets") || "[]");
-
-  //       if (!completedSets.includes(set)) {
-  //         completedSets.push(set);
-  //         sessionStorage.setItem("completedSets", JSON.stringify(completedSets));
-  //       }
-
-  //       sessionStorage.removeItem("completedSections");
-  //     }
-  //   }
-  // }, [score, isMuted]);
 
   useEffect(() => {
     if (!isMuted) {
       playBackgroundMusic(); // This ensures new audio plays after src update
     }
   }, [backgroundAudioSrc]);
-
-  const getCertificateLevel = (marksObtained: number): string => {
-    const percentage = (marksObtained / 400) * 100;
-
-    if (percentage >= 80) return "Gold";
-    else if (percentage >= 70) return "Silver";
-    // else if (percentage >= 60) return "Bronze";
-    return "Bronze"; // Optional case if percentage < 60
-  };
-
-  const getDefaultUser = (): User => ({
-    name: "",
-    department: "",
-    designation: "",
-    email: "",
-    mobile: "",
-    title: "",
-  });
-
-  const generateCertificate = (score: number): void => {
-
-    const level = getCertificateLevel(score);
-    // URLs of the font files to fetch
-    const fontUrl1 = "/fonts/open-sans.ttf"; // First font file
-    const fontUrl2 = "/fonts/noto-sans.ttf";
-
-    const getUserData = (): User => {
-      if (typeof window !== "undefined") {
-        const storedData = sessionStorage.getItem("currentUser");
-        return storedData ? JSON.parse(storedData) : getDefaultUser();
-      }
-      return getDefaultUser(); // Default values for SSR or undefined sessionStorage
-    };
-
-    // const isClient = typeof window !== 'undefined';
-    const userData: User = getUserData();
-
-    // Fetch both font files and convert them to Base64
-    Promise.all([
-      fetch(fontUrl1).then((response) => response.blob()),
-      fetch(fontUrl2).then((response) => response.blob()),
-    ])
-      .then(([fontBlob1, fontBlob2]) => {
-        // Convert the first font blob to Base64
-        const fontReader1 = new FileReader();
-        fontReader1.onloadend = () => {
-
-          if (!fontReader1.result) {
-            console.error("Failed to read the first font file.");
-            return;
-          }
-          //const base64Font1 = fontReader1.result.toString().split(",")[1]; // Extract the Base64 part
-
-          // Convert the second font blob to Base64
-          const fontReader2 = new FileReader();
-          fontReader2.onloadend = () => {
-
-            if (!fontReader2.result) {
-              console.error("Failed to read the second font file.");
-              return;
-            }
-            //const base64Font2 = fontReader2.result.toString().split(",")[1]; // Extract the Base64 part
-
-            // Initialize jsPDF
-            const doc = new jsPDF({
-              orientation: "landscape",
-              unit: "px",
-              format: [800, 600],
-            });
-
-            // // Add the first custom font to jsPDF
-            // doc.addFileToVFS("open-sans.ttf", base64Font1);
-            // doc.addFont("open-sans.ttf", "open-sans", "normal", 'Identity-H');
-
-            // // Add the second custom font to jsPDF
-            // doc.addFileToVFS("noto-sans.ttf", base64Font2);
-            // doc.addFont("noto-sans.ttf", "noto-sans", "normal", 'Identity-H');
-
-            const img = new Image();
-
-            if (level == "Gold")
-              img.src = "./certificates/gold-certificate.png";
-            else if (level == "Silver")
-              img.src = "./certificates/Silver_Certificate.png";
-            else
-              img.src = "./certificates/Bronze_Certificate.png";
-
-            img.onload = function () {
-              doc.addImage(img, "JPEG", 0, 0, 800, 600);
-
-              // Set the first font and add text
-              // doc.setFont("open-sans");
-              doc.setFont('helvetica', 'bold');
-              doc.setFontSize(30);
-              doc.text(`${Title[userData.title as Title]}` + "." + `${userData.name}`, 400, 240, { align: "center" });
-
-              // Set the second font and add text
-              // doc.setFont("noto-sans");
-              doc.setFont('times', 'normal');
-              doc.setFontSize(17);
-              doc.text(`(${userData.designation} - ${userData.department})`, 400, 272, { align: "center" });
-
-              // Add the date
-              const today = new Date();
-              const day = String(today.getDate()).padStart(2, "0");
-              const month = String(today.getMonth() + 1).padStart(2, "0");
-              const year = today.getFullYear();
-              const formattedDate = `${day}/${month}/${year}`;
-
-              // doc.setFont("noto-sans");
-              doc.setFont('times', 'normal');
-              doc.setFontSize(19);
-              doc.text(`${formattedDate}`, 672, 448, { align: "center" });
-
-              // Save the PDF
-              doc.save(`Certificate_${level}.pdf`);
-            }
-
-          };
-          fontReader2.readAsDataURL(fontBlob2); // Convert the second font blob to a data URL
-        };
-        fontReader1.readAsDataURL(fontBlob1); // Convert the first font blob to a data URL
-      })
-      .catch((error) => {
-        console.error("Error loading font files:", error);
-      });
-  };
-
 
   const handleReturnToStages = () => {
     setBackgroundAudioSrc("./songs/bgm.mp3");
@@ -311,119 +294,135 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
       sessionStorage.removeItem("allStagesCompleted");
     }
 
-    router.push(`/game-map?set=${encodeURIComponent(set)}`);
+    router.replace(`/spinwheel?set=${encodeURIComponent(set)}`);
   };
 
   const handleSelectAnotherSet = () => {
+    sessionStorage.removeItem("allStagesCompleted");
+    sessionStorage.removeItem("finalTotalScore");
     setBackgroundAudioSrc("./songs/bgm.mp3");
     playBackgroundMusic(); // Resume background music
-    router.push("/set");
+    router.replace("/set");
   }
 
   const handleDownloadCertificate = () => {
     generateCertificate(totalScore);
   }
 
-  // return (
-  //   <div className="flex flex-col items-center justify-center min-h-screen">
-  //     {/* <audio ref={winningSoundRef} src="./soundeffects/winningsound.mp3" /> */}
-  //     {score > 0 && <Confetti width={windowSize.width} height={windowSize.height} />}
+  const handleDownloadAnswerSheet = () => {
+    generateAnswerSheet(set);
+  }
 
-  //     <h1
-  //       className={`text-4xl sm:text-6xl font-bold mb-8 text-center 
-  //       ${score > 0 ? "text-white animate-bounce" : "text-yellow-300"}`}
-  //     >
-  //       {score > 0 ? "Congratulations!" : "Don't Give Up!"}
-  //     </h1>
-
-  //     <div className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-lg p-8 mb-8 text-center">
-  //       <p className="text-3xl text-white mb-4">
-  //         {score > 0 ? "You have successfully completed" : "You have attempted"}
-  //       </p>
-  //       <p className="text-4xl text-white mb-4">
-  //         <strong>{stage} Stage</strong>
-  //       </p>
-  //       <p className="text-3xl text-white mb-4">{score > 0 ? "with a score of" : "but didn't score any points."}</p>
-  //       {score > 0 && <p className={"text-6xl font-bold animate-pulse text-blue-800"}>{score}</p>}
-  //     </div>
-
-  //     <button
-  //       className="px-6 py-2 bg-blue-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-blue-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
-  //       onClick={handleReturnToStages}
-  //     >
-  //       Return to Stages Page
-  //     </button>
-  //   </div>
-  // );
   const showConfetti = (allSectionsCompleted && totalScore > 0) || (!allSectionsCompleted && score > 0);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       {/* <audio ref={winningSoundRef} src="./soundeffects/winningsound.mp3" /> */}
-      {showConfetti
-        // score > 0 
-        && <Confetti width={windowSize.width} height={windowSize.height} />}
+      {showConfetti ?
+        (<Confetti width={windowSize.width} height={windowSize.height} />) :
+        (<AnimatedBackground />)
+      }
 
-      <h1
-        className={`text-4xl sm:text-6xl font-bold mb-8 text-center 
-        ${(showConfetti)
-            // score > 0 
-            ? "text-white animate-bounce" : "text-yellow-300"}`}
-      >
-        {allSectionsCompleted ? "All Stages Completed!" : score > 0 ? "Congratulations!" : "Don't Give Up!"}
-      </h1>
+      {allSectionsCompleted && (
+        <h1
+          className={`text-4xl sm:text-6xl font-bold mb-8 text-center z-50
+          ${(showConfetti) ? "text-white animate-bounce" : "text-yellow-300"}`}
+        >
+          All Stages Completed!
+        </h1>
+      )}
 
-      <div className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-lg p-8 mb-8 text-center">
-        <p className="text-3xl text-white mb-4">
-          {allSectionsCompleted
-            ? "You have successfully completed all stages."
-            : score > 0
-              ? "You have successfully completed"
-              : "You have attempted"}
-        </p>
-        {!allSectionsCompleted && (
-          <p className="text-4xl text-white mb-4">
-            <strong>{stage} Stage</strong>
-          </p>
+      <div className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-lg shadow-md p-8 mb-8 text-center ring-4 ring-blue-600">
+
+        {!allSectionsCompleted && score >= 0 && score < 10 && (
+          <div className="text-center text-xl text-white mt-4 max-w-3xl mx-auto">
+            {currentStage && currentStage.wrongAnswerMessage && (
+              <div className="p-6 rounded-lg transition-all duration-300 transform scale-105">
+                <div className="flex items-center mb-16">
+                  {currentStage.icon}
+                  <h2 className="text-7xl font-bold ml-3 text-gray-700">{currentStage.title}</h2>
+                </div>
+                <p className="text-6xl font-bold text-blue-800 mb-4">{computedScore} {currentStage.unit}</p>
+                <p className="text-2xl text-white">{currentStage.wrongAnswerMessage[1]}</p>
+              </div>
+            )}
+          </div>
         )}
-        <p className="text-3xl text-white mb-4">
-          {allSectionsCompleted
-            ? "Your total score is:"
-            : score > 0
-              ? "with a score of"
-              : "but didn't score any points."}
-        </p>
-        {/* {score > 0 && ( */}
-        {((allSectionsCompleted && totalScore > 0) || (!allSectionsCompleted && score > 0)) && (
-          <p className="text-6xl font-bold animate-pulse text-blue-800">
-            {allSectionsCompleted ? totalScore : score}
-          </p>
+
+        {!allSectionsCompleted && score === 10 && (
+          <div className="text-center text-xl text-white mt-4 max-w-3xl mx-auto">
+            {currentStage && currentStage.allCorrectAnswermessage && (
+              <div className="p-6 rounded-lg transition-all duration-300 transform scale-105">
+                <div className="flex items-center mb-16">
+                  {currentStage.icon}
+                  <h2 className="text-7xl font-bold ml-3 text-gray-700">{currentStage.title}</h2>
+                </div>
+                <p className="text-6xl font-bold text-blue-800 mb-4">{currentStage.maxScore} {currentStage.unit}</p>
+                <p className="text-2xl text-white">{currentStage.allCorrectAnswermessage[1]}</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {allSectionsCompleted && (
+          <div className="text-center text-xl text-white mt-4">
+            <ResultsScreen
+              score={(totalScore / 80) * 100}
+            />
+          </div>
         )}
       </div>
 
-      {allSectionsCompleted && totalScore > 0 ? (
+      {allSectionsCompleted && (totalScore / 80) * 100 >= 50 ? (
         <div className="flex flex-col md:flex-row justify-between items-center w-full gap-4">
           <button
-            className="px-6 py-2 w-full md:w-auto bg-green-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-green-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50"
+            className="px-6 py-2 w-full md:w-auto bg-green-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-green-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 flex justify-between items-center"
             onClick={handleSelectAnotherSet}
           >
-            Return to Select Set
+            Go to Next Game
+            <ArrowRight className="ml-2 h-4 w-4" />
           </button>
           <button
-            className="px-6 py-2 w-full md:w-auto bg-yellow-600 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-yellow-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50"
+            className="px-6 py-2 w-full md:w-auto bg-yellow-600 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-yellow-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50 flex justify-between items-center"
             onClick={handleDownloadCertificate}
           >
-            ⬇️ Download Certificate
+            Download Certificate
+            <Download className="ml-2 h-5 w-5" />
+          </button>
+          <button
+            className="px-6 py-2 w-full md:w-auto bg-blue-500 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-yellow-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50 flex justify-between items-center"
+            onClick={handleDownloadAnswerSheet}
+          >
+            Download Answers
+            <Download className="ml-2 h-5 w-5" />
           </button>
         </div>
-      ) : (
-        <button
-          className="px-6 py-2 bg-blue-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-blue-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
-          onClick={handleReturnToStages}
-        >
-          Return to Stages Page
-        </button>
-      )}
+      ) : allSectionsCompleted && (totalScore / 80) * 100 < 50 ?
+        <div className="flex flex-col md:flex-row justify-between items-center w-full gap-4">
+          <button
+            className="px-6 py-2 bg-blue-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-blue-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 flex justify-between items-center"
+            onClick={handleSelectAnotherSet}
+          >
+            Go to Next Game
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </button>
+          <button
+            className="px-6 py-2 w-full md:w-auto bg-blue-500 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-yellow-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50 flex justify-between items-center"
+            onClick={handleDownloadAnswerSheet}
+          >
+            Download Answers
+            <Download className="ml-2 h-5 w-5" />
+          </button>
+        </div>
+        : (
+          <button
+            className="px-6 py-2 bg-teal-500 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-teal-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50 flex justify-between items-center"
+            onClick={handleReturnToStages}
+          >
+            Go to Spin Wheel
+            <RefreshCw className="ml-2 h-5 w-5" />
+          </button>
+        )}
     </div>
   );
 };

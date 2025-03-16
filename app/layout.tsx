@@ -5,8 +5,8 @@ import AudioPlayer from '@/components/AudioPlayer'
 import AudioToggleButton  from '@/components/AudioToggle'
 
 export const metadata: Metadata = {
-  title: 'Aqua Nagar',
-  // description: 'Created by Hi-Griv'
+  title: 'Salem City',
+  description: 'Created and updated by Hi-Griv'
 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
