@@ -114,8 +114,8 @@ export default function About() {
                   <p>1. Choose a mission to begin your journey.</p>
                   <p>2. Spin the wheel to select a stage to play.</p>
                   <p>3. Answer each question within the time limit.</p>
-                  <p>4. Your choices impact Maruthu Nagar—improving or worsening its condition based on your answers.</p>
-                  <p>5. After each stage, you&apos;ll see how your decisions have affected Maruthu Nagar.</p>
+                  <p>4. Your choices impact Salem City—improving or worsening its condition based on your answers.</p>
+                  <p>5. After each stage, you&apos;ll see how your decisions have affected Salem City.</p>
                   <p>6. Return to the spin wheel and continue playing until all stages are completed.</p>
                   <p>7. Complete all eight stages to finish the mission.</p>
                   <p>8. Discover your level at the end of the mission based on your performance.</p>

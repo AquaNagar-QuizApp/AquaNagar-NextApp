@@ -6,8 +6,8 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  basePath: isProd ? "./MaruthuNagar-NextApp" : "", // No org name needed
-  assetPrefix: isProd ? "./MaruthuNagar-NextApp" : "",
+  basePath: isProd ? "./AquaNagar-NextApp" : "", // No org name needed
+  assetPrefix: isProd ? "./AquaNagar-NextApp" : "",
   reactStrictMode: true,
   swcMinify: true, // Ensures minification
 };

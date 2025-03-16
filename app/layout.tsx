@@ -5,7 +5,7 @@ import AudioPlayer from '@/components/AudioPlayer'
 import AudioToggleButton  from '@/components/AudioToggle'
 
 export const metadata: Metadata = {
-  title: 'Maruthu Nagar',
+  title: 'Salem City',
   description: 'Created and updated by Hi-Griv'
 }
 

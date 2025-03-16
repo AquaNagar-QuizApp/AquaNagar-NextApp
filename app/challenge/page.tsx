@@ -62,7 +62,7 @@ export default function Challenge() {
         >
           <h2 className="text-3xl font-semibold text-white mb-8">Ready for the Challenge?</h2>
           <p className="text-lg text-blue-100 mb-8">
-            Are you prepared to take on the role of WSS Official and tackle the water management challenges of Maruthu Nagar?
+            Are you prepared to take on the role of WSS Official and tackle the water management challenges of Salem City?
           </p>
           {/* <Link href="/role"> */}
           <motion.button

@@ -66,7 +66,7 @@ export default function Intro() {
                         animate={isMounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }} // Animate only on client
                         transition={{ delay: 0.3 }}
                     >
-                        Hi, I am Bob! I will help you through this game.
+                        Hi, I am Raja! I will help you through this game.
                     </motion.p>
 
                     {/* <Link href="/objective">

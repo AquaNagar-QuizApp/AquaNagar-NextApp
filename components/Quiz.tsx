@@ -1,4 +1,4 @@
-import { useState, useEffect, JSX, useCallback, useRef } from "react"
+import { useState, useEffect, JSX, useCallback, useRef, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -199,7 +199,14 @@ export function Quiz({ quizSet, stage, onComplete, updateWrongAnswer }: QuizProp
   };
 
 
-  const currentQuestionData = quizSet.questions[currentQuestion];
+  // const currentQuestionData = quizSet.questions[currentQuestion];
+  const currentQuestionData = useMemo(() => {
+    return {
+      ...quizSet.questions[currentQuestion],
+      options: [...quizSet.questions[currentQuestion].options].sort(() => Math.random() - 0.5)
+    };
+  }, [currentQuestion]); // Rerun only when currentQuestion changes
+  
 
   const questionVariants = {
     hidden: { opacity: 0, x: -50 },
@@ -250,7 +257,7 @@ export function Quiz({ quizSet, stage, onComplete, updateWrongAnswer }: QuizProp
 
       <AnimatePresence mode="wait">
         <motion.div
-          key={timeLeft} // Re-triggers animation when timeLeft updates
+          // key={timeLeft} // Re-triggers animation when timeLeft updates
           initial={{ scaleX: 1, opacity: 1 }}
           animate={{
             scaleX: timeLeft > 0 ? timeLeft / 30 : 0, // Shrink width smoothly
@@ -258,7 +265,7 @@ export function Quiz({ quizSet, stage, onComplete, updateWrongAnswer }: QuizProp
             scaleY: timeLeft > 0 ? 1 : 0.2, // Reduce height at the end
           }}
           transition={{ duration: 1, ease: "linear" }} // Smooth animation
-          className="w-full"
+          className="w-full" // origin-left class makes the shrinking from right to left
         >
           <Progress
             value={(timeLeft / 30) * 100}

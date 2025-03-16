@@ -118,7 +118,7 @@ export const generateCertificate = (score: number): void => {
             doc.text(`${formattedDate}`, 672, 448, { align: "center" });
 
             // Save the PDF
-            doc.save(`Certificate_${level}.pdf`);
+            doc.save(`${level}_Certificate.pdf`);
           }
 
         };

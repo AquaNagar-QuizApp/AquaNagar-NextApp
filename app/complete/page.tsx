@@ -9,6 +9,7 @@ import { Activity, ArrowRight, Clock, Download, Droplet, Heart, IndianRupee, Pie
 import { AnimatedBackground } from "@/components/AnimatedBackground"
 import ResultsScreen from "@/components/result-screen"
 import { generateCertificate } from "@/components/Certificate";
+import { generateAnswerSheet } from "@/components/AnswerSheet"
 
 interface StageScoreSectionProps {
   router: ReturnType<typeof useRouter>; // Router type
@@ -72,11 +73,11 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
       icon: <Droplet className="w-16 h-16 text-blue-500 flex-shrink-0" />,
       wrongAnswerMessage: [
         "Dam capacity has been compromised.",
-        "Maruthu Nagar Dam's storage capacity has been reduced due to planning errors."
+        "Salem City Dam's storage capacity has been reduced due to planning errors."
       ],
       allCorrectAnswermessage: [
         "Dam capacity is at optimal level.",
-        "Maruthu Nagar Dam is operating at full capacity, ensuring reliable water supply."
+        "Salem City Dam is operating at full capacity, ensuring reliable water supply."
       ]
     },
     {
@@ -314,6 +315,10 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
     generateCertificate(totalScore);
   }
 
+  const handleDownloadAnswerSheet = () => {
+    generateAnswerSheet(set);
+  }
+
   // return (
   //   <div className="flex flex-col items-center justify-center min-h-screen">
   //     {/* <audio ref={winningSoundRef} src="./soundeffects/winningsound.mp3" /> */}
@@ -504,6 +509,13 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
             onClick={handleDownloadCertificate}
           >
             Download Certificate
+            <Download className="ml-2 h-5 w-5" />
+          </button>
+          <button
+            className="px-6 py-2 w-full md:w-auto bg-blue-500 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-yellow-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50 flex justify-between items-center"
+            onClick={handleDownloadAnswerSheet}
+          >
+            Download Answers
             <Download className="ml-2 h-5 w-5" />
           </button>
         </div>
