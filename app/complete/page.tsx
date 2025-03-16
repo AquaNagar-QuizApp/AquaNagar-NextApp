@@ -520,13 +520,22 @@ function StageScoreSection({ router, isMuted, backgroundAudioSrc, playBackground
           </button>
         </div>
       ) : allSectionsCompleted && (totalScore / 80) * 100 < 50 ?
-        <button
-          className="px-6 py-2 bg-blue-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-blue-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 flex justify-between items-center"
-          onClick={handleSelectAnotherSet}
-        >
-          Go to Next Game
-          <ArrowRight className="ml-2 h-5 w-5" />
-        </button>
+        <div className="flex flex-col md:flex-row justify-between items-center w-full gap-4">
+          <button
+            className="px-6 py-2 bg-blue-700 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-blue-800 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 flex justify-between items-center"
+            onClick={handleSelectAnotherSet}
+          >
+            Go to Next Game
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </button>
+          <button
+            className="px-6 py-2 w-full md:w-auto bg-blue-500 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-yellow-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50 flex justify-between items-center"
+            onClick={handleDownloadAnswerSheet}
+          >
+            Download Answers
+            <Download className="ml-2 h-5 w-5" />
+          </button>
+        </div>
         : (
           <button
             className="px-6 py-2 bg-teal-500 text-white rounded-lg font-semibold backdrop-blur-lg text-lg transition duration-300 ease-in-out transform hover:bg-teal-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50 flex justify-between items-center"
